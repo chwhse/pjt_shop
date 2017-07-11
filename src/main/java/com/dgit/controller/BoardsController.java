@@ -11,7 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.dgit.domain.BoardsContentVO;
+import com.dgit.domain.BoardsVO;
 import com.dgit.service.BoardsService;
 
 
@@ -31,4 +34,55 @@ public class BoardsController {
 		return "boards/listPage";
 	}
 	
+	@RequestMapping(value="/register", method=RequestMethod.GET)
+	public String registerGET() throws Exception{
+		return "boards/register";
+	}
+	
+	@RequestMapping(value="/register", method=RequestMethod.POST)
+	public String registerPOST(BoardsVO bVO, BoardsContentVO bcVO) throws Exception{
+		logger.info("=============Register Post=============");
+		
+		service.boardsInsert(bVO);
+		// service bc 넣어야해
+		logger.info(bVO.toString());
+		logger.info(bcVO.toString());
+		return "redirect:listPage";
+	}
+	
+	@RequestMapping(value="/read", method=RequestMethod.GET)
+	public String read(int no, Model model) throws Exception{
+		BoardsVO vo = service.boardsSelectByNo(no);
+		
+		model.addAttribute("board", vo);
+		return "boards/read";
+	}
+	
+	@RequestMapping(value="/delete", method=RequestMethod.GET)
+	public String delete(int no) throws Exception{
+		service.boardsDelete(no);
+		
+		return "redirect:listPage";
+	}
+	
+	@RequestMapping(value="/modify", method=RequestMethod.GET)
+	public String modifyGET(int no,Model model) throws Exception{
+		BoardsVO vo = service.boardsSelectByNo(no);
+		
+		model.addAttribute("board", vo);
+		return "boards/modify";
+	}
+	
+	@RequestMapping(value="/modify", method=RequestMethod.POST)
+	public String modifyPOST(BoardsVO vo,RedirectAttributes rttr) 	throws Exception{
+		
+		System.out.println("=======MOD POST========");
+		System.out.println("vo:"+vo.toString());
+		service.boardsUpdate(vo);
+		
+		rttr.addAttribute("no", vo.getBno());
+		System.out.println("no:"+vo.getBno());
+		return "redirect:read";
+		
+	}
 }

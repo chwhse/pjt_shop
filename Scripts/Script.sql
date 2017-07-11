@@ -44,7 +44,7 @@ ALTER TABLE Goods
 CREATE TABLE GoodsDetail (
 	gcode      varchar(20)  NOT NULL , -- 상품코드
 	gdesc      VARCHAR(2000) NULL  , -- 상품설명
-	gdetailimg VARCHAR(2000) NULL  , -- 상품상세이미지
+	gdetailimg TEXT NULL  , -- 상품상세이미지
 	gstock     INTEGER       NULL   -- 상품재고수량
 );
 

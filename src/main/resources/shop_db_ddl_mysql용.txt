@@ -1,226 +1,226 @@
--- È¸¿ø
+-- íšŒì›
 DROP TABLE IF EXISTS Comment;
 DROP TABLE IF EXISTS Review; 
 DROP TABLE IF EXISTS Orders;
 DROP TABLE IF EXISTS Users; 
 CREATE TABLE Users (
-	uid    varchar(20)  NOT NULL , -- È¸¿ø¾ÆÀÌµğ
-	upw    varchar(20)  NOT NULL , -- È¸¿øºñ¹Ğ¹øÈ£
-	uname  varchar(20)  NOT NULL , -- È¸¿ø¸í
-	uemail varchar(50)  NULL     , -- È¸¿øÀÌ¸ŞÀÏ
-	uaddr  varchar(120) NULL     , -- È¸¿øÁÖ¼Ò
-	uphone varchar(20)  NULL     , -- È¸¿øÀüÈ­
-	ugrade BOOLEAN       NOT NULL  -- °èÁ¤µî±Ş
+	uid    varchar(20)  NOT NULL , -- íšŒì›ì•„ì´ë””
+	upw    varchar(20)  NOT NULL , -- íšŒì›ë¹„ë°€ë²ˆí˜¸
+	uname  varchar(20)  NOT NULL , -- íšŒì›ëª…
+	uemail varchar(50)  NULL     , -- íšŒì›ì´ë©”ì¼
+	uaddr  varchar(120) NULL     , -- íšŒì›ì£¼ì†Œ
+	uphone varchar(20)  NULL     , -- íšŒì›ì „í™”
+	ugrade BOOLEAN       NOT NULL  -- ê³„ì •ë“±ê¸‰
 );
 
--- È¸¿ø
+-- íšŒì›
 ALTER TABLE Users
-	ADD CONSTRAINT PK_Users -- È¸¿ø ±âº»Å°
+	ADD CONSTRAINT PK_Users -- íšŒì› ê¸°ë³¸í‚¤
 		PRIMARY KEY (
-			uid -- È¸¿ø¾ÆÀÌµğ
+			uid -- íšŒì›ì•„ì´ë””
 		);
 
 
--- »óÇ°
+-- ìƒí’ˆ
 DROP TABLE IF EXISTS GoodsDetail; 
 DROP TABLE IF EXISTS Goods; 
 CREATE TABLE Goods (
-	gcode     varchar(20) NOT NULL , -- »óÇ°ÄÚµå
-	gname     varchar(40) NOT NULL , -- »óÇ°¸í
-	gcategory varchar(20) NULL     , -- »óÇ°Ä«Å×°í¸®
-	gthumb    VARCHAR(200) NULL    , -- »óÇ°´ëÇ¥ÀÌ¹ÌÁö
-	gprice    INTEGER      NULL    , -- »óÇ°°¡°İ
-	gisexist  BOOLEAN      NOT NULL  -- Á¸Àç¿©ºÎ
+	gcode     varchar(20) NOT NULL , -- ìƒí’ˆì½”ë“œ
+	gname     varchar(40) NOT NULL , -- ìƒí’ˆëª…
+	gcategory varchar(20) NULL     , -- ìƒí’ˆì¹´í…Œê³ ë¦¬
+	gthumb    VARCHAR(200) NULL    , -- ìƒí’ˆëŒ€í‘œì´ë¯¸ì§€
+	gprice    INTEGER      NULL    , -- ìƒí’ˆê°€ê²©
+	gisexist  BOOLEAN      NOT NULL  -- ì¡´ì¬ì—¬ë¶€
 );
 
--- »óÇ°
+-- ìƒí’ˆ
 ALTER TABLE Goods
-	ADD CONSTRAINT PK_Goods -- »óÇ° ±âº»Å°
+	ADD CONSTRAINT PK_Goods -- ìƒí’ˆ ê¸°ë³¸í‚¤
 		PRIMARY KEY (
-			gcode -- »óÇ°ÄÚµå
+			gcode -- ìƒí’ˆì½”ë“œ
 		);
 		
--- »óÇ°»ó¼¼
+-- ìƒí’ˆìƒì„¸
 CREATE TABLE GoodsDetail (
-	gcode      varchar(20)  NOT NULL , -- »óÇ°ÄÚµå
-	gdesc      VARCHAR(2000) NULL  , -- »óÇ°¼³¸í
-	gdetailimg VARCHAR(2000) NULL  , -- »óÇ°»ó¼¼ÀÌ¹ÌÁö
-	gstock     INTEGER       NULL   -- »óÇ°Àç°í¼ö·®
+	gcode      varchar(20)  NOT NULL , -- ìƒí’ˆì½”ë“œ
+	gdesc      VARCHAR(2000) NULL  , -- ìƒí’ˆì„¤ëª…
+	gdetailimg TEXT NULL  , -- ìƒí’ˆìƒì„¸ì´ë¯¸ì§€
+	gstock     INTEGER       NULL   -- ìƒí’ˆì¬ê³ ìˆ˜ëŸ‰
 );
 
--- »óÇ°»ó¼¼
+-- ìƒí’ˆìƒì„¸
 ALTER TABLE GoodsDetail
-	ADD CONSTRAINT PK_Goods_detail -- »óÇ°»ó¼¼ ±âº»Å°
+	ADD CONSTRAINT PK_Goods_detail -- ìƒí’ˆìƒì„¸ ê¸°ë³¸í‚¤
 		PRIMARY KEY (
-			gcode -- »óÇ°ÄÚµå
+			gcode -- ìƒí’ˆì½”ë“œ
 		);
 		
--- »óÇ°»ó¼¼
+-- ìƒí’ˆìƒì„¸
 ALTER TABLE GoodsDetail
-	ADD CONSTRAINT FK_Goods_TO_Goods_detail -- »óÇ° -> »óÇ°»ó¼¼
+	ADD CONSTRAINT FK_Goods_TO_Goods_detail -- ìƒí’ˆ -> ìƒí’ˆìƒì„¸
 		FOREIGN KEY (
-			gcode -- »óÇ°ÄÚµå
+			gcode -- ìƒí’ˆì½”ë“œ
 		)
-		REFERENCES Goods ( -- »óÇ°
-			gcode -- »óÇ°ÄÚµå
+		REFERENCES Goods ( -- ìƒí’ˆ
+			gcode -- ìƒí’ˆì½”ë“œ
 		);
 
 
--- ¼öÃëÀÎÁ¤º¸
+-- ìˆ˜ì·¨ì¸ì •ë³´
 DROP TABLE IF EXISTS Recipient; 
 CREATE TABLE Recipient (
-	rcname    varchar(20)  NOT NULL , -- ¼öÃëÀÎ¸í
-	rcemail   varchar(50)  NULL    , -- ¼öÃëÀÎÀÌ¸ŞÀÏ
-	rcaddr    varchar(120) NULL    , -- ¼öÃëÀÎÁÖ¼Ò
-	rcphone   varchar(20)  NULL    , -- ¼öÃëÀÎÀüÈ­
-	rcmessage VARCHAR(120)  NULL    -- Àü´Ş¸Ş½ÃÁö
+	rcname    varchar(20)  NOT NULL , -- ìˆ˜ì·¨ì¸ëª…
+	rcemail   varchar(50)  NULL    , -- ìˆ˜ì·¨ì¸ì´ë©”ì¼
+	rcaddr    varchar(120) NULL    , -- ìˆ˜ì·¨ì¸ì£¼ì†Œ
+	rcphone   varchar(20)  NULL    , -- ìˆ˜ì·¨ì¸ì „í™”
+	rcmessage VARCHAR(120)  NULL    -- ì „ë‹¬ë©”ì‹œì§€
 );
 
--- ¼öÃëÀÎÁ¤º¸
+-- ìˆ˜ì·¨ì¸ì •ë³´
 ALTER TABLE Recipient
-	ADD CONSTRAINT PK_Recipient -- ¼öÃëÀÎÁ¤º¸ ±âº»Å°
+	ADD CONSTRAINT PK_Recipient -- ìˆ˜ì·¨ì¸ì •ë³´ ê¸°ë³¸í‚¤
 		PRIMARY KEY (
-			rcname -- ¼öÃëÀÎ¸í
+			rcname -- ìˆ˜ì·¨ì¸ëª…
 		);
 
 
 
--- ÁÖ¹®
+-- ì£¼ë¬¸
 
 CREATE TABLE Orders (
-	ocode       varchar(20) NOT NULL , -- ÁÖ¹®ÄÚµå
-	ono         varchar(20) NULL     , -- ÁÖ¹®¹øÈ£
-	uid         varchar(20) NULL     , -- È¸¿ø¾ÆÀÌµğ
-	oisbasket   BOOLEAN      NULL     , -- Àå¹Ù±¸´Ï¿©ºÎ
-	gcode       varchar(20) NULL     , -- »óÇ°ÄÚµå
-	oquantity   INTEGER      NOT NULL , -- ÁÖ¹®¼ö·®
-	odate       TIMESTAMP    NOT NULL default now(), -- ÁÖ¹®³¯Â¥
-	ototalprice INTEGER      NOT NULL , -- ÃÖÁ¾°¡°İ
-	rcname      varchar(20) NULL     , -- ¼öÃëÀÎ¸í
-	ocondition  varchar(20) NULL      -- ÁÖ¹®»óÅÂ
+	ocode       varchar(20) NOT NULL , -- ì£¼ë¬¸ì½”ë“œ
+	ono         varchar(20) NULL     , -- ì£¼ë¬¸ë²ˆí˜¸
+	uid         varchar(20) NULL     , -- íšŒì›ì•„ì´ë””
+	oisbasket   BOOLEAN      NULL     , -- ì¥ë°”êµ¬ë‹ˆì—¬ë¶€
+	gcode       varchar(20) NULL     , -- ìƒí’ˆì½”ë“œ
+	oquantity   INTEGER      NOT NULL , -- ì£¼ë¬¸ìˆ˜ëŸ‰
+	odate       TIMESTAMP    NOT NULL default now(), -- ì£¼ë¬¸ë‚ ì§œ
+	ototalprice INTEGER      NOT NULL , -- ìµœì¢…ê°€ê²©
+	rcname      varchar(20) NULL     , -- ìˆ˜ì·¨ì¸ëª…
+	ocondition  varchar(20) NULL      -- ì£¼ë¬¸ìƒíƒœ
 );
 
--- ÁÖ¹®
+-- ì£¼ë¬¸
 ALTER TABLE Orders
-	ADD CONSTRAINT PK_Orders -- ÁÖ¹® ±âº»Å°
+	ADD CONSTRAINT PK_Orders -- ì£¼ë¬¸ ê¸°ë³¸í‚¤
 		PRIMARY KEY (
-			ocode -- ÁÖ¹®ÄÚµå
+			ocode -- ì£¼ë¬¸ì½”ë“œ
 		);
--- ÁÖ¹®
+-- ì£¼ë¬¸
 ALTER TABLE Orders
-	ADD CONSTRAINT FK_Users_TO_Orders -- È¸¿ø -> ÁÖ¹®
+	ADD CONSTRAINT FK_Users_TO_Orders -- íšŒì› -> ì£¼ë¬¸
 		FOREIGN KEY (
-			uid -- È¸¿ø¾ÆÀÌµğ
+			uid -- íšŒì›ì•„ì´ë””
 		)
-		REFERENCES Users ( -- È¸¿ø
-			uid -- È¸¿ø¾ÆÀÌµğ
+		REFERENCES Users ( -- íšŒì›
+			uid -- íšŒì›ì•„ì´ë””
 		);
 
--- ÁÖ¹®
+-- ì£¼ë¬¸
 ALTER TABLE Orders
-	ADD CONSTRAINT FK_Goods_TO_Orders -- »óÇ° -> ÁÖ¹®
+	ADD CONSTRAINT FK_Goods_TO_Orders -- ìƒí’ˆ -> ì£¼ë¬¸
 		FOREIGN KEY (
-			gcode -- »óÇ°ÄÚµå
+			gcode -- ìƒí’ˆì½”ë“œ
 		)
-		REFERENCES Goods ( -- »óÇ°
-			gcode -- »óÇ°ÄÚµå
+		REFERENCES Goods ( -- ìƒí’ˆ
+			gcode -- ìƒí’ˆì½”ë“œ
 		);
 
--- »óÇ°ÈÄ±â
+-- ìƒí’ˆí›„ê¸°
 CREATE TABLE Review (
-	rno      INTEGER       NOT NULL , -- »óÇ°ÈÄ±â¹øÈ£
-	gcode    varchar(20)  NULL     , -- »óÇ°ÄÚµå
-	uid      varchar(20)  NULL     , -- È¸¿ø¾ÆÀÌµğ
-	rtitle   varchar(100) NOT NULL , -- »óÇ°ÈÄ±âÁ¦¸ñ
-	rcontent TEXT          NOT NULL , -- »óÇ°ÈÄ±â³»¿ë
-	rregdate TIMESTAMP     NOT NULL default now(), -- »óÇ°ÈÄ±âµî·ÏÀÏ
-	ocode    varchar(20)  NULL      -- ÁÖ¹®ÄÚµå
+	rno      INTEGER       NOT NULL , -- ìƒí’ˆí›„ê¸°ë²ˆí˜¸
+	gcode    varchar(20)  NULL     , -- ìƒí’ˆì½”ë“œ
+	uid      varchar(20)  NULL     , -- íšŒì›ì•„ì´ë””
+	rtitle   varchar(100) NOT NULL , -- ìƒí’ˆí›„ê¸°ì œëª©
+	rcontent TEXT          NOT NULL , -- ìƒí’ˆí›„ê¸°ë‚´ìš©
+	rregdate TIMESTAMP     NOT NULL default now(), -- ìƒí’ˆí›„ê¸°ë“±ë¡ì¼
+	ocode    varchar(20)  NULL      -- ì£¼ë¬¸ì½”ë“œ
 );
 
--- »óÇ°ÈÄ±â
+-- ìƒí’ˆí›„ê¸°
 ALTER TABLE Review
-	ADD CONSTRAINT PK_Review -- »óÇ°ÈÄ±â ±âº»Å°
+	ADD CONSTRAINT PK_Review -- ìƒí’ˆí›„ê¸° ê¸°ë³¸í‚¤
 		PRIMARY KEY (
-			rno -- »óÇ°ÈÄ±â¹øÈ£
+			rno -- ìƒí’ˆí›„ê¸°ë²ˆí˜¸
 		);
 
 
--- »óÇ°ÈÄ±â
+-- ìƒí’ˆí›„ê¸°
 ALTER TABLE Review
-	ADD CONSTRAINT FK_Users_TO_Review -- È¸¿ø -> »óÇ°ÈÄ±â
+	ADD CONSTRAINT FK_Users_TO_Review -- íšŒì› -> ìƒí’ˆí›„ê¸°
 		FOREIGN KEY (
-			uid -- È¸¿ø¾ÆÀÌµğ
+			uid -- íšŒì›ì•„ì´ë””
 		)
-		REFERENCES Users ( -- È¸¿ø
-			uid -- È¸¿ø¾ÆÀÌµğ
+		REFERENCES Users ( -- íšŒì›
+			uid -- íšŒì›ì•„ì´ë””
 		);
 
--- »óÇ°ÈÄ±â
+-- ìƒí’ˆí›„ê¸°
 ALTER TABLE Review
-	ADD CONSTRAINT FK_Goods_TO_Review -- »óÇ° -> »óÇ°ÈÄ±â
+	ADD CONSTRAINT FK_Goods_TO_Review -- ìƒí’ˆ -> ìƒí’ˆí›„ê¸°
 		FOREIGN KEY (
-			gcode -- »óÇ°ÄÚµå
+			gcode -- ìƒí’ˆì½”ë“œ
 		)
-		REFERENCES Goods ( -- »óÇ°
-			gcode -- »óÇ°ÄÚµå
+		REFERENCES Goods ( -- ìƒí’ˆ
+			gcode -- ìƒí’ˆì½”ë“œ
 		);
 
--- »óÇ°ÈÄ±â
+-- ìƒí’ˆí›„ê¸°
 ALTER TABLE Review
-	ADD CONSTRAINT FK_Orders_TO_Review -- ÁÖ¹® -> »óÇ°ÈÄ±â
+	ADD CONSTRAINT FK_Orders_TO_Review -- ì£¼ë¬¸ -> ìƒí’ˆí›„ê¸°
 		FOREIGN KEY (
-			ocode -- ÁÖ¹®ÄÚµå
+			ocode -- ì£¼ë¬¸ì½”ë“œ
 		)
-		REFERENCES Orders ( -- ÁÖ¹®
-			ocode -- ÁÖ¹®ÄÚµå
+		REFERENCES Orders ( -- ì£¼ë¬¸
+			ocode -- ì£¼ë¬¸ì½”ë“œ
 		);
 		
 			
--- »óÇ°ÈÄ±âÄÚ¸àÆ®
+-- ìƒí’ˆí›„ê¸°ì½”ë©˜íŠ¸
 CREATE TABLE Comment (
-	cno      INTEGER        NOT NULL , -- »óÇ°ÈÄ±âÄÚ¸àÆ®¹øÈ£
-	rno      INTEGER        NULL  , -- »óÇ°ÈÄ±â¹øÈ£
-	uid      varchar(20)   NULL   , -- È¸¿ø¾ÆÀÌµğ
-	ccontent varchar(1000) NULL   , -- »óÇ°ÈÄ±âÄÚ¸àÆ®³»¿ë
-	cdate    TIMESTAMP      NOT NULL default now()   -- »óÇ°ÈÄ±âÄÚ¸àÆ®³¯Â¥
+	cno      INTEGER        NOT NULL , -- ìƒí’ˆí›„ê¸°ì½”ë©˜íŠ¸ë²ˆí˜¸
+	rno      INTEGER        NULL  , -- ìƒí’ˆí›„ê¸°ë²ˆí˜¸
+	uid      varchar(20)   NULL   , -- íšŒì›ì•„ì´ë””
+	ccontent varchar(1000) NULL   , -- ìƒí’ˆí›„ê¸°ì½”ë©˜íŠ¸ë‚´ìš©
+	cdate    TIMESTAMP      NOT NULL default now()   -- ìƒí’ˆí›„ê¸°ì½”ë©˜íŠ¸ë‚ ì§œ
 );
 
--- »óÇ°ÈÄ±âÄÚ¸àÆ®
+-- ìƒí’ˆí›„ê¸°ì½”ë©˜íŠ¸
 ALTER TABLE Comment
-	ADD CONSTRAINT PK_Comment -- »óÇ°ÈÄ±âÄÚ¸àÆ® ±âº»Å°
+	ADD CONSTRAINT PK_Comment -- ìƒí’ˆí›„ê¸°ì½”ë©˜íŠ¸ ê¸°ë³¸í‚¤
 		PRIMARY KEY (
-			cno -- »óÇ°ÈÄ±âÄÚ¸àÆ®¹øÈ£
+			cno -- ìƒí’ˆí›„ê¸°ì½”ë©˜íŠ¸ë²ˆí˜¸
 		);
 
--- »óÇ°ÈÄ±âÄÚ¸àÆ®
+-- ìƒí’ˆí›„ê¸°ì½”ë©˜íŠ¸
 ALTER TABLE Comment
-	ADD CONSTRAINT FK_Review_TO_Comment -- »óÇ°ÈÄ±â -> »óÇ°ÈÄ±âÄÚ¸àÆ®
+	ADD CONSTRAINT FK_Review_TO_Comment -- ìƒí’ˆí›„ê¸° -> ìƒí’ˆí›„ê¸°ì½”ë©˜íŠ¸
 		FOREIGN KEY (
-			rno -- »óÇ°ÈÄ±â¹øÈ£
+			rno -- ìƒí’ˆí›„ê¸°ë²ˆí˜¸
 		)
-		REFERENCES Review ( -- »óÇ°ÈÄ±â
-			rno -- »óÇ°ÈÄ±â¹øÈ£
+		REFERENCES Review ( -- ìƒí’ˆí›„ê¸°
+			rno -- ìƒí’ˆí›„ê¸°ë²ˆí˜¸
 		);
 
--- »óÇ°ÈÄ±âÄÚ¸àÆ®
+-- ìƒí’ˆí›„ê¸°ì½”ë©˜íŠ¸
 ALTER TABLE Comment
-	ADD CONSTRAINT FK_Users_TO_Comment -- È¸¿ø -> »óÇ°ÈÄ±âÄÚ¸àÆ®
+	ADD CONSTRAINT FK_Users_TO_Comment -- íšŒì› -> ìƒí’ˆí›„ê¸°ì½”ë©˜íŠ¸
 		FOREIGN KEY (
-			uid -- È¸¿ø¾ÆÀÌµğ
+			uid -- íšŒì›ì•„ì´ë””
 		)
-		REFERENCES Users ( -- È¸¿ø
-			uid -- È¸¿ø¾ÆÀÌµğ
+		REFERENCES Users ( -- íšŒì›
+			uid -- íšŒì›ì•„ì´ë””
 		);
 
--- ÁÖ¹®³»¿ª
+-- ì£¼ë¬¸ë‚´ì—­
 DROP TABLE IF EXISTS OrdersHistory; 
 CREATE TABLE OrdersHistory (
-	ocode       varchar(20) NULL , -- ÁÖ¹®ÄÚµå
-	uid         varchar(20) NULL , -- È¸¿ø¾ÆÀÌµğ
-	ono         varchar(20) NULL , -- ÁÖ¹®¹øÈ£
-	odate       TIMESTAMP    NULL , -- ÁÖ¹®³¯Â¥
-	oquantity   INTEGER      NULL , -- ÁÖ¹®¼ö·®
-	ototalprice INTEGER      NULL  -- ÃÖÁ¾°¡°İ
+	ocode       varchar(20) NULL , -- ì£¼ë¬¸ì½”ë“œ
+	uid         varchar(20) NULL , -- íšŒì›ì•„ì´ë””
+	ono         varchar(20) NULL , -- ì£¼ë¬¸ë²ˆí˜¸
+	odate       TIMESTAMP    NULL , -- ì£¼ë¬¸ë‚ ì§œ
+	oquantity   INTEGER      NULL , -- ì£¼ë¬¸ìˆ˜ëŸ‰
+	ototalprice INTEGER      NULL  -- ìµœì¢…ê°€ê²©
 );
 
 
@@ -229,39 +229,39 @@ CREATE TABLE OrdersHistory (
 /*	=================================================================================*/			
 		
 		
-		-- °Ô½ÃÆÇ
+		-- ê²Œì‹œíŒ
 DROP TABLE IF EXISTS BoardsContent;
 DROP TABLE IF EXISTS Boards; 
 CREATE TABLE Boards (
-	bno      INTEGER       NOT NULL DEFAULT 0, -- °Ô½Ã±Û¹øÈ£
-	btitle   varchar(100) NOT NULL , -- °Ô½Ã±ÛÁ¦¸ñ
-	uid      varchar(20)  NULL     , -- È¸¿ø¾ÆÀÌµğ
-	bregdate TIMESTAMP    NOT NULL default now(), -- °Ô½ÃÀÏ
-	breadcnt INTEGER       DEFAULT 0  -- °Ô½Ã±ÛÁ¶È¸¼ö
+	bno      INTEGER       NOT NULL DEFAULT 0, -- ê²Œì‹œê¸€ë²ˆí˜¸
+	btitle   varchar(100) NOT NULL , -- ê²Œì‹œê¸€ì œëª©
+	uid      varchar(20)  NULL     , -- íšŒì›ì•„ì´ë””
+	bregdate TIMESTAMP    NOT NULL default now(), -- ê²Œì‹œì¼
+	breadcnt INTEGER       DEFAULT 0  -- ê²Œì‹œê¸€ì¡°íšŒìˆ˜
 );
 
--- °Ô½ÃÆÇ
+-- ê²Œì‹œíŒ
 ALTER TABLE Boards
-	ADD CONSTRAINT PK_Boards -- °Ô½ÃÆÇ ±âº»Å°
+	ADD CONSTRAINT PK_Boards -- ê²Œì‹œíŒ ê¸°ë³¸í‚¤
 		PRIMARY KEY (
-			bno -- °Ô½Ã±Û¹øÈ£
+			bno -- ê²Œì‹œê¸€ë²ˆí˜¸
 		);
 		
--- °Ô½ÃÆÇ³»¿ë
+-- ê²Œì‹œíŒë‚´ìš©
 
 CREATE TABLE BoardsContent (
-	bno      INTEGER NULL, -- °Ô½Ã±Û¹øÈ£
-	bcontent TEXT    NULL -- °Ô½ÃÆÇ³»¿ë
+	bno      INTEGER NULL, -- ê²Œì‹œê¸€ë²ˆí˜¸
+	bcontent TEXT    NULL -- ê²Œì‹œíŒë‚´ìš©
 );
 
--- °Ô½ÃÆÇ³»¿ë
+-- ê²Œì‹œíŒë‚´ìš©
 ALTER TABLE BoardsContent
-	ADD CONSTRAINT FK_Boards_TO_Boards_content -- °Ô½ÃÆÇ -> °Ô½ÃÆÇ³»¿ë
+	ADD CONSTRAINT FK_Boards_TO_Boards_content -- ê²Œì‹œíŒ -> ê²Œì‹œíŒë‚´ìš©
 		FOREIGN KEY (
-			bno -- °Ô½Ã±Û¹øÈ£
+			bno -- ê²Œì‹œê¸€ë²ˆí˜¸
 		)
-		REFERENCES Boards ( -- °Ô½ÃÆÇ
-			bno -- °Ô½Ã±Û¹øÈ£
+		REFERENCES Boards ( -- ê²Œì‹œíŒ
+			bno -- ê²Œì‹œê¸€ë²ˆí˜¸
 		) ON DELETE CASCADE;
 
 		
@@ -270,13 +270,13 @@ ALTER TABLE BoardsContent
 		
 INSERT INTO boards
 (bno, btitle, uid,  breadcnt) values
-(1, '°Ô½Ã¹°01', 'user01', breadcnt+1),
-(2, '°Ô½Ã¹°02', 'user02', breadcnt+1);
+(1, 'ê²Œì‹œë¬¼01', 'user01', breadcnt+1),
+(2, 'ê²Œì‹œë¬¼02', 'user02', breadcnt+1);
 
 INSERT INTO boardscontent
 (bno, bcontent)values
-(1, '³»¿ë01'),
-(2, '³»¿ë02');
+(1, 'ë‚´ìš©01'),
+(2, 'ë‚´ìš©02');
 
 select MAX(bno)+1 from boards;
 

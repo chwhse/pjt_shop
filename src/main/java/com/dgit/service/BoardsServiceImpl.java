@@ -20,7 +20,23 @@ public class BoardsServiceImpl implements BoardsService {
 	}
 
 	@Override
-	public int getMaxBno() throws Exception {
-		return dao.getMaxBno();
+	public void boardsInsert(BoardsVO vo) throws Exception {
+		vo.setBno(dao.getMaxBno());
+		dao.boardsInsert(vo);
+	}
+
+	@Override
+	public BoardsVO boardsSelectByNo(int no) throws Exception {
+		return dao.boardsSelectByNo(no);
+	}
+
+	@Override
+	public void boardsDelete(int no) throws Exception {
+		dao.boardsDelete(no);
+	}
+
+	@Override
+	public void boardsUpdate(BoardsVO vo) throws Exception {
+		dao.boardsUpdate(vo);
 	}
 }

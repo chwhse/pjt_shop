@@ -26,4 +26,24 @@ public class BoardsDAOImpl implements BoardsDAO {
 		return session.selectOne(namespace+".getMaxBno");
 	}
 
+	@Override
+	public void boardsInsert(BoardsVO vo) {
+		session.insert(namespace+".boardsInsert", vo);
+	}
+	@Override
+	public BoardsVO boardsSelectByNo(int no) throws Exception {
+		return session.selectOne(namespace+".boardsSelectByNo", no);
+	}
+
+	@Override
+	public void boardsDelete(int no) throws Exception {
+		session.delete(namespace+".boardsDelete", no);
+	}
+
+	@Override
+	public void boardsUpdate(BoardsVO vo) throws Exception {
+		session.update(namespace+".boardsUpdate", vo);
+	}
+
+
 }

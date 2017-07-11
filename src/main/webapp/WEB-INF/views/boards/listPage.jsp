@@ -9,19 +9,19 @@
 </head>
 <body>
 
-	<a href="register">[새 프로젝트 등록]</a>
+	<a href="register">[게시글 등록]</a>
 	
 	<c:if test="${list.size() == 0 }">
-		등록된 프로젝트가 없습니다.
+		등록된 게시글이 없습니다.
 	</c:if>
 	
 	<c:if test="${list.size() > 0 }">
 		<table border="1">
 			<tr>
-				<th>프로젝트 이름</th>
-				<th>시작날짜</th>
-				<th>종료날짜</th>
-				<th>상태</th>
+				<th>title</th>
+				<th>writer</th>
+				<th>register date</th>
+				<th>read count</th>
 			</tr>
 			
 	<c:forEach var="board" items="${list }">

@@ -1,0 +1,59 @@
+@CHARSET "UTF-8";
+
+	.error{
+		color: red;
+		display: none;
+		font-size: 12px;
+		margin-left: 90px;
+	}
+	.error2{
+		color: red;
+		display: none;
+		font-size: 12px;
+		margin-left: 90px;
+	}
+	form {
+		width:300px;
+		border: 1px solid gray;
+		padding-left: 20px;
+	}
+	label {
+		padding-left: 10px;
+		width:80px;
+		float: left;
+	}
+	p:LAST-CHILD{
+		text-align: center;
+	}
+
+header {
+	width: 1150px;
+	height: 150px;
+	background: #1E90FF;
+	line-height: 150px;
+	margin: 0 auto;
+}
+
+header p {
+	color: white;
+	font-size: 25px;
+}
+
+section {
+	width: 960px;
+	margin: 20px auto;
+}
+
+footer {
+	color: white;
+	text-align: center;
+	height: 150px;
+	width: 1150px;
+	margin: 0 auto;
+	background: #1E90FF;
+	line-height: 150px;
+}
+
+footer p {
+	font-size: 25px;
+}
