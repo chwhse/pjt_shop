@@ -26,11 +26,11 @@
 			
 	<c:forEach var="board" items="${list }">
 		<tr>
-			<td><a href="read?no=${board.btitle}">
-			${board.projectname}</a></td>
-			<td>${board.startdate}</td>
-			<td>${board.enddate}</td>
-			<td>${board.projecting}</td>
+			<td><a href="read?no=${board.bno}">
+			${board.btitle}</a></td>
+			<td>${board.uid}</td>
+			<td>${board.bregdate}</td>
+			<td>${board.breadcnt}</td>
 		
 		</tr>
 	</c:forEach>
