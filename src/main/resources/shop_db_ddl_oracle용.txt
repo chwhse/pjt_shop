@@ -1,0 +1,263 @@
+
+-- 게시판내용
+CREATE TABLE Boards_content (
+	bno      INTEGER NULL COMMENT '게시글번호', -- 게시글번호
+	bcontent TEXT    NULL COMMENT '게시판내용' -- 게시판내용
+)
+COMMENT '게시판내용';
+
+-- 게시판
+CREATE TABLE Boards (
+	bno      INTEGER       NOT NULL COMMENT '게시글번호', -- 게시글번호
+	btitle   varchar2(100) NOT NULL COMMENT '게시글제목', -- 게시글제목
+	uid      varchar2(20)  NULL     COMMENT '회원아이디', -- 회원아이디
+	bregdate TIMESTAMP     NOT NULL COMMENT '게시일', -- 게시일
+	breadcnt INTEGER       NOT NULL COMMENT '게시글조회수' -- 게시글조회수
+)
+COMMENT '게시판';
+
+-- 게시판
+ALTER TABLE Boards
+	ADD CONSTRAINT PK_Boards -- 게시판 기본키
+		PRIMARY KEY (
+			bno -- 게시글번호
+		);
+
+-- 상품상세
+CREATE TABLE Goods_detail (
+	gcode      varchar2(20)  NOT NULL COMMENT '상품코드', -- 상품코드
+	gdesc      VARCHAR(2000) NULL     COMMENT '상품설명', -- 상품설명
+	gdetailimg VARCHAR(2000) NULL     COMMENT '상품상세이미지', -- 상품상세이미지
+	gstock     INTEGER       NULL     COMMENT '상품재고수량' -- 상품재고수량
+)
+COMMENT '상품상세';
+
+-- 상품상세
+ALTER TABLE Goods_detail
+	ADD CONSTRAINT PK_Goods_detail -- 상품상세 기본키
+		PRIMARY KEY (
+			gcode -- 상품코드
+		);
+
+-- 상품
+CREATE TABLE Goods (
+	gcode     varchar2(20) NOT NULL COMMENT '상품코드', -- 상품코드
+	gname     varchar2(40) NOT NULL COMMENT '상품명', -- 상품명
+	gcategory varchar2(20) NULL     COMMENT '상품카테고리', -- 상품카테고리
+	gthumb    VARCHAR(200) NULL     COMMENT '상품대표이미지', -- 상품대표이미지
+	gprice    INTEGER      NULL     COMMENT '상품가격', -- 상품가격
+	gisexist  BOOLEAN      NOT NULL COMMENT '존재여부' -- 존재여부
+)
+COMMENT '상품';
+
+-- 상품
+ALTER TABLE Goods
+	ADD CONSTRAINT PK_Goods -- 상품 기본키
+		PRIMARY KEY (
+			gcode -- 상품코드
+		);
+
+-- 상품후기코멘트
+CREATE TABLE Comment (
+	cno      INTEGER        NOT NULL COMMENT '상품후기코멘트번호', -- 상품후기코멘트번호
+	rno      INTEGER        NULL     COMMENT '상품후기번호', -- 상품후기번호
+	uid      varchar2(20)   NULL     COMMENT '회원아이디', -- 회원아이디
+	ccontent varchar2(1000) NULL     COMMENT '상품후기코멘트내용', -- 상품후기코멘트내용
+	cdate    TIMESTAMP      NULL     COMMENT '상품후기코멘트날짜' -- 상품후기코멘트날짜
+)
+COMMENT '상품후기코멘트';
+
+-- 상품후기코멘트
+ALTER TABLE Comment
+	ADD CONSTRAINT PK_Comment -- 상품후기코멘트 기본키
+		PRIMARY KEY (
+			cno -- 상품후기코멘트번호
+		);
+
+-- 수취인정보
+CREATE TABLE Recipient (
+	rcname    varchar2(20)  NOT NULL COMMENT '수취인명', -- 수취인명
+	rcemail   varchar2(50)  NULL     COMMENT '수취인이메일', -- 수취인이메일
+	rcaddr    varchar2(120) NULL     COMMENT '수취인주소', -- 수취인주소
+	rcphone   varchar2(20)  NULL     COMMENT '수취인전화', -- 수취인전화
+	rcmessage VARCHAR(120)  NULL     COMMENT '전달메시지' -- 전달메시지
+)
+COMMENT '수취인정보';
+
+-- 수취인정보
+ALTER TABLE Recipient
+	ADD CONSTRAINT PK_Recipient -- 수취인정보 기본키
+		PRIMARY KEY (
+			rcname -- 수취인명
+		);
+
+-- 주문
+CREATE TABLE Order (
+	ocode       varchar2(20) NOT NULL COMMENT '주문코드', -- 주문코드
+	ono         varchar2(20) NULL     COMMENT '주문번호', -- 주문번호
+	uid         varchar2(20) NULL     COMMENT '회원아이디', -- 회원아이디
+	oisbasket   BOOLEAN      NULL     COMMENT '장바구니여부', -- 장바구니여부
+	gcode       varchar2(20) NULL     COMMENT '상품코드', -- 상품코드
+	oquantity   INTEGER      NOT NULL COMMENT '주문수량', -- 주문수량
+	odate       TIMESTAMP    NOT NULL COMMENT '주문날짜', -- 주문날짜
+	ototalprice INTEGER      NOT NULL COMMENT '최종가격', -- 최종가격
+	rcname      varchar2(20) NULL     COMMENT '수취인명', -- 수취인명
+	ocondition  varchar2(20) NULL     COMMENT '주문상태' -- 주문상태
+)
+COMMENT '주문';
+
+-- 주문
+ALTER TABLE Order
+	ADD CONSTRAINT PK_Order -- 주문 기본키
+		PRIMARY KEY (
+			ocode -- 주문코드
+		);
+
+-- 상품후기
+CREATE TABLE Review (
+	rno      INTEGER       NOT NULL COMMENT '상품후기번호', -- 상품후기번호
+	gcode    varchar2(20)  NULL     COMMENT '상품코드', -- 상품코드
+	uid      varchar2(20)  NULL     COMMENT '회원아이디', -- 회원아이디
+	rtitle   varchar2(100) NOT NULL COMMENT '상품후기제목', -- 상품후기제목
+	rcontent TEXT          NOT NULL COMMENT '상품후기내용', -- 상품후기내용
+	rregdate TIMESTAMP     NOT NULL COMMENT '상품후기등록일', -- 상품후기등록일
+	ocode    varchar2(20)  NULL     COMMENT '주문코드' -- 주문코드
+)
+COMMENT '상품후기';
+
+-- 상품후기
+ALTER TABLE Review
+	ADD CONSTRAINT PK_Review -- 상품후기 기본키
+		PRIMARY KEY (
+			rno -- 상품후기번호
+		);
+
+-- 주문내역
+CREATE TABLE Order_history (
+	ocode       varchar2(20) NULL COMMENT '주문코드', -- 주문코드
+	uid         varchar2(20) NULL COMMENT '회원아이디', -- 회원아이디
+	ono         varchar2(20) NULL COMMENT '주문번호', -- 주문번호
+	odate       TIMESTAMP    NULL COMMENT '주문날짜', -- 주문날짜
+	oquantity   INTEGER      NULL COMMENT '주문수량', -- 주문수량
+	ototalprice INTEGER      NULL COMMENT '최종가격' -- 최종가격
+)
+COMMENT '주문내역';
+
+-- 회원
+CREATE TABLE User (
+	uid    varchar2(20)  NOT NULL COMMENT '회원아이디', -- 회원아이디
+	upw    varchar2(20)  NOT NULL COMMENT '회원비밀번호', -- 회원비밀번호
+	uname  varchar2(20)  NOT NULL COMMENT '회원명', -- 회원명
+	uemail varchar2(50)  NULL     COMMENT '회원이메일', -- 회원이메일
+	uaddr  varchar2(120) NULL     COMMENT '회원주소', -- 회원주소
+	uphone varchar2(20)  NULL     COMMENT '회원전화', -- 회원전화
+	ugrade BOOLEAN       NOT NULL COMMENT '계정등급' -- 계정등급
+)
+COMMENT '회원';
+
+-- 회원
+ALTER TABLE User
+	ADD CONSTRAINT PK_User -- 회원 기본키
+		PRIMARY KEY (
+			uid -- 회원아이디
+		);
+
+-- 게시판내용
+ALTER TABLE Boards_content
+	ADD CONSTRAINT FK_Boards_TO_Boards_content -- 게시판 -> 게시판내용
+		FOREIGN KEY (
+			bno -- 게시글번호
+		)
+		REFERENCES Boards ( -- 게시판
+			bno -- 게시글번호
+		);
+
+-- 상품상세
+ALTER TABLE Goods_detail
+	ADD CONSTRAINT FK_Goods_TO_Goods_detail -- 상품 -> 상품상세
+		FOREIGN KEY (
+			gcode -- 상품코드
+		)
+		REFERENCES Goods ( -- 상품
+			gcode -- 상품코드
+		);
+
+-- 상품후기코멘트
+ALTER TABLE Comment
+	ADD CONSTRAINT FK_Review_TO_Comment -- 상품후기 -> 상품후기코멘트
+		FOREIGN KEY (
+			rno -- 상품후기번호
+		)
+		REFERENCES Review ( -- 상품후기
+			rno -- 상품후기번호
+		);
+
+-- 상품후기코멘트
+ALTER TABLE Comment
+	ADD CONSTRAINT FK_User_TO_Comment -- 회원 -> 상품후기코멘트
+		FOREIGN KEY (
+			uid -- 회원아이디
+		)
+		REFERENCES User ( -- 회원
+			uid -- 회원아이디
+		);
+
+-- 주문
+ALTER TABLE Order
+	ADD CONSTRAINT FK_User_TO_Order -- 회원 -> 주문
+		FOREIGN KEY (
+			uid -- 회원아이디
+		)
+		REFERENCES User ( -- 회원
+			uid -- 회원아이디
+		);
+
+-- 주문
+ALTER TABLE Order
+	ADD CONSTRAINT FK_Recipient_TO_Order -- 수취인정보 -> 주문
+		FOREIGN KEY (
+			rcname -- 수취인명
+		)
+		REFERENCES Recipient ( -- 수취인정보
+			rcname -- 수취인명
+		);
+
+-- 주문
+ALTER TABLE Order
+	ADD CONSTRAINT FK_Goods_TO_Order -- 상품 -> 주문
+		FOREIGN KEY (
+			gcode -- 상품코드
+		)
+		REFERENCES Goods ( -- 상품
+			gcode -- 상품코드
+		);
+
+-- 상품후기
+ALTER TABLE Review
+	ADD CONSTRAINT FK_User_TO_Review -- 회원 -> 상품후기
+		FOREIGN KEY (
+			uid -- 회원아이디
+		)
+		REFERENCES User ( -- 회원
+			uid -- 회원아이디
+		);
+
+-- 상품후기
+ALTER TABLE Review
+	ADD CONSTRAINT FK_Goods_TO_Review -- 상품 -> 상품후기
+		FOREIGN KEY (
+			gcode -- 상품코드
+		)
+		REFERENCES Goods ( -- 상품
+			gcode -- 상품코드
+		);
+
+-- 상품후기
+ALTER TABLE Review
+	ADD CONSTRAINT FK_Order_TO_Review -- 주문 -> 상품후기
+		FOREIGN KEY (
+			ocode -- 주문코드
+		)
+		REFERENCES Order ( -- 주문
+			ocode -- 주문코드
+		);
