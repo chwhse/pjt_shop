@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.dgit.domain.BoardsContentVO;
 import com.dgit.domain.BoardsVO;
 import com.dgit.service.BoardsService;
 
@@ -40,13 +39,11 @@ public class BoardsController {
 	}
 	
 	@RequestMapping(value="/register", method=RequestMethod.POST)
-	public String registerPOST(BoardsVO bVO, BoardsContentVO bcVO) throws Exception{
+	public String registerPOST(BoardsVO vo) throws Exception{
 		logger.info("=============Register Post=============");
 		
-		service.boardsInsert(bVO);
-		// service bc 넣어야해
-		logger.info(bVO.toString());
-		logger.info(bcVO.toString());
+		service.boardsInsert(vo);
+		logger.info(vo.toString());
 		return "redirect:listPage";
 	}
 	
@@ -74,10 +71,10 @@ public class BoardsController {
 	}
 	
 	@RequestMapping(value="/modify", method=RequestMethod.POST)
-	public String modifyPOST(BoardsVO vo,RedirectAttributes rttr) 	throws Exception{
+	public String modifyPOST(BoardsVO vo, RedirectAttributes rttr) 	throws Exception{
 		
 		System.out.println("=======MOD POST========");
-		System.out.println("vo:"+vo.toString());
+		System.out.println("bvo:"+vo.toString());
 		service.boardsUpdate(vo);
 		
 		rttr.addAttribute("no", vo.getBno());

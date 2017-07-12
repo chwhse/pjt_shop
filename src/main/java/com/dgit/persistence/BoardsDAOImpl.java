@@ -45,5 +45,20 @@ public class BoardsDAOImpl implements BoardsDAO {
 		session.update(namespace+".boardsUpdate", vo);
 	}
 
+	@Override
+	public void boardsContentInsert(BoardsVO vo) {
+		session.insert(namespace+".boardsContentInsert", vo);
+	}
+
+	@Override
+	public void boardsContentDelete(int no) throws Exception {
+		session.delete(namespace+".boardsContentDelete", no);
+	}
+
+	@Override
+	public void boardsContentUpdate(BoardsVO vo) throws Exception {
+		session.update(namespace+".boardsContentUpdate", vo);
+	}
+
 
 }

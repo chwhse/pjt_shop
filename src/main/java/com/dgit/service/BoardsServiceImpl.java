@@ -23,6 +23,7 @@ public class BoardsServiceImpl implements BoardsService {
 	public void boardsInsert(BoardsVO vo) throws Exception {
 		vo.setBno(dao.getMaxBno());
 		dao.boardsInsert(vo);
+		dao.boardsContentInsert(vo);
 	}
 
 	@Override
@@ -33,10 +34,12 @@ public class BoardsServiceImpl implements BoardsService {
 	@Override
 	public void boardsDelete(int no) throws Exception {
 		dao.boardsDelete(no);
+		dao.boardsContentDelete(no);
 	}
 
 	@Override
 	public void boardsUpdate(BoardsVO vo) throws Exception {
 		dao.boardsUpdate(vo);
+		dao.boardsContentUpdate(vo);
 	}
 }

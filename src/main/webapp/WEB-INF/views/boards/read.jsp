@@ -14,7 +14,7 @@
 		$("#del").click(function(e) {
 			e.preventDefault();
 			var res = confirm("정말로 삭제하시겠습니까?");
-			var no = ${project.projectno};
+			var no = ${board.bno};
 			if(res == true){
 				location.href = "delete?no="+no; 
 			}else{
@@ -37,9 +37,9 @@
 			</tr>			
 			<tr>
 				<th>게시글 내용</th>
-				<td><%-- ${boardcontent.content} --%></td>
+				<td>${board.bcontent}</td>
 			</tr>
-
+ 
 			<tr>
 				<th>register date</th>
 				<td>${board.bregdate}</td>

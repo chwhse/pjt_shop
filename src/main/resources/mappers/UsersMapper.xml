@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dgit.persistence.UsersDAO">
+	
+	<sql id="wheresql_uid">
+		<where>uid = #{uid}</where>
+	</sql>
+	
+	<select id="usersSelectByid" resultType="UsersVO">
+		SELECT uid, upw, uname, uemail, uaddr, uphone, ugrade
+		FROM users
+		<include refid="wheresql_uid"/>
+	</select>
+	
+	<insert id="usersInsert">
+		INSERT INTO users
+		(uid, upw, uname, uemail, uaddr, uphone)
+		VALUES(#{uid}, #{upw}, #{uname}, #{uemail}, #{uaddr}, #{uphone});
+	</insert>
+			
+	<select id="login" resultType="UsersVO">
+		select * from users 
+		<include refid="wheresql_uid"/> 
+		and upw = #{upw}
+	</select>
+	
+	<delete id="usersDelete">
+		DELETE FROM  users
+		<include refid="wheresql_uid"/>
+	</delete>
+	
+	<update id="usersUpdate">
+		UPDATE users
+		<set>
+			<if test="upw != null">
+				upw=#{upw}, 
+			</if>
+			<if test="uname != null">
+				 uname=#{uname}, 
+			</if>
+			<if test="uemail != null">
+				uemail=#{uemail},
+			</if>
+			<if test="uaddr != null">
+				uaddr=#{uaddr},
+			</if>
+			<if test="uphone != null">
+				 uphone=#{uphone}, 
+			</if>
+		</set>  
+		<include refid="wheresql_uid"/>
+	</update>
+</mapper>

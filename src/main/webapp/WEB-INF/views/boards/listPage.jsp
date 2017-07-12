@@ -4,6 +4,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link href="${pageContext.request.contextPath}/resources/bootstrap/css/bootsnipp.css" rel="stylesheet" type="text/css" />
+	
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>

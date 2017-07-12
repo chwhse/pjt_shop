@@ -1,6 +1,6 @@
 -- 회원
-DROP TABLE IF EXISTS Comment;
-DROP TABLE IF EXISTS Review; 
+DROP TABLE IF EXISTS Comments;
+DROP TABLE IF EXISTS Reviews; 
 DROP TABLE IF EXISTS Orders;
 DROP TABLE IF EXISTS Users; 
 CREATE TABLE Users (
@@ -10,7 +10,7 @@ CREATE TABLE Users (
 	uemail varchar(50)  NULL     , -- 회원이메일
 	uaddr  varchar(120) NULL     , -- 회원주소
 	uphone varchar(20)  NULL     , -- 회원전화
-	ugrade BOOLEAN       NOT NULL  -- 계정등급
+	ugrade BOOLEAN  NOT NULL default false -- 계정등급
 );
 
 -- 회원
@@ -127,7 +127,7 @@ ALTER TABLE Orders
 		);
 
 -- 상품후기
-CREATE TABLE Review (
+CREATE TABLE Reviews (
 	rno      INTEGER       NOT NULL , -- 상품후기번호
 	gcode    varchar(20)  NULL     , -- 상품코드
 	uid      varchar(20)  NULL     , -- 회원아이디
@@ -138,7 +138,7 @@ CREATE TABLE Review (
 );
 
 -- 상품후기
-ALTER TABLE Review
+ALTER TABLE Reviews
 	ADD CONSTRAINT PK_Review -- 상품후기 기본키
 		PRIMARY KEY (
 			rno -- 상품후기번호
@@ -146,7 +146,7 @@ ALTER TABLE Review
 
 
 -- 상품후기
-ALTER TABLE Review
+ALTER TABLE Reviews
 	ADD CONSTRAINT FK_Users_TO_Review -- 회원 -> 상품후기
 		FOREIGN KEY (
 			uid -- 회원아이디
@@ -156,7 +156,7 @@ ALTER TABLE Review
 		);
 
 -- 상품후기
-ALTER TABLE Review
+ALTER TABLE Reviews
 	ADD CONSTRAINT FK_Goods_TO_Review -- 상품 -> 상품후기
 		FOREIGN KEY (
 			gcode -- 상품코드
@@ -166,7 +166,7 @@ ALTER TABLE Review
 		);
 
 -- 상품후기
-ALTER TABLE Review
+ALTER TABLE Reviews
 	ADD CONSTRAINT FK_Orders_TO_Review -- 주문 -> 상품후기
 		FOREIGN KEY (
 			ocode -- 주문코드
@@ -177,7 +177,7 @@ ALTER TABLE Review
 		
 			
 -- 상품후기코멘트
-CREATE TABLE Comment (
+CREATE TABLE Comments (
 	cno      INTEGER        NOT NULL , -- 상품후기코멘트번호
 	rno      INTEGER        NULL  , -- 상품후기번호
 	uid      varchar(20)   NULL   , -- 회원아이디
@@ -186,24 +186,24 @@ CREATE TABLE Comment (
 );
 
 -- 상품후기코멘트
-ALTER TABLE Comment
+ALTER TABLE Comments
 	ADD CONSTRAINT PK_Comment -- 상품후기코멘트 기본키
 		PRIMARY KEY (
 			cno -- 상품후기코멘트번호
 		);
 
 -- 상품후기코멘트
-ALTER TABLE Comment
+ALTER TABLE Comments
 	ADD CONSTRAINT FK_Review_TO_Comment -- 상품후기 -> 상품후기코멘트
 		FOREIGN KEY (
 			rno -- 상품후기번호
 		)
-		REFERENCES Review ( -- 상품후기
+		REFERENCES Reviews ( -- 상품후기
 			rno -- 상품후기번호
 		);
 
 -- 상품후기코멘트
-ALTER TABLE Comment
+ALTER TABLE Comments
 	ADD CONSTRAINT FK_Users_TO_Comment -- 회원 -> 상품후기코멘트
 		FOREIGN KEY (
 			uid -- 회원아이디
@@ -269,17 +269,65 @@ ALTER TABLE BoardsContent
 /*----------------------------dump data insert-------------------------- */		
 		
 INSERT INTO boards
-(bno, btitle, uid,  breadcnt) values
-(1, '게시물01', 'user01', breadcnt+1),
-(2, '게시물02', 'user02', breadcnt+1);
+(bno, btitle, uid) values
+(1, '게시물01', 'admin'),
+(2, '게시물02', 'admin'),
+(3, '게시물03', 'admin'),
+(4, '게시물04', 'admin'),
+(5, '게시물05', 'admin'),
+(6, '게시물06', 'admin'),
+(7, '게시물07', 'admin'),
+(8, '게시물08', 'admin'),
+(9, '게시물09', 'admin'),
+(10, '게시물10', 'admin');
 
 INSERT INTO boardscontent
 (bno, bcontent)values
 (1, '내용01'),
-(2, '내용02');
+(2, '내용02'),
+(3, '내용03'),
+(4, '내용04'),
+(5, '내용05'),
+(6, '내용06'),
+(7, '내용07'),
+(8, '내용08'),
+(9, '내용09'),
+(10, '내용10');
 
 select MAX(bno)+1 from boards;
 
 
 select * from boards
-order by bno desc, bregdate desc;
+		order by bno desc, bregdate desc;
+
+SELECT b.bno, b.btitle, bc.bcontent, b.uid, b.bregdate, b.breadcnt
+FROM boards b join boardscontent bc on b.bno=bc.bno
+where b.bno = 1;
+
+UPDATE boardscontent
+	set bcontent='99999'
+	where bno = 10;
+
+
+/*	=================================================================================*/	
+
+	
+INSERT INTO users
+(uid, upw, uname, uemail, uaddr, uphone, ugrade)values
+('admin', '1234', '관리자', 'admin@gmail.com', 'Daegu IT', '010-1111-1234', true);
+
+INSERT INTO users
+(uid, upw, uname, uemail, uaddr, uphone)values
+('user01', '1234', '회원01', 'user01@gmail.com', '대구아이티', '010-2222-1234'),
+('user02', '1234', '회원02', 'user02@gmail.com', '대구아이티', '010-3333-1234'),
+('user03', '1234', '회원03', 'user03@gmail.com', '대구아이티', '010-4444-1234'),
+('user04', '1234', '회원04', 'user04@gmail.com', '대구아이티', '010-5555-1234'),
+('user05', '1234', '회원05', 'user05@gmail.com', '대구아이티', '010-6666-1234'),
+('user06', '1234', '회원06', 'user06@gmail.com', '대구아이티', '010-7777-1234'),
+('user07', '1234', '회원07', 'user07@gmail.com', '대구아이티', '010-8888-1234'),
+('user08', '1234', '회원08', 'user08@gmail.com', '대구아이티', '010-9999-1234'),
+('user09', '1234', '회원09', 'user09@gmail.com', '대구아이티', '010-1010-1234'),
+('user10', '1234', '회원10', 'user10@gmail.com', '대구아이티', '010-0110-1234');
+
+
+

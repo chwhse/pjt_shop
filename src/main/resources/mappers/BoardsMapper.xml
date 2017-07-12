@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dgit.persistence.BoardsDAO">
+
+	<resultMap type="BoardsVO" id="boardResult">
+		<result property="bno" column="bno"/>
+		<result property="btitle" column="btitle"/>
+		<result property="bcontent" column="bcontent"/>
+		<result property="uid" column="uid"/>
+		<result property="bregdate" column="bregdate"/>
+		<result property="breadcnt" column="breadcnt"/>
+	</resultMap>
+	
 	<sql id="wheresql_bno">
-	where bno = #{bno}
+		where bno = #{bno}
 	</sql>
 	<select id="boardsListAll" resultType="BoardsVO">
 		select * from boards
@@ -13,10 +23,11 @@
 		select MAX(bno)+1 from boards
 	</select>
 	
-	<select id="boardsSelectByNo" resultType="BoardsVO">
-		SELECT *
-		FROM boards 
-		<include refid="wheresql_bno"/>
+	<select id="boardsSelectByNo" resultMap="boardResult">
+		SELECT b.bno, b.btitle, bc.bcontent, b.uid, b.bregdate, b.breadcnt
+		FROM boards b join boardscontent bc
+		on b.bno=bc.bno
+		where b.bno = #{bno}
 	</select>
 	
 	<insert id="boardsInsert">
@@ -24,15 +35,28 @@
 		(bno, btitle, uid, bregdate)
 		VALUES(#{bno}, #{btitle}, #{uid}, CURRENT_TIMESTAMP);
 	</insert>
+	<insert id="boardsContentInsert">
+		INSERT INTO boardscontent
+		(bno, bcontent)
+		VALUES(#{bno}, #{bcontent});
+	</insert>
 	
 	<update id="boardsUpdate">
 		UPDATE boards
-		SET btitle=#{btitle}, uid=#{uid}, bregdate=CURRENT_TIMESTAMP
+		SET btitle=#{btitle}, uid=#{uid}
 		<include refid="wheresql_bno"/>
 	</update>
-	
+	<update id="boardsContentUpdate">
+		UPDATE boardscontent
+		SET bcontent=#{bcontent}
+		<include refid="wheresql_bno"/>
+	</update>
 	<delete id="boardsDelete">
 		DELETE FROM  boards
+		<include refid="wheresql_bno"/>
+	</delete>
+	<delete id="boardsContentDelete">
+		DELETE FROM boardscontent
 		<include refid="wheresql_bno"/>
 	</delete>
 	

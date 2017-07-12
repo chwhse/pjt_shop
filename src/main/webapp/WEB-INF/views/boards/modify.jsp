@@ -42,38 +42,24 @@
 <body>
 	<form action="modify" name="f1" method="post">
 		<p>
-			<input type="hidden" name="projectno"
-				value="${project.projectno }">
+			<input type="hidden" name="bno"
+				value="${board.bno }">
 		</p>
 		<p>
-			<label>프로젝트 이름</label><input type="text" name="projectname"
-				value="${project.projectname }">
-			<span class="error">프로젝트 이름을 입력하세요.</span>
+			<label>board title</label><input type="text" name="btitle"
+				value="${board.btitle }">
+			<span class="error">input the board-title.</span>
 		</p>
 		
 		<p>
-			<label>프로젝트 내용</label><input type="text" name="content"
-				value="${project.content }" >
-			<span class="error">프로젝트 내용을 입력하세요.</span>
+			<label>board content</label><input type="text" name="bcontent"
+				value="${board.bcontent }" >
+			<span class="error">input the board-content.</span>
 		</p>
 		<p>
-			<label>시작날짜</label><input type="date" name="startdate"  
-				value = "${project.startdate }"	id="startdate">
-			<span class="error">시작날짜을 입력하세요.</span>
+			<label>writer</label><input type="text" name="uid"  
+				value = "${board.uid }" readonly="readonly">
 		</p>
-		<p>
-			<label>종료날짜</label><input type="date" name="enddate"
-				value="${project.enddate }" id="enddate">
-			<span class="error">종료날짜을 입력하세요.</span>
-		</p>
-			<label>진행상태</label>
-			<select name="projecting" id="projecting">
-				<option<c:if test="${project.projecting eq '준비' }">selected</c:if>>준비</option>
-				<option<c:if test="${project.projecting eq '진행중' }">selected</c:if>>진행중</option>
-				<option<c:if test="${project.projecting eq '종료' }">selected</c:if>>종료</option>
-				<option<c:if test="${project.projecting eq '보류' }">selected</c:if>>보류</option>
-				
-			</select>
 		<p>
 			<input type="submit" value="수정">
 		</p>

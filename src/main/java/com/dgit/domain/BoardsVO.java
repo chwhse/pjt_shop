@@ -5,10 +5,19 @@ import java.sql.Date;
 public class BoardsVO {
 	private int bno;
 	private String btitle;
+	private String bcontent;
 	private String uid;
 	private Date bregdate;
 //	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private int breadcnt;
+	
+	
+	public String getBcontent() {
+		return bcontent;
+	}
+	public void setBcontent(String bcontent) {
+		this.bcontent = bcontent;
+	}
 	public int getBno() {
 		return bno;
 	}
@@ -41,9 +50,9 @@ public class BoardsVO {
 	}
 	@Override
 	public String toString() {
-		return "BoardsVO [bno=" + bno + ", btitle=" + btitle + ", uid=" + uid + ", bregdate=" + bregdate + ", breadcnt="
-				+ breadcnt + "]";
+		return "BoardsVO [bno=" + bno + ", btitle=" + btitle + ", bcontent=" + bcontent + ", uid=" + uid + ", bregdate="
+				+ bregdate + ", breadcnt=" + breadcnt + "]";
 	}
-	
+
 	
 }
