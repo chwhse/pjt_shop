@@ -30,7 +30,8 @@ CREATE TABLE Goods (
 	gcategory varchar(20) NULL     , -- 상품카테고리
 	gthumb    VARCHAR(200) NULL    , -- 상품대표이미지
 	gprice    INTEGER      NULL    , -- 상품가격
-	gisexist  BOOLEAN      NOT NULL  -- 존재여부
+	gregdate  TIMESTAMP    NOT NULL default now(), -- 상품게시일
+	gisexist  BOOLEAN      NOT NULL default 0 -- 존재여부
 );
 
 -- 상품
@@ -44,7 +45,7 @@ ALTER TABLE Goods
 CREATE TABLE GoodsDetail (
 	gcode      varchar(20)  NOT NULL , -- 상품코드
 	gdesc      VARCHAR(2000) NULL  , -- 상품설명
-	gdetailimg TEXT NULL  , -- 상품상세이미지
+	gdetailimg text NULL  , -- 상품상세이미지
 	gstock     INTEGER       NULL   -- 상품재고수량
 );
 
@@ -106,15 +107,6 @@ ALTER TABLE Orders
 		PRIMARY KEY (
 			ocode -- 주문코드
 		);
--- 주문
-ALTER TABLE Orders
-	ADD CONSTRAINT FK_Users_TO_Orders -- 회원 -> 주문
-		FOREIGN KEY (
-			uid -- 회원아이디
-		)
-		REFERENCES Users ( -- 회원
-			uid -- 회원아이디
-		);
 
 -- 주문
 ALTER TABLE Orders
@@ -144,16 +136,6 @@ ALTER TABLE Reviews
 			rno -- 상품후기번호
 		);
 
-
--- 상품후기
-ALTER TABLE Reviews
-	ADD CONSTRAINT FK_Users_TO_Review -- 회원 -> 상품후기
-		FOREIGN KEY (
-			uid -- 회원아이디
-		)
-		REFERENCES Users ( -- 회원
-			uid -- 회원아이디
-		);
 
 -- 상품후기
 ALTER TABLE Reviews
@@ -202,15 +184,6 @@ ALTER TABLE Comments
 			rno -- 상품후기번호
 		);
 
--- 상품후기코멘트
-ALTER TABLE Comments
-	ADD CONSTRAINT FK_Users_TO_Comment -- 회원 -> 상품후기코멘트
-		FOREIGN KEY (
-			uid -- 회원아이디
-		)
-		REFERENCES Users ( -- 회원
-			uid -- 회원아이디
-		);
 
 -- 주문내역
 DROP TABLE IF EXISTS OrdersHistory; 
@@ -267,7 +240,25 @@ ALTER TABLE BoardsContent
 		
 /*	=================================================================================*/	
 /*----------------------------dump data insert-------------------------- */		
-		
+
+	
+INSERT INTO users
+(uid, upw, uname, uemail, uaddr, uphone, ugrade)values
+('admin', '1234', '관리자', 'admin@gmail.com', 'Daegu IT', '010-1111-1234', true);
+
+INSERT INTO users
+(uid, upw, uname, uemail, uaddr, uphone)values
+('user01', '1234', '회원01', 'user01@gmail.com', '대구아이티', '010-2222-1234'),
+('user02', '1234', '회원02', 'user02@gmail.com', '대구아이티', '010-3333-1234'),
+('user03', '1234', '회원03', 'user03@gmail.com', '대구아이티', '010-4444-1234'),
+('user04', '1234', '회원04', 'user04@gmail.com', '대구아이티', '010-5555-1234'),
+('user05', '1234', '회원05', 'user05@gmail.com', '대구아이티', '010-6666-1234'),
+('user06', '1234', '회원06', 'user06@gmail.com', '대구아이티', '010-7777-1234'),
+('user07', '1234', '회원07', 'user07@gmail.com', '대구아이티', '010-8888-1234'),
+('user08', '1234', '회원08', 'user08@gmail.com', '대구아이티', '010-9999-1234'),
+('user09', '1234', '회원09', 'user09@gmail.com', '대구아이티', '010-1010-1234'),
+('user10', '1234', '회원10', 'user10@gmail.com', '대구아이티', '010-0110-1234');
+
 INSERT INTO boards
 (bno, btitle, uid) values
 (1, '게시물01', 'admin'),
@@ -296,7 +287,6 @@ INSERT INTO boardscontent
 
 select MAX(bno)+1 from boards;
 
-
 select * from boards
 		order by bno desc, bregdate desc;
 
@@ -308,26 +298,81 @@ UPDATE boardscontent
 	set bcontent='99999'
 	where bno = 10;
 
+select count(*) from boards;	
 
 /*	=================================================================================*/	
+	INSERT INTO goods
+	(gcode, gname, gcategory, gthumb, gprice, gregdate, gisexist) values
+	('c10001', '코스타리카 돈 마요 100g', 'coffee','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif',7500, CURRENT_TIMESTAMP, 1),
+	('c10002', '코스타리카 카틀레야 게이샤 100g', 'coffee','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif',16000, CURRENT_TIMESTAMP, 1),
+	('c10003', '파나마 핀카 자미슨 모건 게이샤 100g', 'coffee','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif',32000, CURRENT_TIMESTAMP, 1),
+	('c10004', '파나마 핀카 자미슨 모건 게이샤 200g', 'coffee','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif',64000, CURRENT_TIMESTAMP, 1),
+	('c10005', '예멘 모카 마타리 200g', 'coffee','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif',22000, CURRENT_TIMESTAMP, 1),
+	('c10006', '자메이카 블루마운틴 200g', 'coffee','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif',45000, CURRENT_TIMESTAMP, 1),
+	('c10007', '하와이안 코나 엑스트라 팬시 200g', 'coffee','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif',43000, CURRENT_TIMESTAMP, 1),
+	('c90002', '카뮤 더치 블렌드 500g', 'coffee','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif',35000, CURRENT_TIMESTAMP, 1),
+	('c90003', '카뮤 블렌드 500g', 'coffee','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif',30000, CURRENT_TIMESTAMP, 1),
+	('c90004', '에스프레소 블렌드 500g', 'coffee','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif',30000, CURRENT_TIMESTAMP, 1),
+	('c90005', '카뮤 다크 블렌드 500g', 'coffee','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif',30000, CURRENT_TIMESTAMP, 1),
+	('c20001', '케냐 클래식 500g', 'coffee','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif',35000, CURRENT_TIMESTAMP, 1),
+	('c20002', '에티오피아 예가체프 500g', 'coffee','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif',37500, CURRENT_TIMESTAMP, 1),
+	('c20003', '에티오피아 시다모 500g', 'coffee','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif',35000, CURRENT_TIMESTAMP, 1),
+	('c20004', '에티오피아 코케 500g', 'coffee','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif',45000, CURRENT_TIMESTAMP, 1),
+	('c20005', '인도네시아 만델링 500g', 'coffee','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif',35000, CURRENT_TIMESTAMP, 1),
+	('c20006', '파푸아뉴기니 마라와카 블루마운틴 500g', 'coffee','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif',37500, CURRENT_TIMESTAMP, 1),
+	('c20007', '콜롬비아 라 유니온 500g', 'coffee','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif',37500, CURRENT_TIMESTAMP, 1),
+	('c20008', '과테말라 클래식 500g', 'coffee','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif',35000, CURRENT_TIMESTAMP, 1);
+
+	INSERT INTO goodsdetail
+	(gcode, gdesc, gdetailimg, gstock) values
+	('c10001', '상세-코스타리카 돈 마요 100g', '/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif', 100),
+	('c10002', '상세-코스타리카 카틀레야 게이샤 100g', '/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif', 10),
+	('c10003', '상세-파나마 핀카 자미슨 모건 게이샤 100g','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif',1),
+	('c10004', '상세-파나마 핀카 자미슨 모건 게이샤 200g','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif',1),
+	('c10005', '상세-예멘 모카 마타리 200g','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif', 1),
+	('c10006', '상세-자메이카 블루마운틴 200g','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif', 1),
+	('c10007', '상세-하와이안 코나 엑스트라 팬시 200g','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif', 1),
+	('c90002', '상세-카뮤 더치 블렌드 500g','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif', 1),
+	('c90003', '상세-카뮤 블렌드 500g','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif', 1),
+	('c90004', '상세-에스프레소 블렌드 500g','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif', 1),
+	('c90005', '상세-카뮤 다크 블렌드 500g','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif', 1),
+	('c20001', '상세-케냐 클래식 500g','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif', 1),
+	('c20002', '상세-에티오피아 예가체프 500g','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif', 1),
+	('c20003', '상세-에티오피아 시다모 500g','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif', 1),
+	('c20004', '상세-에티오피아 코케 500g','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif', 1),
+	('c20005', '상세-인도네시아 만델링 500g','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif', 1),
+	('c20006', '상세-파푸아뉴기니 마라와카 블루마운틴 500g','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif', 1),
+	('c20007', '상세-콜롬비아 라 유니온 500g','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif', 1),
+	('c20008', '상세-과테말라 클래식 500g','/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif', 1);
+
+
+
+	select * from goods
+	order by gcode desc, gregdate desc;
+	
+	select right(gcode, 5)+1 from goods where gcode='c20008';
+	
+	select  g.gcode, gname, gcategory, gthumb, gprice, gregdate, gisexist, gdesc, gdetailimg, gstock
+		FROM goods g join goodsdetail gd
+		on g.gcode = gd.gcode
+		where g.gcode = 'c20008';
+	
+	UPDATE goods
+	SET gname='과테말라 클래식 500g', gcategory='coffee', gthumb='/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif', gprice=35000, gisexist=1
+	WHERE gcode='c20008';
+	
+	UPDATE goodsdetail
+	SET gdesc='상세-과테말라 클래식 500g', gdetailimg='/2017/07/05/s_3215e591-2e1f-4ae5-bbd2-eae7280e0c25_leaf2.gif', gstock=1
+	WHERE gcode='c20008';
 
 	
-INSERT INTO users
-(uid, upw, uname, uemail, uaddr, uphone, ugrade)values
-('admin', '1234', '관리자', 'admin@gmail.com', 'Daegu IT', '010-1111-1234', true);
 
-INSERT INTO users
-(uid, upw, uname, uemail, uaddr, uphone)values
-('user01', '1234', '회원01', 'user01@gmail.com', '대구아이티', '010-2222-1234'),
-('user02', '1234', '회원02', 'user02@gmail.com', '대구아이티', '010-3333-1234'),
-('user03', '1234', '회원03', 'user03@gmail.com', '대구아이티', '010-4444-1234'),
-('user04', '1234', '회원04', 'user04@gmail.com', '대구아이티', '010-5555-1234'),
-('user05', '1234', '회원05', 'user05@gmail.com', '대구아이티', '010-6666-1234'),
-('user06', '1234', '회원06', 'user06@gmail.com', '대구아이티', '010-7777-1234'),
-('user07', '1234', '회원07', 'user07@gmail.com', '대구아이티', '010-8888-1234'),
-('user08', '1234', '회원08', 'user08@gmail.com', '대구아이티', '010-9999-1234'),
-('user09', '1234', '회원09', 'user09@gmail.com', '대구아이티', '010-1010-1234'),
-('user10', '1234', '회원10', 'user10@gmail.com', '대구아이티', '010-0110-1234');
+	
 
+
+
+
+
+/*	=================================================================================*/	
 
 

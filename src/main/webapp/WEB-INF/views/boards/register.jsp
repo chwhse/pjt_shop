@@ -3,24 +3,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+<%@ include file="../include/header_head.jsp"%> 
 <meta charset="UTF-8">
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/common.css">
-<style type="text/css">
-	form{
-		width:500px;
-	}
-   label{
-      width : 150px;
-      text-align: right;
-      float: left;
-      margin-right: 20px;
-   }
-   .a1{
-      padding-left: 850px;
-   }
-</style>
-
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/common.css?ver4">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/common.js"></script>
@@ -35,31 +20,50 @@
 			return false;
 		};
 
-		alert("등록되었습니다.");
+		alert("등록 되었습니다.");
 
 	});
+    
+    
   });
+  function btnCancel() {
+	  location.href ="listPage"; 
+	}
   </script>
-
-<title>Insert title here</title>
 </head>
-<body>
-	<form action="register" name="f1" method="post">
-		<p>
-			<label>board title</label><input type="text" name="btitle" id="btitle" value="">
-			<span class="error">게시글 제목을 입력하세요.</span>
-		</p>
-		
-		<p>
-			<label>board content</label><input type="text" name="bcontent" value="">
-			<span class="error">게시글 내용을 입력하세요.</span>
-		</p>
-		<p>
-			<label>writer</label><input type="text" name="uid"  id="uid" value="">
-		</p>
-		<p>
-			<input type="submit" value="추가">
-		</p>
-	</form>
-</body>
+<%@ include file="../include/header.jsp"%> 
+	<body>
+		<form class="form-horizontal" action="register" name="f1" method="post">
+			<div class="form-group"> 
+				<label class="col-sm-3 control-label">board title</label>
+				<div class="col-sm-6">
+					<input class="form-control" type="text" name="btitle" id="btitle" value="">
+					<span class="error">input the board-title.</span>
+				</div>
+			</div>
+			
+			<div class="form-group"> 
+				<label class="col-sm-3 control-label">board content</label><br>
+				<div class="col-sm-6">
+					<textarea class="form-control" rows="10" cols="50" name="bcontent"></textarea>
+					<span class="error">input the board-content.</span>
+				</div>
+			</div>
+			<div class="form-group"> 
+				<label class="col-sm-3 control-label">writer</label>
+				<div class="col-sm-6">
+					<input class="form-control" type="text" name="uid"  id="uid" value="${login}" readonly="readonly">
+				</div>	
+			</div>
+			<div class="form-group"> 
+				<div class="col-sm-12 text-center">
+					<button class="btn btn-danger" >게시글 등록</button>
+					<button class="btn btn-default" type="button" onclick="btnCancel()" >취소</button>
+				</div>
+			</div>
+		</form>
+	</body>
+<%@ include file="../include/footer.jsp"%>
+<script src="${pageContext.request.contextPath}/resources/dist/js/bootstrap.min.js"></script>
+
 </html>

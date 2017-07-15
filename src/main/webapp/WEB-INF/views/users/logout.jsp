@@ -9,7 +9,7 @@
 <body>
 	<script type="text/javascript">
 	// 주소가:/ex001/user/sboard/listPage됨..
-		location.href = "${pageContext.request.contextPath}/sboard/listPage";
+		location.href = "${pageContext.request.contextPath}/boards/listPage";
 	</script>
 
 </body>

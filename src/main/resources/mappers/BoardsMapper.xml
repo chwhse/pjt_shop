@@ -2,20 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dgit.persistence.BoardsDAO">
 
-	<resultMap type="BoardsVO" id="boardResult">
-		<result property="bno" column="bno"/>
-		<result property="btitle" column="btitle"/>
-		<result property="bcontent" column="bcontent"/>
-		<result property="uid" column="uid"/>
-		<result property="bregdate" column="bregdate"/>
-		<result property="breadcnt" column="breadcnt"/>
-	</resultMap>
-	
 	<sql id="wheresql_bno">
 		where bno = #{bno}
 	</sql>
 	<select id="boardsListAll" resultType="BoardsVO">
-		select * from boards
+		select bno, btitle, uid, bregdate, breadcnt from boards
+		where bno > 0
 		order by bno desc, bregdate desc
 	</select>
 	
@@ -23,12 +15,47 @@
 		select MAX(bno)+1 from boards
 	</select>
 	
-	<select id="boardsSelectByNo" resultMap="boardResult">
+	<select id="boardsSelectByNo" resultType="BoardsVO">
 		SELECT b.bno, b.btitle, bc.bcontent, b.uid, b.bregdate, b.breadcnt
 		FROM boards b join boardscontent bc
 		on b.bno=bc.bno
 		where b.bno = #{bno}
 	</select>
+	
+	<select id="listSearch" resultType="BoardsVO">
+		SELECT * FROM boards
+		<include refid="search"></include>
+		order by bno desc,bregdate desc
+		limit #{pageStart},#{perPageNum}
+	</select>
+	
+	<select id="searchCount" resultType="int">
+		select count(*) from boards 
+		<include refid="search"/>
+	</select>
+	
+	<sql id="search">
+		<if test="searchType !=null">
+			<if test="searchType =='t'.toString()">
+				where btitle like CONCAT('%',#{keyword},'%')
+			</if>
+			<if test="searchType =='c'.toString()">
+				where bcontent like CONCAT('%',#{keyword},'%')
+			</if>
+			<if test="searchType =='w'.toString()">
+				where uid like CONCAT('%',#{keyword},'%')
+			</if>
+			<if test="searchType =='tc'.toString()">
+				where btitle like CONCAT('%',#{keyword},'%') or bcontent like CONCAT('%',#{keyword},'%')
+			</if>
+			<if test="searchType =='cw'.toString()">
+				where bcontent like CONCAT('%',#{keyword},'%') or uid like CONCAT('%',#{keyword},'%')
+			</if>
+			<if test="searchType =='tcw'.toString()">
+				where btitle like CONCAT('%',#{keyword},'%') or bcontent like CONCAT('%',#{keyword},'%') or uid like CONCAT('%',#{keyword},'%')
+			</if>
+		</if>
+	</sql>
 	
 	<insert id="boardsInsert">
 		INSERT INTO boards
@@ -43,12 +70,17 @@
 	
 	<update id="boardsUpdate">
 		UPDATE boards
-		SET btitle=#{btitle}, uid=#{uid}
+		SET btitle=#{btitle}
 		<include refid="wheresql_bno"/>
 	</update>
 	<update id="boardsContentUpdate">
 		UPDATE boardscontent
 		SET bcontent=#{bcontent}
+		<include refid="wheresql_bno"/>
+	</update>
+	<update id="setReadCnt">
+		UPDATE boards
+		SET breadcnt=breadcnt+1
 		<include refid="wheresql_bno"/>
 	</update>
 	<delete id="boardsDelete">

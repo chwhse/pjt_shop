@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dgit.persistence.GoodsDAO">
+
+	<sql id="wheresql_gcode">
+		where gcode = #{gcode}
+	</sql>
+	
+	<select id="goodsListAll" resultType="GoodsVO">
+		select * from goods
+		order by gcode desc, gregdate desc
+	</select>
+	
+	<select id="getMaxGcode" resultType="String">
+		select right(gcode, 5)+1 from goods where gcode=#{gcode}
+	</select>
+	
+	<!-- <select id="goodsSelectByCode" resultMap="goodResult">
+		select  g.gcode, gname, gcategory, gthumb, gprice, gregdate, gisexist, gdesc, gdetailimg, gstock
+		FROM goods g join goodsdetail gd
+		on g.gcode = gd.gcode
+		<include refid="wheresql_gcode"/>
+	</select> -->
+	
+	<select id="searchCount" resultType="int">
+		select count(*) from goods 
+		<include refid="search"/>
+	</select>
+	
+	<sql id="search">
+		<if test="searchType !=null">
+			<if test="searchType =='t'.toString()">
+				where title like CONCAT('%',#{keyword},'%')
+			</if>
+			<if test="searchType =='c'.toString()">
+				where content like CONCAT('%',#{keyword},'%')
+			</if>
+			<if test="searchType =='w'.toString()">
+				where writer like CONCAT('%',#{keyword},'%')
+			</if>
+			<if test="searchType =='tc'.toString()">
+				where title like CONCAT('%',#{keyword},'%') or content like CONCAT('%',#{keyword},'%')
+			</if>
+			<if test="searchType =='cw'.toString()">
+				where content like CONCAT('%',#{keyword},'%') or writer like CONCAT('%',#{keyword},'%')
+			</if>
+			<if test="searchType =='tcw'.toString()">
+				where title like CONCAT('%',#{keyword},'%') or content like CONCAT('%',#{keyword},'%') or writer like CONCAT('%',#{keyword},'%')
+			</if>
+		</if>
+	</sql>
+	
+	<insert id="goodsInsert">
+		INSERT INTO goods
+		(gcode, gname, gcategory, gthumb, gprice, gregdate, gisexist) values
+		(#{gcode},#{gname},#{gcategory},#{gthumb},#{gprice},#{gregdate},#{gisexist})
+	</insert>
+	<insert id="goodsDetailInsert">
+		INSERT INTO goodsdetail
+		(gcode, gdesc, gdetailimg, gstock) values
+		(#{gcode},#{gdesc},#{gdetailimg},#{gstock})
+	
+	</insert>
+	
+	<update id="goodsUpdate">
+		UPDATE goods
+		<set>
+			<if test="gname != null">
+				gname=#{gname},
+			</if>
+			<if test="gcategory != null">
+				gcategory=#{gcategory},
+			</if>
+			<if test="gthumb != null">
+				gthumb=#{gthumb},
+			</if>
+			<if test="gprice != null">
+				gprice=${gprice},
+			</if>
+			<if test="gisexist != null">
+				gisexist=${gisexist}
+			</if>
+		</set> 
+		<include refid="wheresql_gcode"/>
+	</update>
+	
+	<update id="goodsDetailUpdate">
+		UPDATE goodsdetail
+		<set>
+			<if test="gdesc != null">
+				gdesc=#{gdesc},
+			</if>
+			<if test="gdetailimg != null">
+				gdetailimg=#{gdetailimg},
+			</if>
+			<if test="gstock != null">
+				gstock=#{gstock},
+			</if>
+		</set> 
+		<include refid="wheresql_gcode"/>
+	</update>
+	
+	<delete id="goodsDelete">
+		DELETE FROM  goods
+		<include refid="wheresql_gcode"/>
+	</delete>
+	<delete id="goodsDetailDelete">
+		DELETE FROM goodsdetail
+		<include refid="wheresql_gcode"/>
+	</delete>
+	
+
+</mapper>

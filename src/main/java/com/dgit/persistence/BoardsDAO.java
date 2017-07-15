@@ -3,6 +3,8 @@ package com.dgit.persistence;
 import java.util.List;
 
 import com.dgit.domain.BoardsVO;
+import com.dgit.domain.Criteria;
+import com.dgit.domain.SearchCriteria;
 
 
 public interface BoardsDAO {
@@ -16,6 +18,9 @@ public interface BoardsDAO {
 	public void boardsContentDelete(int no) throws Exception;
 	public void boardsUpdate(BoardsVO vo) throws Exception;
 	public void boardsContentUpdate(BoardsVO vo) throws Exception;
+	public void setReadCnt(int no) throws Exception;
 	
+	public int searchCount(SearchCriteria cri) throws Exception;
+	public List<BoardsVO> listSearch(SearchCriteria cri) throws Exception;
 	
 }

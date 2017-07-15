@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.dgit.domain.UsersVO;
 import com.dgit.service.UsersService;
@@ -22,10 +23,20 @@ public class UsersController {
 	@Autowired
 	private UsersService service;
 	
-	// /user/login
-	@RequestMapping(value="/bottsnippTest", method=RequestMethod.GET)
-	public void getBottsnippTest(){
+	@RequestMapping(value="/joinForm", method=RequestMethod.GET)
+	public void JoinFormGET(){
 	}
+	@RequestMapping(value="/joinForm", method=RequestMethod.POST)
+	public String JoinFormPOST(UsersVO vo, Model model, RedirectAttributes rttr) throws Exception{
+		logger.info("======================JOIN POST=====================");
+		service.usersInsert(vo);
+		
+
+		logger.info(vo.toString());
+		model.addAttribute("loginVO", vo);
+		return "redirect:/boards/listPage";
+	}
+	
 	@RequestMapping(value="/login", method=RequestMethod.GET)
 	public void getLogin(){
 	}
@@ -46,6 +57,7 @@ public class UsersController {
 	
 	@RequestMapping(value="/logout", method=RequestMethod.GET)
 	public void logout(HttpSession session){
+		logger.info("=======로그아웃=======");
 		session.removeAttribute("login");
 		session.invalidate();
 	}

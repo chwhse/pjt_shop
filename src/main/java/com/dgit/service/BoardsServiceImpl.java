@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dgit.domain.BoardsVO;
+import com.dgit.domain.Criteria;
+import com.dgit.domain.SearchCriteria;
 import com.dgit.persistence.BoardsDAO;
 
 @Service
@@ -41,5 +43,20 @@ public class BoardsServiceImpl implements BoardsService {
 	public void boardsUpdate(BoardsVO vo) throws Exception {
 		dao.boardsUpdate(vo);
 		dao.boardsContentUpdate(vo);
+	}
+
+	@Override
+	public void setReadCnt(int no) throws Exception {
+		dao.setReadCnt(no);
+	}
+
+	@Override
+	public int searchCount(SearchCriteria cri) throws Exception {
+		return dao.searchCount(cri);
+	}
+
+	@Override
+	public List<BoardsVO> listSearch(SearchCriteria cri) throws Exception {
+		return dao.listSearch(cri);
 	}
 }

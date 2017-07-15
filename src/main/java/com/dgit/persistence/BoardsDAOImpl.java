@@ -8,6 +8,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import com.dgit.domain.BoardsVO;
+import com.dgit.domain.Criteria;
+import com.dgit.domain.SearchCriteria;
 
 @Repository
 public class BoardsDAOImpl implements BoardsDAO {
@@ -58,6 +60,20 @@ public class BoardsDAOImpl implements BoardsDAO {
 	@Override
 	public void boardsContentUpdate(BoardsVO vo) throws Exception {
 		session.update(namespace+".boardsContentUpdate", vo);
+	}
+
+	@Override
+	public void setReadCnt(int no) throws Exception {
+		session.update(namespace+".setReadCnt", no);
+	}
+
+	@Override
+	public int searchCount(SearchCriteria cri) throws Exception {
+		return session.selectOne(namespace+".searchCount",cri);
+	}
+	@Override
+	public List<BoardsVO> listSearch(SearchCriteria cri) throws Exception {
+		return session.selectList(namespace+".listSearch", cri);
 	}
 
 

@@ -13,11 +13,11 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 			throws Exception {
 		System.out.println("AUTH Interceptor PreHandle ---------@");
 		HttpSession session = request.getSession();
-		String userid = (String)session.getAttribute("login");
-		System.out.println("session userid : "+userid);
-		if(userid == null){
+		String uid = (String)session.getAttribute("login");
+		System.out.println("session uid : "+uid);
+		if(uid == null){
 			saveDest(request);
-			String url = request.getContextPath()+"/user/login";
+			String url = request.getContextPath()+"/users/login";
 			response.sendRedirect(url);
 			return false;
 		}
