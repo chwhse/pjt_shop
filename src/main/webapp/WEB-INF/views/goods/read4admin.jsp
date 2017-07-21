@@ -15,8 +15,24 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/common.js"></script>
 <script type="text/javascript">
-	function btnBuy() {
-		$("#f1").attr("action","${pageContext.request.contextPath}/orders/buy");
+	function btnDelete() {
+		var res = confirm("정말로 삭제하시겠습니까?");
+		var gcode = ${good.gcode};
+		if(res == true){
+			/* location.href = "delete?gcode="+gcode;  */
+			 $("#f1").attr("action","${pageContext.request.contextPath}/goods/delete"); //post형식의 delete커맨드 호출됨
+	         $("#f1").submit();
+		}else{
+			return false;
+		}
+	}
+	function btnCancel() {
+        $("#f1").attr("action","listPage${pageMaker.makeSearch(pageMaker.cri.page)}");
+        $("#f1").attr("method","get");
+        $("#f1").submit();
+	}
+	function btnModify() {
+		$("#f1").attr("action","${pageContext.request.contextPath}/goods/modify");
         $("#f1").attr("method","get");
         $("#f1").submit();
 	}
@@ -24,6 +40,10 @@
 </head>
 <%@ include file="../include/header.jsp"%>
 	<body>
+		<!-- <div class="page-header">
+		<h1 class="page-title"></h1>
+		<p class="lead page-description">
+		</p></div> -->
 		
 		<table border="1">
 				<tr>
@@ -73,10 +93,10 @@
 					<th>상품 공급 가격</th>
 					<td>${good.gsupprice}</td>
 				</tr>
-<%--			<tr>
+				<tr>
 					<th>상품 진열상태</th>
 					<td>${good.gisdisplay}</td>
-				</tr> --%>
+				</tr>
 				<tr>
 					<th>상품 판매상태</th>
 					<td>${good.gisonsale}</td>
@@ -95,6 +115,11 @@
 		</div>
 				
 		<div class="btn-group btn-group-sm">
+			<c:if test='${login=="admin" }'>	
+				<button class="btn btn-warning " onclick="btnModify()">상품 수정</button>
+				<button class="btn btn-danger" onclick="btnDelete()">상품 삭제</button>
+				<button class="btn btn-success" onclick="btnCancel()">돌아가기</button>
+			</c:if>
 			<button class="btn btn-primary" onclick="btnBuy()">장바구니 담기</button>
 		</div><br><br><br><br><br><br><br><br>
 	</body>

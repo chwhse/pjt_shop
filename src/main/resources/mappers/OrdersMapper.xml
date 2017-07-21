@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dgit.persistence.OrdersDAO">
+	<resultMap id="orderResultByOcode" type="OrdersVO" >
+		<id property="ono" column="ono" />
+		<result property="ocode" column="ocode"/>
+		<result property="uid" column="uid"/>
+		<result property="oisbasket" column="oisbasket"/>
+		
+		<result property="oquantity" column="oquantity"/>
+		<result property="odate" column="odate"/>
+		<result property="ototalprice" column="ototalprice"/>
+		<collection property="goods" ofType="GoodsVO" resultMap="orderGoodResult"/>
+	</resultMap>
+	
+	<resultMap type="GoodsVO" id="orderGoodResult">
+		<id property="gcode" column="gcode"/>
+		<result property="gname" column="gname"/>
+		<result property="gcategory" column="gcategory"/>
+		<result property="gtitleimg" column="gtitleimg"/>
+		<result property="gprice" column="gprice"/>
+		<result property="gsupprice" column="gsupprice"/>
+		<result property="gregdate" column="gregdate"/>
+		<result property="gisdisplay" column="gisdisplay"/>
+		<result property="gisonsale" column="gisonsale"/>
+	</resultMap>
+	
+	<select id="ordersSelectByCode" parameterType="String" resultMap="orderResultByOcode">
+		select ocode, ono, uid, oisbasket,  oquantity, odate, ototalprice,
+		g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay, gisonsale	 
+		from orders o left join goods g on o.gcode=g.gcode
+		<include refid="wheresql_ocode"/>
+	</select>
+	<select id="ordersSelectByNo" parameterType="int" resultMap="orderResultByOcode">
+		select ocode, ono, uid, oisbasket,  oquantity, odate, ototalprice,
+		g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay, gisonsale	 
+		from orders o left join goods g on o.gcode=g.gcode
+		<include refid="wheresql_ono"/>
+	</select>
+	
+<!-- 	<select id="selectOrderByOno" parameterMap="int" resultMap="orderResult">
+		select * from Orders where ono = #{ono}
+	</select>
+	 -->
+<!-- 	<select id="selectGoodsForOrder" parameterMap="String" resultType="GoodsVO">
+		select * from Goods where gcode = #{gcode}
+	</select> -->
+
+	<sql id="wheresql_ocode">
+		where ocode = #{ocode}
+	</sql>
+	<sql id="wheresql_ono">
+		where ono = #{ono}
+	</sql>
+	<select id="ordersListAll" resultType="OrdersVO">
+		select ocode, ono, uid, oisbasket, gcode, oquantity, odate, ototalprice
+		from orders
+		order by ocode desc, odate desc
+	</select>
+	<select id="listSearch" resultType="OrdersVO">
+		SELECT * 
+		FROM orders
+		<include refid="search"/>
+		order by ocode desc, odate desc
+		limit #{pageStart},#{perPageNum}
+	</select>	
+	
+	<select id="getMaxOcode" resultType="String">
+		select MAX(ocode)+1 from orders
+	</select>
+
+	
+	<select id="searchCount" resultType="int">
+		select count(*) from orders 
+		<include refid="search"/>
+	</select>
+	
+	<sql id="search">
+		<if test="searchType !=null">
+			<if test="searchType =='t'.toString()">
+				where ocode like CONCAT('%',#{keyword},'%')
+			</if>
+			<if test="searchType =='c'.toString()">
+				where gcode like CONCAT('%',#{keyword},'%')
+			</if>
+			<if test="searchType =='w'.toString()">
+				where uid like CONCAT('%',#{keyword},'%')
+			</if>
+			<if test="searchType =='tc'.toString()">
+				where ocode like CONCAT('%',#{keyword},'%') or gcode like CONCAT('%',#{keyword},'%')
+			</if>
+			<if test="searchType =='cw'.toString()">
+				where gcode like CONCAT('%',#{keyword},'%') or uid like CONCAT('%',#{keyword},'%')
+			</if>
+			<if test="searchType =='tcw'.toString()">
+				where ocode like CONCAT('%',#{keyword},'%') or gcode like CONCAT('%',#{keyword},'%') or uid like CONCAT('%',#{keyword},'%')
+			</if>
+		</if>
+	</sql>
+	
+	<insert id="createShoppingBag">
+		INSERT INTO orders
+		(ocode, uid, oisbasket, gcode, oquantity, odate, ototalprice)
+		VALUES(#{ocode}, #{uid}, #{oisbasket}, #{gcode}, #{oquantity}, 
+		CURRENT_TIMESTAMP, #{ototalprice});
+	</insert>
+	
+	<update id="ordersTotalUpdate">
+		UPDATE orders
+		SET oisbasket=#{oisbasket}, oquantity=#{oquantity},  ototalprice=#{ototalprice}
+		<include refid="wheresql_ocode"/>
+	</update>
+	<update id="ordersEachUpdate">
+		UPDATE orders
+		SET oisbasket=#{oisbasket}, oquantity=#{oquantity},  ototalprice=#{ototalprice}
+		<include refid="wheresql_ono"/>
+	</update>
+
+	<delete id="ordersTotalDelete">
+		DELETE FROM  orders
+		<include refid="wheresql_ocode"/>
+	</delete>
+	<delete id="ordersEachDelete">
+		DELETE FROM  orders
+		<include refid="wheresql_ono"/>
+	</delete>
+	
+
+</mapper>

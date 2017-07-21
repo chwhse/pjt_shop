@@ -37,6 +37,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 			//저장된 dest의 값을 받아, 그곳으로 이동되도록 함.
 			String path = (String) session.getAttribute("dest");
 			if(path != null){
+				System.out.println("돌아가는 path 확인:"+path);
 				response.sendRedirect(path);
 			}
 		}

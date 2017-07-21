@@ -78,11 +78,7 @@
 		SET bcontent=#{bcontent}
 		<include refid="wheresql_bno"/>
 	</update>
-	<update id="setReadCnt">
-		UPDATE boards
-		SET breadcnt=breadcnt+1
-		<include refid="wheresql_bno"/>
-	</update>
+
 	<delete id="boardsDelete">
 		DELETE FROM  boards
 		<include refid="wheresql_bno"/>
@@ -92,4 +88,9 @@
 		<include refid="wheresql_bno"/>
 	</delete>
 	
+	<update id="setReadCnt">
+		UPDATE boards
+		SET breadcnt=breadcnt+1
+		<include refid="wheresql_bno"/>
+	</update>
 </mapper>

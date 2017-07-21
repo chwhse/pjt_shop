@@ -5,23 +5,56 @@
 	<sql id="wheresql_gcode">
 		where gcode = #{gcode}
 	</sql>
-	
-	<select id="goodsListAll" resultType="GoodsVO">
-		select * from goods
-		order by gcode desc, gregdate desc
-	</select>
-	
-	<select id="getMaxGcode" resultType="String">
-		select right(gcode, 5)+1 from goods where gcode=#{gcode}
-	</select>
-	
-	<!-- <select id="goodsSelectByCode" resultMap="goodResult">
-		select  g.gcode, gname, gcategory, gthumb, gprice, gregdate, gisexist, gdesc, gdetailimg, gstock
-		FROM goods g join goodsdetail gd
-		on g.gcode = gd.gcode
+	<select id="getMaxGcodePlus1" resultType="String">
+		select CONCAT(#{gcategoryfl}, right(gcode, 5)+1)
+		from goods 
 		<include refid="wheresql_gcode"/>
-	</select> -->
+	</select>
+	<select id="getMaxGcodeByCategory" resultType="String">
+		select MAX(gcode) 
+		from goods 
+		where gcategory like CONCAT(#{gcategoryfl},'%')
+	</select>
+
+	<select id="getAllGoodsCategory" resultType="String">
+		select gcategory from goodscategory
+		order by gcategory desc
+	</select>
 	
+	<select id="goodsSelectByUid" resultType="GoodsVO">
+		select * from orders where uid = #{uid}
+		order by odate desc
+	</select>
+	
+	 <select id="goodsSelectByCode" resultType="GoodsVO">
+		select  g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate,
+		gisdisplay, gisonsale, gdesc, gdetailimg, gstock
+		FROM goodsdetail gd join goods g
+		on g.gcode = gd.gcode
+		right outer join goodsdetailimg gdi
+		on g.gcode = gdi.gcode
+		where g.gcode = #{gcode}
+		group by g.gcode <!-- 현재 쿼리는 여러개 상세이미지 중 하나만 출력 --> 
+	</select> 
+	
+	<select id="goodsListForAdmin" resultType="GoodsVO">
+		select * from goods
+		<include refid="search"/>
+		order by gcode desc, gregdate desc
+		limit #{pageStart},#{perPageNum}
+	</select>	
+		
+	<select id="listSearch" resultType="GoodsVO">
+		SELECT * FROM goods
+		where gisdisplay = true
+		<if test="searchType !=null">
+			<if test="searchType =='t'.toString()">
+				and gname like CONCAT('%',#{keyword},'%')
+			</if>
+		</if>
+		order by gcode desc,gregdate desc
+		limit #{pageStart},#{perPageNum}
+	</select>	
 	<select id="searchCount" resultType="int">
 		select count(*) from goods 
 		<include refid="search"/>
@@ -30,36 +63,25 @@
 	<sql id="search">
 		<if test="searchType !=null">
 			<if test="searchType =='t'.toString()">
-				where title like CONCAT('%',#{keyword},'%')
-			</if>
-			<if test="searchType =='c'.toString()">
-				where content like CONCAT('%',#{keyword},'%')
-			</if>
-			<if test="searchType =='w'.toString()">
-				where writer like CONCAT('%',#{keyword},'%')
-			</if>
-			<if test="searchType =='tc'.toString()">
-				where title like CONCAT('%',#{keyword},'%') or content like CONCAT('%',#{keyword},'%')
-			</if>
-			<if test="searchType =='cw'.toString()">
-				where content like CONCAT('%',#{keyword},'%') or writer like CONCAT('%',#{keyword},'%')
-			</if>
-			<if test="searchType =='tcw'.toString()">
-				where title like CONCAT('%',#{keyword},'%') or content like CONCAT('%',#{keyword},'%') or writer like CONCAT('%',#{keyword},'%')
+				<where> gname like CONCAT('%',#{keyword},'%')</where>
 			</if>
 		</if>
+		
 	</sql>
 	
 	<insert id="goodsInsert">
 		INSERT INTO goods
-		(gcode, gname, gcategory, gthumb, gprice, gregdate, gisexist) values
-		(#{gcode},#{gname},#{gcategory},#{gthumb},#{gprice},#{gregdate},#{gisexist})
+		(gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay, gisonsale) values
+		(#{gcode},#{gname},#{gcategory},#{gtitleimg},#{gprice},#{gsupprice},#{gregdate},#{gisdisplay}, #{gisonsale})
 	</insert>
 	<insert id="goodsDetailInsert">
 		INSERT INTO goodsdetail
-		(gcode, gdesc, gdetailimg, gstock) values
-		(#{gcode},#{gdesc},#{gdetailimg},#{gstock})
-	
+		(gcode, gdesc,  gstock) values
+		(#{gcode},#{gdesc},#{gstock})
+	</insert>
+	<insert id="goodsCategoryInsert">
+		INSERT INTO goodscategory
+		(gcategory)	VALUES(#{gcategory});
 	</insert>
 	
 	<update id="goodsUpdate">
@@ -71,14 +93,20 @@
 			<if test="gcategory != null">
 				gcategory=#{gcategory},
 			</if>
-			<if test="gthumb != null">
-				gthumb=#{gthumb},
+			<if test="gtitleimg != null">
+				gtitleimg=#{gtitleimg},
 			</if>
 			<if test="gprice != null">
 				gprice=${gprice},
 			</if>
-			<if test="gisexist != null">
-				gisexist=${gisexist}
+			<if test="gsupprice != null">
+				gprice=${gsupprice},
+			</if>
+			<if test="gisdisplay != null">
+				gisdisplay=${gisdisplay},
+			</if>
+			<if test="gisonsale != null">
+				gisonsale=${gisonsale},
 			</if>
 		</set> 
 		<include refid="wheresql_gcode"/>
@@ -90,16 +118,12 @@
 			<if test="gdesc != null">
 				gdesc=#{gdesc},
 			</if>
-			<if test="gdetailimg != null">
-				gdetailimg=#{gdetailimg},
-			</if>
 			<if test="gstock != null">
 				gstock=#{gstock},
 			</if>
 		</set> 
 		<include refid="wheresql_gcode"/>
 	</update>
-	
 	<delete id="goodsDelete">
 		DELETE FROM  goods
 		<include refid="wheresql_gcode"/>
@@ -108,6 +132,33 @@
 		DELETE FROM goodsdetail
 		<include refid="wheresql_gcode"/>
 	</delete>
+	<delete id="goodsCategoryDelete">
+		DELETE FROM goodscategory
+		where gcategory = #{gcategory}
+	</delete>
 	
+	<!-- 파일업로드 관련 매퍼 -->
+	
+   <insert id="addAttach">
+   		INSERT INTO goodsdetailimg
+		(gcode, gdetailimg) values
+		(#{gcode},#{gdetailimg})
+   </insert>
+   
+   <select id="getAttach" resultType="string">
+       select gdetailimg from goodsdetailimg 
+       <include refid="wheresql_gcode"/>
+   </select>
+   
+   <delete id="deleteAttachByGdetailimg">
+   		delete from goodsdetailimg
+   		<include refid="wheresql_gcode"/>
+   		and gdetailimg=#{gdetailimg}
+   </delete>
+   
+   <delete id="deleteAttachByCode">
+   		delete from goodsdetailimg
+   		<include refid="wheresql_gcode"/>
+   </delete>
 
 </mapper>

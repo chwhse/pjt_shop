@@ -13,33 +13,38 @@
 		            <span class="icon-bar"></span>
 		            <span class="icon-bar"></span>
 		          </button>
-		          <a class="navbar-brand" href="#">Cafe Atto Shop</a>
+		          <a class="navbar-brand" href="#">Cafe Atto</a>
 		        </div>
 		        <div id="navbar" class="collapse navbar-collapse">
 		          <ul class="nav navbar-nav">
-		            <li class="active"><a href="#">Home</a></li>
-		            <li><a href="#">Our Coffee</a></li>
-		            <li><a href="#">Menu Items</a></li>
-		            <li><a href="#">Take Home</a></li>
-		            <li><a href="#">About Us</a></li>
-		            <li class="dropdown">
-		              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">다른거? <span class="caret"></span></a>
-		              <ul class="dropdown-menu">
-		                <li><a href="#">니가 뭘 좋아할지 몰라서</a></li>
-		                <li><a href="#">준비했다</a></li>
-		                <li><a href="#">이것도 있고</a></li>
-		                <li><a href="#">저것도 있어</a></li>
-		                <li role="separator" class="divider"></li>
-		                <li class="dropdown-header">짜잔</li>
-		                <li><a href="#">이모티콘 안써짐</a></li>
-		                <li><a href="#">쩝쩝</a></li>
-		              </ul>
-		            </li>
+		            <li class="active"><a href="${pageContext.request.contextPath}/homes/home">Home</a></li>
+		            <li><a href="${pageContext.request.contextPath}/homes/aboutus">About Us</a></li>
+		            <li><a href="${pageContext.request.contextPath}/goods/listPage">Shopping</a></li>
+		            <li><a href="${pageContext.request.contextPath}/reviews/listPage">Reviews</a></li>
+		            <li><a href="${pageContext.request.contextPath}/boards/listPage">Announcement</a></li>
+		            <li><a href="#">My Page</a></li>
+		            <li><a href="#">Shopping Cart</a></li>
+			        <c:if test='${login=="admin" }'>  
+			            <li class="dropdown">
+			              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">관리자메뉴 <span class="caret"></span></a>
+			              <ul class="dropdown-menu">
+			                <li><a href="${pageContext.request.contextPath}/goods/listPage4admin">상품관리</a></li>
+			                <li><a href="${pageContext.request.contextPath}/orders/listPage">주문관리</a></li>
+			                <li><a href="#">회원관리</a></li>
+			                <li><a href="#">기타등등</a></li>
+			                <li role="separator" class="divider"></li>
+			                <li class="dropdown-header">사장님</li>
+			                <li><a href="#">비밀메뉴</a></li>
+			                <li><a href="#">찡긋</a></li>
+			                <li><a href="#">헤헿</a></li>
+			              </ul>
+			            </li>
+		            </c:if>  
 		          </ul>
 		        </div><!--/.nav-collapse -->
 		      </div>
 			  </nav>
-			  <div display="block" height="34px">
+			  <div id="login-div">
 				<div class="pull-right">
 	                    <c:if test="${!empty login }">
 	                    <spand>${login}님 환영합니다.</spand>

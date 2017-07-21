@@ -29,7 +29,7 @@ public class BoardsDAOImpl implements BoardsDAO {
 	}
 
 	@Override
-	public void boardsInsert(BoardsVO vo) {
+	public void boardsInsert(BoardsVO vo)throws Exception {
 		session.insert(namespace+".boardsInsert", vo);
 	}
 	@Override

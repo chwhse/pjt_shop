@@ -9,58 +9,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.dgit.domain.BoardsVO;
-import com.dgit.domain.Criteria;
-import com.dgit.domain.GoodsVO;
-import com.dgit.domain.SearchCriteria;
-import com.dgit.persistence.BoardsDAO;
-import com.dgit.persistence.GoodsDAO;
+import com.dgit.domain.ReviewsVO;
+import com.dgit.persistence.ReviewsDAO;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"file:src/main/webapp/WEB-INF/spring/root-context.xml"})
-public class GoodsDaoTest {
+
+public class ReviewsDaoTest {
 	@Autowired
-	private GoodsDAO dao;
+	private ReviewsDAO dao;
 	
 	@Test
 	public void testListPage()throws Exception{
-		System.out.println("@!!!!!!!!!###################");
-		SearchCriteria cri = new SearchCriteria();
-		cri.setPage(1);
-		cri.setPerPageNum(10);
-		List<GoodsVO> list = dao.listSearch(cri);
 		
-		for(GoodsVO vo : list){
-			System.out.println(vo.getGcategory()+":"+vo.getGname());
+		List<ReviewsVO> list = dao.reviewsListAll();
+		
+		for(ReviewsVO vo : list){
+			System.out.println(vo.getRno()+":"+vo.getRtitle());
 		}
-	}
-/*	@Test
-	public void testMaxGcode()throws Exception{
-		System.out.println("@!!!!!!!!!###################");
-		System.out.println("카테고리뽑기 "+dao.getMaxGcodeByCategory("machine"));
-		GoodsVO vo = new GoodsVO();
-		vo.setGcategory("coffee");
-		String maxGcode = dao.getMaxGcodePlus1(vo);
-		System.out.println("맥스코드:"+maxGcode);
-	}*/
-/*	
-	@Test
-	public void testInsertGdetail()throws Exception{
-		GoodsVO vo = new GoodsVO();
-		vo.setGcode("c50009");
-		vo.setGname("이름");
-		vo.setGcategory("coffee");
-		List<String> list = new ArrayList<>();
-		list.add("바보");
-		list.add("멍청이");
-		vo.setGdetailimg(list);
-		System.out.println("디테일이미지1:"+vo.toString());
-		dao.goodsInsert(vo);
-		System.out.println("디테일이미지2:"+vo.toString());
-		dao.goodsDetailInsert(vo);
 		
-	}*/
+	}
 	/*	
 	@Test
 	public void testInsertMember()throws Exception {

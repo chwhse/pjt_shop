@@ -3,26 +3,75 @@ package com.dgit.domain;
 import java.sql.Date;
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
 public class GoodsVO {
 	private String gcode;
 	private String gname;
 	private String gcategory;
-	private String gthumb;
+	private String gtitleimg;
 	private int gprice;
-	private Date gdate;
-	private boolean gisexist;
+	private int gsupprice;
+	private Date gregdate;
+	private boolean gisdisplay;
+	private boolean gisonsale;
 	
 	private String gdesc;
 	private List<String> gdetailimg;
 	private int gstock;
 	
-	
-	
-	public Date getGdate() {
-		return gdate;
+	public String getGcode() {
+		return gcode;
 	}
-	public void setGdate(Date gdate) {
-		this.gdate = gdate;
+	public void setGcode(String gcode) {
+		this.gcode = gcode;
+	}
+	public String getGname() {
+		return gname;
+	}
+	public void setGname(String gname) {
+		this.gname = gname;
+	}
+	public String getGcategory() {
+		return gcategory;
+	}
+	public void setGcategory(String gcategory) {
+		this.gcategory = gcategory;
+	}
+	public String getGtitleimg() {
+		return gtitleimg;
+	}
+	public void setGtitleimg(String gtitleimg) {
+		this.gtitleimg = gtitleimg;
+	}
+	public int getGprice() {
+		return gprice;
+	}
+	public void setGprice(int gprice) {
+		this.gprice = gprice;
+	}
+	public int getGsupprice() {
+		return gsupprice;
+	}
+	public void setGsupprice(int gsupprice) {
+		this.gsupprice = gsupprice;
+	}
+	public Date getGregdate() {
+		return gregdate;
+	}
+	public void setGregdate(Date gregdate) {
+		this.gregdate = gregdate;
+	}
+	public boolean isGisdisplay() {
+		return gisdisplay;
+	}
+	public void setGisdisplay(boolean gisdisplay) {
+		this.gisdisplay = gisdisplay;
+	}
+	public boolean isGisonsale() {
+		return gisonsale;
+	}
+	public void setGisonsale(boolean gisonsale) {
+		this.gisonsale = gisonsale;
 	}
 	public String getGdesc() {
 		return gdesc;
@@ -42,51 +91,14 @@ public class GoodsVO {
 	public void setGstock(int gstock) {
 		this.gstock = gstock;
 	}
-	public String getGcode() {
-		return gcode;
-	}
-	public void setGcode(String gcode) {
-		this.gcode = gcode;
-	}
-	public String getGname() {
-		return gname;
-	}
-	public void setGname(String gname) {
-		this.gname = gname;
-	}
-	public String getGcategory() {
-		return gcategory;
-	}
-	public void setGcategory(String gcategory) {
-		this.gcategory = gcategory;
-	}
-	public String getGthumb() {
-		return gthumb;
-	}
-	public void setGthumb(String gthumb) {
-		this.gthumb = gthumb;
-	}
-	public int getGprice() {
-		return gprice;
-	}
-	public void setGprice(int gprice) {
-		this.gprice = gprice;
-	}
-	public boolean isGisexist() {
-		return gisexist;
-	}
-	public void setGisexist(boolean gisexist) {
-		this.gisexist = gisexist;
-	}
 	@Override
 	public String toString() {
-		return "GoodsVO [gcode=" + gcode + ", gname=" + gname + ", gcategory=" + gcategory + ", gthumb=" + gthumb
-				+ ", gprice=" + gprice + ", gdate=" + gdate + ", gisexist=" + gisexist + ", gdesc=" + gdesc
-				+ ", gdetailimg=" + gdetailimg + ", gstock=" + gstock + "]";
+		return "GoodsVO [gcode=" + gcode + ", gname=" + gname + ", gcategory=" + gcategory + ", gtitleimg=" + gtitleimg
+				+ ", gprice=" + gprice + ", gsupprice=" + gsupprice + ", gregdate=" + gregdate + ", gisdisplay="
+				+ gisdisplay + ", gisonsale=" + gisonsale + ", gdesc=" + gdesc + ", gstock=" + gstock + "]";
 	}
+
 	
 	
-	
-	
-	
+
 }

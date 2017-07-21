@@ -5,7 +5,7 @@
 <head>
 <%@ include file="../include/header_head.jsp"%> 
 <meta charset="UTF-8">
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/common.css?ver4">
+
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/common.js"></script>
@@ -16,10 +16,10 @@
 		$(".error").css("display","none");
 		$(".error2").css("display","none");
 	
-		if(checkInputEmpty($("input[name]"))==false){
+/* 		if(checkInputEmpty($("input[name]"))==false){
 			return false;
 		};
-
+ */
 		alert("등록 되었습니다.");
 
 	});
@@ -33,7 +33,7 @@
 </head>
 <%@ include file="../include/header.jsp"%> 
 	<body>
-		<form class="form-horizontal" action="register" name="f1" method="post">
+		<form class="form-horizontal" action="register" name="f1" method="post"  enctype="multipart/form-data">
 			<div class="form-group"> 
 				<label class="col-sm-3 control-label">상품명</label>
 				<div class="col-sm-6">
@@ -43,24 +43,25 @@
 			</div>
 			
 			<div class="form-group"> 
-				<label class="col-sm-3 control-label">카테고리</label><br>
+				<label class="col-sm-3 control-label">상품분류</label><br>
 				<div class="col-sm-6">
-					<input class="form-control" type="text" name="gcategory" id="gcategory" value="">
-					<span class="error">input the goods category.</span>
-				</div>
-			</div>
-			
-			<div class="form-group"> 
-				<label class="col-sm-3 control-label">썸네일</label><br>
-				<div class="col-sm-6">
-					<input class="form-control" type="text" name="gthumb" id="gthumb" value="">
-					<span class="error">input the Thumb-nail.</span>
+					<select class="form-control" name="gcategory" id="gcategory">
+						<c:forEach var="gcategory" items="${gcategorylist }">
+							<option>${gcategory }</option>
+						</c:forEach>
+					</select>
 				</div>
 			</div>
 			<div class="form-group"> 
 				<label class="col-sm-3 control-label">상품 가격</label>
 				<div class="col-sm-6">
 					<input class="form-control" type="text" name="gprice"  id="gprice" >
+				</div>	
+			</div>
+			<div class="form-group"> 
+				<label class="col-sm-3 control-label">상품 공급 가격</label>
+				<div class="col-sm-6">
+					<input class="form-control" type="text" name="gsupprice"  id="gsupprice" >
 				</div>	
 			</div>
 			<div class="form-group"> 
@@ -71,15 +72,33 @@
 				</div>	
 			</div>
 			<div class="form-group"> 
+				<label class="col-sm-3 control-label">대표이미지</label>
+				<div class="col-sm-6">
+					<input class="form-control" type="file" name="gtitleimgfile">
+				</div>
+			</div>
+			<div class="form-group"> 
 				<label class="col-sm-3 control-label">상품 상세이미지</label>
 				<div class="col-sm-6">
-					<input class="form-control" type="text" name="gdetailimg"  id="gdetailimg" >
+					<input class="form-control" type="file" name="gdetailimgfile" multiple="multiple">
 				</div>	
 			</div>
 			<div class="form-group"> 
 				<label class="col-sm-3 control-label">상품 재고</label>
 				<div class="col-sm-6">
 					<input class="form-control" type="text" name="gstock"  id="gstock" >
+				</div>	
+			</div>
+			<div class="form-group"> 
+				<label class="col-sm-3 control-label">상품 진열여부</label>
+				<div class="col-sm-6">
+					<input class="form-control" type="checkbox" checked="checked" name="gisdisplay" id="gisdisplay">
+				</div>	
+			</div>
+			<div class="form-group"> 
+				<label class="col-sm-3 control-label">진열 상품 판매여부</label>
+				<div class="col-sm-6">
+					<input class="form-control" type="checkbox" checked="checked" name="gisonsale" id="gisonsale">
 				</div>	
 			</div>
 
@@ -91,7 +110,7 @@
 					<button class="btn btn-default" type="button" onclick="btnCancel()" >취소</button>
 				</div>
 			</div>
-		</form>
+		</form><br><br><br><br><br><br><br><br><br><br><br><br><br>
 	</body>
 <%@ include file="../include/footer.jsp"%>
 <script src="${pageContext.request.contextPath}/resources/dist/js/bootstrap.min.js"></script>
