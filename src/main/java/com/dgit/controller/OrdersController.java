@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -21,6 +22,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -51,6 +54,23 @@ public class OrdersController {
 	private String uploadPath;
 	
 	
+	@RequestMapping(value = "/changeQtt/{ono}/{oqtt}/{tPrice}", method=RequestMethod.POST)
+	public ResponseEntity<String> changeGoodGET(@PathVariable("ono")int ono,
+						@PathVariable("oqtt")int oqtt,@PathVariable("tPrice")int tPrice) throws Exception {
+		ResponseEntity<String> entity = null;
+		try{
+			OrdersVO vo = service.ordersSelectByNo(ono);
+			vo.setOquantity(oqtt);
+			vo.setOtotalprice(tPrice);
+			service.ordersEachUpdate(vo);
+			logger.info("order:"+service.ordersSelectByNo(ono).toString());
+			entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+		} catch (Exception e) {
+			entity = new ResponseEntity<String>("FAIL",HttpStatus.BAD_REQUEST);
+		}
+		return entity;
+	}
+	
 	@RequestMapping(value = "listPage", method = RequestMethod.GET)
 	public String listPageGET(@ModelAttribute("cri")SearchCriteria cri,Model model) throws Exception {
 		model.addAttribute("list", service.listSearch(cri) );
@@ -66,7 +86,7 @@ public class OrdersController {
 	
 	
 	@RequestMapping(value="/buy", method=RequestMethod.GET)
-	public String buyGET(String gcode, Model model,
+	public String buyGET(String mygcode, Model model,
 						HttpSession session,
 						HttpServletResponse response) throws Exception{
 		logger.info("=============buy GET=============");
@@ -76,33 +96,51 @@ public class OrdersController {
 		if(uid == null){
 			response.sendRedirect("/users/login");
 		}
-		
-		/*// 여기 넘어오기전 상품 장바구니에db 담기 
+		List<OrdersVO> list = new ArrayList<>();
 		OrdersVO vo = new OrdersVO();
-		vo.setGcode(gcode);
 		vo.setUid(uid);
-		service.createShoppingBag(vo);
-		*/
-		
-		model.addAttribute("list", service.ordersSelectByCode("u00004"));
-		logger.info("리스트 수:"+service.ordersSelectByCode("u00004"));
-		model.addAttribute("good", gservice.goodsSelectByCode(gcode));
+		// 장바구니 조회 후 가져오기
+		 list = service.ordersSelectById(uid); // oisbasket = true인 값 가져옴
+		if(list.isEmpty()){
+			String newOcode = service.createShoppingBag(vo);
+			vo.setOcode(newOcode);
+		}else{
+			vo.setOcode(list.get(0).getOcode());
+		}
+		vo.setGoods(gservice.goodsSelectByCode(mygcode));
+		vo.setOquantity(1);
+		System.out.println("넣기전 ono 확인:"+vo.toString());
+		service.insertShoppingBag(vo);
+		list = service.ordersSelectByCode(vo.getOcode());
+		int totalPrice = 0;
+		for(OrdersVO ovo : list){
+			System.out.println("넣은후 확인:"+ovo.toString());
+			if(ovo.getGoods()!=null){
+				totalPrice += ovo.getGoods().getGprice()*ovo.getOquantity();
+				System.out.println(totalPrice+"");
+			}
+		}
+		vo.setOtotalprice(totalPrice);
+		service.ordersUpdateWithTotalPriceByCode(vo);
+		list = service.ordersSelectByCode(vo.getOcode());
+		model.addAttribute("list", list);
+		logger.info("총합:"+list.get(0).getOtotalprice());
 		
 		return "orders/buy";
 	}
 	
 	@RequestMapping(value="/buy", method=RequestMethod.POST)
-	public String buyPOST(OrdersVO vo, Model model) throws Exception{
+	public String buyPOST(String ocodes, Model model) throws Exception{
 		logger.info("=============buy POST=============");
 		
 		
-		// service.ordersEachInsert(vo);;
-		List<OrdersVO> list = vo.getOrdersVOList();
-		
-		for(OrdersVO order : list){
-			logger.info(order.toString());
+		List<OrdersVO> list = service.ordersSelectByCode(ocodes);
+		for(OrdersVO vo : list){
+			logger.info(vo.toString());
+			
+			service.ordersComplete(vo);
 		}
-		return "redirect:listPage";
+		return "orders/settle";
 	}
 	
 	@RequestMapping(value="/read", method=RequestMethod.GET)
@@ -116,7 +154,7 @@ public class OrdersController {
 	@RequestMapping(value="/delete", method=RequestMethod.POST)
 	public String deleteGET(String ocode) throws Exception{
 		logger.info("=============delete DELETE=============");
-		service.ordersEachDelete(ocode);
+		service.ordersCancelByCode(ocode);
 		
 		return "redirect:listPage";
 	}

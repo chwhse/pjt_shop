@@ -19,13 +19,26 @@ public class OrdersServiceImpl implements OrdersService {
 	public List<OrdersVO> ordersListAll() throws Exception {
 		return dao.ordersListAll();
 	}
-
 	@Override
-	public void createShoppingBag(OrdersVO vo) throws Exception {
-		vo.setOcode(dao.getMaxOcode());
+	public String createShoppingBag(OrdersVO vo) throws Exception {
+		vo.setOcode(dao.getMaxOcode(vo.getUid()));
+		System.out.println("ocode:"+vo.getOcode());
 		dao.createShoppingBag(vo);
+		return dao.getMaxOcode(vo.getUid());
 	}
-
+	@Override
+	public void insertShoppingBag(OrdersVO vo) throws Exception {
+		vo.setOtotalprice(vo.getGoods().getGprice());
+		dao.insertShoppingBag(vo);
+	}
+	@Override
+	public List<OrdersVO> ordersSelectById(String id) throws Exception {
+		return dao.ordersSelectById(id);
+	}
+	@Override
+	public List<OrdersVO> ordersSelectByIdWithOcondition1AndRisexist0(String id) throws Exception {
+		return dao.ordersSelectByIdWithOcondition1AndRisexist0(id);
+	}
 	@Override
 	public List<OrdersVO> ordersSelectByCode(String code) throws Exception {
 		return dao.ordersSelectByCode(code);
@@ -37,20 +50,25 @@ public class OrdersServiceImpl implements OrdersService {
 	}
 
 	@Override
-	public void ordersTotalDelete(String code) throws Exception {
-		dao.ordersTotalDelete(code);
+	public void ordersEachUpdate(OrdersVO vo) throws Exception {
+		dao.ordersEachUpdate(vo);
 	}
 	@Override
-	public void ordersEachDelete(String code) throws Exception {
-		dao.ordersEachDelete(code);
-	}
-
-	@Override
-	public void ordersTotalUpdate(OrdersVO vo) throws Exception {
+	public void ordersUpdateWithTotalPriceByCode(OrdersVO vo) throws Exception {
 		dao.ordersTotalUpdate(vo);
 	}
 	@Override
-	public void ordersEachUpdate(OrdersVO vo) throws Exception {
+	public void ordersComplete(OrdersVO vo) throws Exception {
+		vo.setOisbasket(false);
+		vo.getGoods().setGstock(vo.getGoods().getGstock()-1);
+		vo.setOcondition(1);
+		dao.ordersEachUpdate(vo);
+	}
+	@Override
+	public void ordersCancelByCode(String ocode) throws Exception {
+		OrdersVO vo = new OrdersVO();
+		vo.setOcode(ocode);
+		vo.setOcondition(-1);
 		dao.ordersEachUpdate(vo);
 	}
 
@@ -63,5 +81,6 @@ public class OrdersServiceImpl implements OrdersService {
 	public int searchCount(SearchCriteria cri) throws Exception {
 		return dao.searchCount(cri);
 	}
+
 	
 }

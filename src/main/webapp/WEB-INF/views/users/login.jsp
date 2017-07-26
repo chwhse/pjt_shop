@@ -58,16 +58,17 @@
     <script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
     <!-- iCheck -->
     
-   <%--  <script src="${pageContext.request.contextPath}/resources/plugins/iCheck/icheck.min.js" type="text/javascript"></script>
     <script>
       $(function () {
-        $('input').iCheck({
-          checkboxClass: 'icheckbox_square-blue',
-          radioClass: 'iradio_square-blue',
-          increaseArea: '20%' // optional
-        });
+    	var url_string =  window.location.href;
+    	var url = new URL(url_string);
+        var result = true;
+        result = url.searchParams.get("UserIsExist");
+    	if(result=="false"  ){
+        	alert("로그인 정보를 확인하세요");
+        }
       });
-    </script> --%>
+    </script> 
   </body>
  <%@ include file="../include/footer.jsp"%> 
 </html>

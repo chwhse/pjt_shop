@@ -16,14 +16,18 @@
 		$(".error").css("display","none");
 		$(".error2").css("display","none");
 	
-		if(checkInputEmpty($("input[name]"))==false){
+/* 		if(checkInputEmpty($("input[name]"))==false){
 			return false;
-		};
-
+		}; */
 		alert("등록 되었습니다.");
 
 	});
-    
+
+    $(document).on("change","#selectbox",function(){  
+	    var gcode = $("#selectbox > option:selected").attr("value2"); //지정 value2 값
+	    $("#gcode").val(gcode);
+
+    });
     
   });
   function btnCancel() {
@@ -34,10 +38,22 @@
 <%@ include file="../include/header.jsp"%> 
 	<body>
 		<form class="form-horizontal" action="register" name="f1" method="post">
+			<input type="hidden" id="gcode" name="mygcode" value="${orderslist.get(0).goods.gcode }" >
+			<div class="form-group"> 
+				<label class="col-sm-3 control-label">review goods</label>
+				<div class="col-sm-6">
+					<select class="form-control" name="ono" id="selectbox">
+						<c:forEach var="order" items="${orderslist }">
+							<option value="${order.ono }" value2="${order.goods.gcode }" >
+							${order.goods.gname } / 주문일 : ${order.odate }</option>
+						</c:forEach>
+					</select>
+				</div>
+			</div>
 			<div class="form-group"> 
 				<label class="col-sm-3 control-label">review title</label>
 				<div class="col-sm-6">
-					<input class="form-control" type="text" name="btitle" id="btitle" value="">
+					<input class="form-control" type="text" name="rtitle" id="rtitle" value="">
 					<span class="error">input the review-title.</span>
 				</div>
 			</div>
@@ -45,7 +61,7 @@
 			<div class="form-group"> 
 				<label class="col-sm-3 control-label">review content</label><br>
 				<div class="col-sm-6">
-					<textarea class="form-control" rows="10" cols="50" name="bcontent"></textarea>
+					<textarea class="form-control" rows="10" cols="50" name="rcontent"></textarea>
 					<span class="error">input the review-content.</span>
 				</div>
 			</div>
@@ -55,7 +71,7 @@
 					<input class="form-control" type="text" name="uid"  id="uid" value="${login}" readonly="readonly">
 				</div>	
 			</div>
-			<div class="form-group"> <!-- <!-- 버튼 --> -->
+			<div class="form-group"> 	<!-- 버튼 -->
 				<div class="col-sm-12 text-center">
 					<button class="btn btn-danger" >후기 등록</button>
 					<button class="btn btn-default" type="button" onclick="btnCancel()" >취소</button>

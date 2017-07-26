@@ -3,25 +3,33 @@ package com.dgit.domain;
 import java.util.Date;
 
 public class ReviewsVO {
-	private Integer rno;
-	private String gcode;
+	private int rno;
+	private GoodsVO goods;
 	private String uid;
 	private String rtitle;
 	private String rcontent;
 	private Date rregdate;
-	private String ocode;
-	private String rcname;
-	public Integer getRno() {
+	private int risexist;
+	private int ono;
+
+	public int getRno() {
 		return rno;
 	}
-	public void setRno(Integer rno) {
+	public void setRno(int rno) {
 		this.rno = rno;
 	}
-	public String getGcode() {
-		return gcode;
+	public int getOno() {
+		return ono;
 	}
-	public void setGcode(String gcode) {
-		this.gcode = gcode;
+	public void setOno(int ono) {
+		this.ono = ono;
+	}
+	
+	public GoodsVO getGoods() {
+		return goods;
+	}
+	public void setGoods(GoodsVO goods) {
+		this.goods = goods;
 	}
 	public String getUid() {
 		return uid;
@@ -47,22 +55,16 @@ public class ReviewsVO {
 	public void setRregdate(Date rregdate) {
 		this.rregdate = rregdate;
 	}
-	public String getOcode() {
-		return ocode;
+	public int getRisexist() {
+		return risexist;
 	}
-	public void setOcode(String ocode) {
-		this.ocode = ocode;
-	}
-	public String getRcname() {
-		return rcname;
-	}
-	public void setRcname(String rcname) {
-		this.rcname = rcname;
+	public void setRisexist(int risexist) {
+		this.risexist = risexist;
 	}
 	@Override
 	public String toString() {
-		return "ReviewsVO [rno=" + rno + ", gcode=" + gcode + ", uid=" + uid + ", rtitle=" + rtitle + ", rcontent="
-				+ rcontent + ", rregdate=" + rregdate + ", ocode=" + ocode + ", rcname=" + rcname + "]";
+		return "ReviewsVO [rno=" + rno + ", goods=" + ", uid=" + uid + ", rtitle=" + rtitle + ", rcontent="
+				+ rcontent + ", rregdate=" + rregdate + ", risexist=" + risexist + ", ono=" + ono + "]";
 	}
 
 	

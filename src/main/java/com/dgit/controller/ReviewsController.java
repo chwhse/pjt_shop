@@ -1,18 +1,33 @@
 package com.dgit.controller;
 
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.dgit.domain.CommentsVO;
+import com.dgit.domain.GoodsVO;
+import com.dgit.domain.OrdersVO;
 import com.dgit.domain.PageMaker;
 import com.dgit.domain.ReviewsVO;
 import com.dgit.domain.SearchCriteria;
+import com.dgit.service.CommentsService;
+import com.dgit.service.GoodsService;
+import com.dgit.service.OrdersService;
 import com.dgit.service.ReviewsService;
 
 
@@ -24,6 +39,35 @@ public class ReviewsController {
 	
 	@Autowired
 	ReviewsService service;
+	@Autowired
+	OrdersService oservice;
+	@Autowired
+	GoodsService gservice;
+	@Autowired
+	CommentsService cservice;
+	
+	
+	@RequestMapping(value = "/addComment/{rno}/{ccontent}", method=RequestMethod.POST)
+	public ResponseEntity<CommentsVO> addComment(@PathVariable("rno") int rno,@PathVariable("ccontent") String ccontent){
+		ResponseEntity<CommentsVO> entity = null;
+		
+		logger.info("===============Add Comment POST===============");
+		
+		try{
+			CommentsVO vo = new CommentsVO();
+			vo.setRno(rno);
+			vo.setCcontent(ccontent);
+			cservice.addComment(vo);
+			logger.info("===============Add Comment POST===============");
+			CommentsVO res_vo  = cservice.commentsSelectByno(rno);
+			
+			entity = new ResponseEntity<CommentsVO>(res_vo, HttpStatus.OK);
+		}catch(Exception e){
+			e.printStackTrace();
+			entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400 error
+		}
+		return entity;
+	}
 	
 	@RequestMapping(value = "listPage", method = RequestMethod.GET)
 	public String listPageGET(@ModelAttribute("cri")SearchCriteria cri,Model model) throws Exception {
@@ -38,33 +82,48 @@ public class ReviewsController {
 	}
 	
 	@RequestMapping(value="/register", method=RequestMethod.GET)
-	public String registerGET() throws Exception{
+	public String registerGET(Model model, 
+								HttpSession session, 
+								HttpServletResponse response) throws Exception{
+		String uid = (String) session.getAttribute("login");
+		if(uid == null){
+			response.sendRedirect("/users/login");
+		}
+		model.addAttribute("orderslist", 
+				oservice.ordersSelectByIdWithOcondition1AndRisexist0(uid));
+		List<OrdersVO> list = oservice.ordersSelectByIdWithOcondition1AndRisexist0(uid);
+		System.out.println("리스트개수"+list.size());
+		for(OrdersVO vo : list){
+			System.out.println(vo.getGoods().getGname()+":"+vo.getOdate());
+			System.out.println("ono:"+vo.getOno());
+		}
+		
 		return "reviews/register";
 	}
 	
 	@RequestMapping(value="/register", method=RequestMethod.POST)
-	public String registerPOST(ReviewsVO vo) throws Exception{
+	public String registerPOST(ReviewsVO vo, String mygcode) throws Exception{
 		logger.info("=============Register Post=============");
 		
+		GoodsVO gvo = gservice.goodsSelectByCode(mygcode);
+		vo.setGoods(gvo);
+		System.out.println("reviews:"+vo.getGoods().toString());
 		service.reviewsInsert(vo);
-		logger.info(vo.toString());
 		return "redirect:listPage";
 	}
-/*	
+		
 	@RequestMapping(value="/read", method=RequestMethod.GET)
 	public String readGET(int rno, Model model, @ModelAttribute("cri")SearchCriteria cri, boolean isModify) throws Exception{
 		ReviewsVO vo = service.reviewsSelectByNo(rno);
-		
-			service.reviewsUpdate(vo);
-		
+		System.out.println("reviewVO:"+vo.getGoods().getGname());
 		model.addAttribute("review", vo);
 		return "reviews/read";
 	}
-	
+			
 	@RequestMapping(value="/delete", method=RequestMethod.POST)
-	public String deleteGET(int bno) throws Exception{
+	public String deleteGET(int rno) throws Exception{
 		logger.info("=============delete DELETE=============");
-		service.reviewsDelete(bno);
+		service.reviewsDelete(rno);
 		
 		return "redirect:listPage";
 	}
@@ -78,7 +137,7 @@ public class ReviewsController {
 	}
 	
 	@RequestMapping(value="/modify", method=RequestMethod.POST)
-	public String modifyPOST(ReviewsVO vo,SearchCriteria cri,RedirectAttributes rttr) 	throws Exception{
+	public String modifyPOST(ReviewsVO vo,SearchCriteria cri,RedirectAttributes rttr) throws Exception{
 		
 		logger.info("=============modify Post=============");
 		logger.info("ReviewsVO:"+vo.toString());
@@ -91,5 +150,5 @@ public class ReviewsController {
 	    rttr.addAttribute("keyword", cri.getKeyword());
 		return "redirect:read";
 		
-	}*/
+	}
 }

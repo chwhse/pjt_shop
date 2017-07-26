@@ -23,6 +23,8 @@ public class ReviewsServiceImpl implements ReviewsService {
 	@Override
 	public void reviewsInsert(ReviewsVO vo) throws Exception {
 		vo.setRno(dao.getMaxRno());
+		vo.setRisexist(1);
+		
 		dao.reviewsInsert(vo);
 	}
 

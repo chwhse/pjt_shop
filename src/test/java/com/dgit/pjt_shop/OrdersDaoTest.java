@@ -1,6 +1,6 @@
 package com.dgit.pjt_shop;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 import org.junit.Test;
@@ -11,7 +11,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.dgit.domain.GoodsVO;
 import com.dgit.domain.OrdersVO;
-import com.dgit.domain.SearchCriteria;
 import com.dgit.persistence.OrdersDAO;
 
 
@@ -21,8 +20,47 @@ import com.dgit.persistence.OrdersDAO;
 public class OrdersDaoTest {
 	@Autowired
 	private OrdersDAO dao;
-	
+
+/*
 	@Test
+	public void testListPage()throws Exception{
+		
+		List<OrdersVO> list = dao.ordersSelectByIdWithOcondition1("admin");
+		for(OrdersVO vo : list){
+			System.out.println("상품명:"+vo.getGoods().getGname()+"/ 구매일:"+vo.getOdate());
+		}
+		
+	}*/
+/*	@Test
+	public void testUpdatOrder() throws Exception{
+		OrdersVO vo = new OrdersVO();
+		vo.setOcode("us00005");
+		vo.setOcondition(-1);
+		System.out.println(vo.toString());
+		dao.ordersEachUpdate(vo);
+		170725 10000 0 ordersSelectByIdWithOcondition1
+	}*/
+	
+/*	@Test
+	public void testinsertShoppingBag() throws Exception{
+		System.out.println("######1");
+		OrdersVO order = new OrdersVO();
+		
+		GoodsVO good = new GoodsVO();
+		
+		good.setGcode("c90002");
+		System.out.println("######4");
+		order.setGoods(good);
+		order.setUid("admin");
+		System.out.println("######5");
+		String res = dao.getMaxOcode(order.getUid());
+		order.setOcode(res);
+		dao.createShoppingBag(order);
+		System.out.println("######2"+order.getOcode());
+		System.out.println("######3"+order.getGoods().getGcode());
+		System.out.println("######6");
+	}*/
+/*	@Test
 	public void testOrdersSelectByCode() throws Exception{
 		
 		System.out.println("나와1");
@@ -37,21 +75,10 @@ public class OrdersDaoTest {
 		System.out.println(vo.toString());
 		
 		
-	}
-	
-	
-/*	@Test
-	public void testListPage()throws Exception{
-		
-		SearchCriteria cri = new SearchCriteria();
-		cri.setPage(1);
-		cri.setPerPageNum(10);
-		List<OrdersVO> list = dao.listSearch(cri);
-		for(OrdersVO vo : list){
-			System.out.println("ocode:"+vo.getOcode()+"ono:"+vo.getOno());
-		}
-		
 	}*/
+	
+	
+
 	/*	
 	@Test
 	public void testInsertMember()throws Exception {

@@ -5,48 +5,53 @@ import java.util.List;
 
 public class OrdersVO {
 	private String ocode;
-	private String ono;
+	private int ono;
 	private String uid;
-	private String oisbasket;
-	private List<GoodsVO> goods;
+	private boolean oisbasket;
+	private GoodsVO goods;
 	private int oquantity;
 	private Date odate;
 	private int ototalprice;
-	private List<OrdersVO> ordersVOList;
+	private int ocondition;
 	
 	
 	
-	public List<OrdersVO> getOrdersVOList() {
-		return ordersVOList;
+	public int getOcondition() {
+		return ocondition;
 	}
-	public void setOrdersVOList(List<OrdersVO> ordersVOList) {
-		this.ordersVOList = ordersVOList;
+	public void setOcondition(int ocondition) {
+		this.ocondition = ocondition;
+	}
+	public boolean isOisbasket() {
+		return oisbasket;
+	}
+	public void setOisbasket(boolean oisbasket) {
+		this.oisbasket = oisbasket;
+	}
+	public GoodsVO getGoods() {
+		return goods;
+	}
+	public void setGoods(GoodsVO goods) {
+		this.goods = goods;
 	}
 	
-	
+	public int getOno() {
+		return ono;
+	}
+	public void setOno(int ono) {
+		this.ono = ono;
+	}
 	public String getOcode() {
 		return ocode;
 	}
 	public void setOcode(String ocode) {
 		this.ocode = ocode;
 	}
-	public String getOno() {
-		return ono;
-	}
-	public void setOno(String ono) {
-		this.ono = ono;
-	}
 	public String getUid() {
 		return uid;
 	}
 	public void setUid(String uid) {
 		this.uid = uid;
-	}
-	public String getOisbasket() {
-		return oisbasket;
-	}
-	public void setOisbasket(String oisbasket) {
-		this.oisbasket = oisbasket;
 	}
 
 	public int getOquantity() {
@@ -67,19 +72,13 @@ public class OrdersVO {
 	public void setOtotalprice(int ototalprice) {
 		this.ototalprice = ototalprice;
 	}
-	
-	public List<GoodsVO> getGoods() {
-		return goods;
-	}
-	public void setGoods(List<GoodsVO> goods) {
-		this.goods = goods;
-	}
 	@Override
 	public String toString() {
-		return "OrdersVO [ocode=" + ocode + ", ono=" + ono + ", uid=" + uid + ", oisbasket="
-				+ oisbasket + ", goods=" + goods.toString() + ", oquantity=" + oquantity + ", odate=" + odate + ", ototalprice="
-				+ ototalprice + "]";
+		return "OrdersVO [ocode=" + ocode + ", ono=" + ono + ", uid=" + uid + ", oisbasket=" + oisbasket
+				+ ", oquantity=" + oquantity + ", odate=" + odate + ", ototalprice=" + ototalprice + ", ocondition="
+				+ ocondition + "]";
 	}
+
 	
 	
 }

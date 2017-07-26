@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,6 +27,7 @@ public class UsersController {
 	@RequestMapping(value="/joinForm", method=RequestMethod.GET)
 	public void JoinFormGET(){
 	}
+	@Transactional
 	@RequestMapping(value="/joinForm", method=RequestMethod.POST)
 	public String JoinFormPOST(UsersVO vo, Model model, RedirectAttributes rttr) throws Exception{
 		logger.info("======================JOIN POST=====================");

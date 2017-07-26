@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dgit.persistence.CommentsDAO">
+	<sql id="whereSqlByRno">
+		<where>rno = #{rno}</where>
+	</sql>
+	<sql id="whereSqlByCno">
+		<where>cno = #{cno}</where>
+	</sql>
+
+			
+	<select id="commentsSelectByno" resultType="CommentsVO">
+		select * from comments 
+		<include refid="whereSqlByRno"/>
+		order by cno desc
+	</select>
+
+	<insert id="add">
+		INSERT INTO comments
+		(rno, ccontent)
+		VALUES(#{rno}, #{ccontent});
+	</insert>
+	
+	<update id="modify">
+		update  comments 
+		set ccontent = #{ccontent}
+		<include refid="whereSqlByCno"/>
+	</update>
+
+	<delete id="remove">
+		DELETE FROM  comments
+		<include refid="whereSqlByCno"/>
+	</delete>
+	<select id="count" resultType="int">
+		select count(rno)  from comments
+		<include refid="whereSqlByRno"/>
+	</select>
+	
+	<select id="getRno" resultType="int">
+		select rno from comments where cno = #{cno}
+	</select>
+	
+	
+	
+	
+	
+
+</mapper>

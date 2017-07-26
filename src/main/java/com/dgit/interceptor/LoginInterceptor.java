@@ -27,7 +27,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		UsersVO vo = (UsersVO) modelAndView.getModel().get("loginVO");
 		
 		if(vo == null){
-			response.sendRedirect("login");// 회원가입으로 유도해야하나, 화면X 이리 처리함.
+			response.sendRedirect("login?UserIsExist="+false);// 회원가입으로 유도해야하나, 화면X 이리 처리함.
 		}else{
 			//로그인 처리시 session영역에 login한 사람의 정보 넣음
 			HttpSession session = request.getSession();

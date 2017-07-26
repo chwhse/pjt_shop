@@ -1,6 +1,8 @@
 package com.dgit.persistence;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -23,11 +25,19 @@ public class OrdersDAOImpl implements OrdersDAO {
 	}
 
 	@Override
-	public String getMaxOcode() throws Exception {
-		return session.selectOne(namespace+".getMaxOcode");
+	public String getMaxOcode(String id) throws Exception {
+		return session.selectOne(namespace+".getMaxOcode", id);
 	}
 
 
+	@Override
+	public List<OrdersVO> ordersSelectById(String id) throws Exception {
+		return session.selectList(namespace+".ordersSelectById", id);
+	}
+	@Override
+	public List<OrdersVO> ordersSelectByIdWithOcondition1AndRisexist0(String id) throws Exception {
+		return session.selectList(namespace+".ordersSelectByIdWithOcondition1AndRisexist0", id);
+	}
 	@Override
 	public List<OrdersVO> ordersSelectByCode(String code) throws Exception {
 		return session.selectList(namespace+".ordersSelectByCode", code);
@@ -51,15 +61,9 @@ public class OrdersDAOImpl implements OrdersDAO {
 	public void createShoppingBag(OrdersVO vo) throws Exception {
 		session.insert(namespace+".createShoppingBag", vo);
 	}
-
 	@Override
-	public void ordersTotalDelete(String code) throws Exception {
-		session.delete(namespace+".ordersTotalDelete", code);
-	}
-
-	@Override
-	public void ordersEachDelete(String code) throws Exception {
-		session.delete(namespace+".ordersEachDelete", code);
+	public void insertShoppingBag(OrdersVO vo) throws Exception {
+		session.insert(namespace+".insertShoppingBag", vo);
 	}
 
 	@Override
@@ -71,5 +75,7 @@ public class OrdersDAOImpl implements OrdersDAO {
 	public void ordersEachUpdate(OrdersVO vo) throws Exception {
 		session.update(namespace+".ordersEachUpdate", vo);
 	}
+
+
 
 }

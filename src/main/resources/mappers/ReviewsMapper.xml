@@ -1,12 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dgit.persistence.ReviewsDAO">
-
+	<resultMap id="reviewResult" type="ReviewsVO" >
+		<id property="rno" column="rno" />
+		
+		<result property="uid" column="uid"/>
+		<result property="rtitle" column="rtitle"/>
+		<result property="rcontent" column="rcontent"/>
+		<result property="rregdate" column="rregdate"/>
+		<result property="risexist" column="risexist"/>
+		<result property="ono" column="ono"/>
+		<collection property="goods" ofType="GoodsVO" resultMap="reviewGoodResult"/>
+	</resultMap>
+	
+	<resultMap type="GoodsVO" id="reviewGoodResult">
+		<id property="gcode" column="gcode"/>
+		<result property="gname" column="gname"/>
+		<result property="gcategory" column="gcategory"/>
+		<result property="gtitleimg" column="gtitleimg"/>
+		<result property="gprice" column="gprice"/>
+		<result property="gsupprice" column="gsupprice"/>
+		<result property="gregdate" column="gregdate"/>
+		<result property="gisdisplay" column="gisdisplay"/>
+		<result property="gisonsale" column="gisonsale"/>
+	</resultMap>
 	<sql id="wheresql_rno">
 		where rno = #{rno}
 	</sql>
-	<select id="reviewsListAll" resultType="ReviewsVO">
-		select * from reviews
+	<select id="reviewsListAll" resultMap="reviewResult">
+		SELECT * FROM reviews r join goods g on r.gcode=g.gcode
 		where rno > 0
 		order by rno desc, rregdate desc
 	</select>
@@ -15,13 +37,13 @@
 		select MAX(rno)+1 from reviews
 	</select>
 	
-	<select id="reviewsSelectByNo" resultType="ReviewsVO">
-		SELECT * FROM reviews
+	<select id="reviewsSelectByNo" resultMap="reviewResult">
+		SELECT * FROM reviews r join goods g on r.gcode=g.gcode
 		<include refid="wheresql_rno"/>
 	</select>
 	
 	<select id="listSearch" resultType="ReviewsVO">
-		SELECT * FROM reviews
+		SELECT rno, gcode, uid, rtitle, rcontent, rregdate, risexist, ono FROM reviews
 		<include refid="search"/>
 		order by rno desc,rregdate desc
 		limit #{pageStart},#{perPageNum}
@@ -57,13 +79,23 @@
 	
 	<insert id="reviewsInsert">
 		INSERT INTO reviews
-		(rno, gcode, uid, rtitle, rcontent, rregdate, ocode)
-		VALUES(#{rno}, #{gcode}, #{uid}, #{rtitle}, #{rcontent}, CURRENT_TIMESTAMP,#{ocode})
+		(gcode, uid, rtitle, rcontent, risexist, ono) values
+		(#{goods.gcode}, #{uid}, #{rtitle}, #{rcontent}, #{risexist}, #{ono})
 	</insert>
 	
 	<update id="reviewsUpdate">
 		UPDATE reviews
-		SET rtitle=#{rtitle}, rcontent=#{rcontent}
+		<set>
+			<if test="rtitle != null">
+				rtitle=#{rtitle},
+			</if>
+			<if test="rcontent != null">
+				rcontent=#{rcontent},
+			</if>
+			<if test="risexist != null">
+				risexist=#{risexist},
+			</if>
+		</set>
 		<include refid="wheresql_rno"/>
 	</update>
 

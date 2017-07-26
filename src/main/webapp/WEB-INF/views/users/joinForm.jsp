@@ -13,6 +13,34 @@
 <script>
   $( function() {
     
+	 /*  $("form[name='f1']").submit(function () {
+			$(".error").css("display","none");
+			$(".error2").css("display","none");
+
+			if(checkInputEmpty($("input[name]"))==false){
+				return false;
+			}
+			var special_pattern = /[`~!@#$%^&*|\\\'\";:\/?\(\)\+\=\-\_\,\.]/gi;
+			if(special_pattern.test(str.val()) == true){
+				alert(name + " 에 특수문자는 사용하실 수 없습니다.");
+				str.val("");
+				return false;
+			}
+			var kor_pattern = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g;
+			if(kor_pattern.test(str.val())){
+				alert(name + " 에 한글은 사용하실 수 없습니다.");
+				str.val("");
+				return false;
+			}
+
+			alert("등록 되었습니다.");
+
+		}); */
+	  
+
+
+	  
+	  
     $("form[name='f1']").submit(function () {
 		alert("회원가입을 축하합니다.");
 

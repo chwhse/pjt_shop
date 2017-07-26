@@ -90,7 +90,7 @@
 		<br>
 		<div>
 			<form role="form" method="post" id="f1">
-               <input type="hidden" name="gcode" value="${good.gcode}">
+               <input type="hidden" name="mygcode" value="${good.gcode}">
             </form>
 		</div>
 				

@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.dgit.domain.CommentsVO;
 import com.dgit.domain.ReviewsVO;
+import com.dgit.persistence.CommentsDAO;
 import com.dgit.persistence.ReviewsDAO;
 
 
@@ -19,57 +21,61 @@ import com.dgit.persistence.ReviewsDAO;
 public class ReviewsDaoTest {
 	@Autowired
 	private ReviewsDAO dao;
+	@Autowired
+	private CommentsDAO cdao;
 	
-	@Test
+	
+/*	@Test
+	public void testCommentInsert()throws Exception{
+		CommentsVO vo = new CommentsVO();
+		vo.setRno(1);
+		vo.setCcontent("q바보");
+		cdao.add(vo);
+		
+		System.out.println(cdao.commentsSelectByno(1));
+	}*/
+	
+/*	@Test
 	public void testListPage()throws Exception{
 		
 		List<ReviewsVO> list = dao.reviewsListAll();
+		System.out.println("maxrno:"+dao.getMaxRno());
 		
 		for(ReviewsVO vo : list){
 			System.out.println(vo.getRno()+":"+vo.getRtitle());
 		}
 		
-	}
-	/*	
-	@Test
-	public void testInsertMember()throws Exception {
-		BoardVO board = new BoardVO();
-		board.setTitle("새로운 글을 넣습니다");
-		board.setContent("새로운 글!!");
-		board.setWriter("user00");
-		ArrayList<String> list = new ArrayList<>();
-		list.add("파일1");
-		list.add("파일2");
-		board.setFiles(list.toArray(new String[list.size()]));
-		dao.create(board);
 		
-	}
-	
-	@Test
-	public void testSelectMember()throws Exception {
-		
-		dao.read(2);
-		
-	
-	}
-	
-	@Test
-	public void testUpdateMember()throws Exception {
-		BoardVO board = new BoardVO();
-		board.setBno(2);
-		board.setTitle("수정 글을 넣습니다");
-		board.setContent("수정 글!!");
-		board.setWriter("user22");
-		dao.update(board);
-	}
-	*/
+	}*/
 /*	
 	@Test
-	public void testDeleteMember()throws Exception {
-		dao.delete(2);
+	public void testInsertReview()throws Exception {
+		ReviewsVO vo = new ReviewsVO();
+		vo.setGcode("c10001");
+		vo.setUid("admin");
+		vo.setRtitle("후기테스트");
+		vo.setRcontent("후기후기");
+		vo.setRisexist(0);
+		dao.reviewsInsert(vo);
+		
+	}*/
+/*	
+	
+	@Test
+	public void testUpdateReview()throws Exception {
+		ReviewsVO vo = new ReviewsVO();
+		vo.setRno(10);
+		vo.setRisexist(-1);
+		dao.reviewsUpdate(vo);
+	}*/
+
+/*
+	@Test
+	public void testDeleteReview()throws Exception {
+		dao.reviewsDelete(10);
 		
 		
-	}
-*/
+	}*/
+
 
 }

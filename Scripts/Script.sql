@@ -132,9 +132,10 @@ CREATE TABLE Orders (
 	uid         varchar(20) NULL     , -- 회원아이디
 	oisbasket   BOOLEAN      default 1, -- 장바구니여부
 	gcode       varchar(20) NULL     , -- 상품코드
-	oquantity   INTEGER      NULL , -- 주문수량
+	oquantity   INTEGER      NULL default 0, -- 주문수량
 	odate       TIMESTAMP    NOT NULL default now(), -- 주문날짜
-	ototalprice INTEGER      NULL  -- 최종가격
+	ototalprice INTEGER      NULL  default 0,-- 최종가격
+	ocondition  INTEGER     NOT NULL  default 0-- 주문상태
 );
 
 /*
@@ -159,21 +160,22 @@ ALTER TABLE Orders
 
 -- 상품후기
 CREATE TABLE Reviews (
-	rno      INTEGER       NOT NULL , -- 상품후기번호
+	rno      INTEGER       NOT NULL auto_increment primary key, -- 상품후기번호
 	gcode    varchar(20)  NULL     , -- 상품코드
 	uid      varchar(20)  NULL     , -- 회원아이디
 	rtitle   varchar(100) NOT NULL , -- 상품후기제목
 	rcontent TEXT          NOT NULL , -- 상품후기내용
 	rregdate TIMESTAMP     NOT NULL default now(), -- 상품후기등록일
-	ocode    varchar(50)  NULL      -- 주문코드
+	risexist boolean       NOT NULL default 0, -- 상품후기여부
+	ono      int  		  NULL  -- 주문번호	
 );
 
--- 상품후기
+/*-- 상품후기
 ALTER TABLE Reviews
 	ADD CONSTRAINT PK_Review -- 상품후기 기본키
 		PRIMARY KEY (
 			rno -- 상품후기번호
-		);
+		);*/
 
 		/*외래키 제약 없앰 (자바에서 처리)*/
 /*
@@ -202,29 +204,18 @@ ALTER TABLE Reviews
 	*/		
 -- 상품후기코멘트
 CREATE TABLE Comments (
-	cno      INTEGER        NOT NULL , -- 상품후기코멘트번호
+	cno      INTEGER        auto_increment primary key , -- 상품후기코멘트번호
 	rno      INTEGER        NULL  , -- 상품후기번호
-	uid      varchar(20)   NULL   , -- 회원아이디
 	ccontent varchar(1000) NULL   , -- 상품후기코멘트내용
 	cdate    TIMESTAMP      NOT NULL default now()   -- 상품후기코멘트날짜
 );
 
--- 상품후기코멘트
+/*-- 상품후기코멘트
 ALTER TABLE Comments
 	ADD CONSTRAINT PK_Comment -- 상품후기코멘트 기본키
 		PRIMARY KEY (
 			cno -- 상품후기코멘트번호
-		);
-
--- 상품후기코멘트
-ALTER TABLE Comments
-	ADD CONSTRAINT FK_Review_TO_Comment -- 상품후기 -> 상품후기코멘트
-		FOREIGN KEY (
-			rno -- 상품후기번호
-		)
-		REFERENCES Reviews ( -- 상품후기
-			rno -- 상품후기번호
-		);
+		);*/
 
 
 -- 주문내역
@@ -235,7 +226,8 @@ CREATE TABLE OrdersHistory (
 	uid         varchar(20) NULL , -- 회원아이디
 	odate       TIMESTAMP    NULL , -- 주문날짜
 	oquantity   INTEGER      NULL , -- 주문수량
-	ototalprice INTEGER      NULL  -- 최종가격
+	ototalprice INTEGER      NULL default 0, -- 최종가격
+	ocondition  INTEGER     NOT NULL  default 0-- 주문상태	
 );
 
 
@@ -304,12 +296,12 @@ INSERT INTO users
 INSERT INTO boards
 (bno, btitle, uid) values
 (1, '게시물01', 'admin'),
-(2, '게시물02', 'admin'),
-(3, '게시물03', 'admin'),
-(4, '게시물04', 'admin'),
-(5, '게시물05', 'admin'),
-(6, '게시물06', 'admin'),
-(7, '게시물07', 'admin'),
+(2, '게시물02', 'user01'),
+(3, '게시물03', 'user01'),
+(4, '게시물04', 'user01'),
+(5, '게시물05', 'user02'),
+(6, '게시물06', 'user02'),
+(7, '게시물07', 'user03'),
 (8, '게시물08', 'admin'),
 (9, '게시물09', 'admin'),
 (10, '게시물10', 'admin');
@@ -353,26 +345,26 @@ select count(*) from boards;
 
 	INSERT INTO goods
 	(gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay, gisonsale) values
-	('c10000', '관리자 계정으로 로그인 시 보이는 상품', 'coffee','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif',7500,5000, CURRENT_TIMESTAMP, 0, 0),
-	('c10001', '코스타리카 돈 마요 100g', 'coffee','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif',7500,5000, CURRENT_TIMESTAMP, 1, 1),
-	('c10002', '코스타리카 카틀레야 게이샤 100g', 'coffee','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif',16000,10000, CURRENT_TIMESTAMP, 1, 1),
-	('m10003', '파나마 핀카 자미슨 모건 게이샤 100g', 'machines coffee','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif',32000,20000, CURRENT_TIMESTAMP, 1, 1),
-	('m10004', '파나마 핀카 자미슨 모건 게이샤 200g', 'machines coffee','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif',64000,41000, CURRENT_TIMESTAMP, 0, 1),
-	('m10005', '예멘 모카 마타리 200g', 'machines coffee','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif',22000,15000, CURRENT_TIMESTAMP, 0, 1),
-	('c10006', '자메이카 블루마운틴 200g', 'coffee','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif',45000,30000, CURRENT_TIMESTAMP, 0, 1),
-	('c10007', '하와이안 코나 엑스트라 팬시 200g', 'coffee','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif',43000,28000, CURRENT_TIMESTAMP, 0, 1),
-	('c90002', '카뮤 더치 블렌드 500g', 'coffee','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif',35000,22000, CURRENT_TIMESTAMP, 0, 1),
-	('c90003', '카뮤 블렌드 500g', 'coffee','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif',30000,20000, CURRENT_TIMESTAMP, 1, 1),
-	('c90004', '에스프레소 블렌드 500g', 'coffee','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif',30000,20000, CURRENT_TIMESTAMP, 1, 1),
-	('c90005', '카뮤 다크 블렌드 500g', 'coffee','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif',30000,20000, CURRENT_TIMESTAMP, 1, 1),
-	('c20001', '케냐 클래식 500g', 'coffee','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif',35000,22000, CURRENT_TIMESTAMP, 1, 1),
-	('c20002', '에티오피아 예가체프 500g', 'coffee','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif',37500,23000, CURRENT_TIMESTAMP, 1, 1),
-	('c20003', '에티오피아 시다모 500g', 'coffee','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif',35000,22000, CURRENT_TIMESTAMP, 1, 1),
-	('c20004', '에티오피아 코케 500g', 'coffee','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif',45000,30000, CURRENT_TIMESTAMP, 1, 1),
-	('c20005', '인도네시아 만델링 500g', 'coffee','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif',35000,22000, CURRENT_TIMESTAMP, 1, 1),
-	('c20006', '파푸아뉴기니 마라와카 블루마운틴 500g', 'coffee','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif',37500,23000, CURRENT_TIMESTAMP, 1, 1),
-	('c20007', '콜롬비아 라 유니온 500g', 'coffee','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif',37500,23000, CURRENT_TIMESTAMP, 1, 0),
-	('c20008', '과테말라 클래식 500g', 'coffee','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif',35000,22000, CURRENT_TIMESTAMP, 1, 1);
+	('c10000', '관리자 계정으로 로그인 시 보이는 상품', 'coffee','imgEx',7500,5000, CURRENT_TIMESTAMP, 0, 0),
+	('c10001', '코스타리카 돈 마요 100g', 'coffee','imgEx',7500,5000, CURRENT_TIMESTAMP, 1, 1),
+	('c10002', '코스타리카 카틀레야 게이샤 100g', 'coffee','imgEx',16000,10000, CURRENT_TIMESTAMP, 1, 1),
+	('m10003', '파나마 핀카 자미슨 모건 게이샤 100g', 'machines coffee','imgEx',32000,20000, CURRENT_TIMESTAMP, 1, 1),
+	('m10004', '파나마 핀카 자미슨 모건 게이샤 200g', 'machines coffee','imgEx',64000,41000, CURRENT_TIMESTAMP, 0, 1),
+	('m10005', '예멘 모카 마타리 200g', 'machines coffee','imgEx',22000,15000, CURRENT_TIMESTAMP, 0, 1),
+	('c10006', '자메이카 블루마운틴 200g', 'coffee','',45000,30000, CURRENT_TIMESTAMP, 0, 1),
+	('c10007', '하와이안 코나 엑스트라 팬시 200g', 'coffee','imgEx',43000,28000, CURRENT_TIMESTAMP, 0, 1),
+	('c90002', '카뮤 더치 블렌드 500g', 'coffee','imgEx',35000,22000, CURRENT_TIMESTAMP, 0, 1),
+	('c90003', '카뮤 블렌드 500g', 'coffee','imgEx',30000,20000, CURRENT_TIMESTAMP, 1, 1),
+	('c90004', '에스프레소 블렌드 500g', 'coffee','imgEx',30000,20000, CURRENT_TIMESTAMP, 1, 1),
+	('c90005', '카뮤 다크 블렌드 500g', 'coffee','imgEx',30000,20000, CURRENT_TIMESTAMP, 1, 1),
+	('c20001', '케냐 클래식 500g', 'coffee','imgEx',35000,22000, CURRENT_TIMESTAMP, 1, 1),
+	('c20002', '에티오피아 예가체프 500g', 'coffee','imgEx',37500,23000, CURRENT_TIMESTAMP, 1, 1),
+	('c20003', '에티오피아 시다모 500g', 'coffee','imgEx',35000,22000, CURRENT_TIMESTAMP, 1, 1),
+	('c20004', '에티오피아 코케 500g', 'coffee','imgEx',45000,30000, CURRENT_TIMESTAMP, 1, 1),
+	('c20005', '인도네시아 만델링 500g', 'coffee','imgEx',35000,22000, CURRENT_TIMESTAMP, 1, 1),
+	('c20006', '파푸아뉴기니 마라와카 블루마운틴 500g', 'coffee','imgEx',37500,23000, CURRENT_TIMESTAMP, 1, 1),
+	('c20007', '콜롬비아 라 유니온 500g', 'coffee','imgEx',37500,23000, CURRENT_TIMESTAMP, 1, 0),
+	('c20008', '과테말라 클래식 500g', 'coffee','imgEx',35000,22000, CURRENT_TIMESTAMP, 1, 1);
 
 	INSERT INTO goodsdetail 
 	(gcode, gdesc,gstock) values
@@ -399,37 +391,37 @@ select count(*) from boards;
 
 	INSERT INTO goodsdetailimg 
 	(gcode, gdetailimg) values
-	('c10000','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif'),
-	('c10000','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif'),
-	('c10000','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif'),
-	('c10001','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif'),
-	('c10001','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif'),
-	('c10001','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif'),
-	('c10002','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif'),
-	('c10002','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif'),
-	('c10002','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif'),
-	('m10003','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif'),
-	('m10003','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif'),
-	('m10003','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif'),
-	('m10003','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif'),
-	('m10004','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif'),
-	('m10004','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif'),
-	('m10004','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif'),
-	('m10005','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif'),
-	('c10006','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif'),
-	('c10007','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif'),
-	('c90002','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif'),
-	('c90003','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif'),
-	('c90004','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif'),
-	('c90005','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif'),
-	('c20001','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif'),
-	('c20002','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif'),
-	('c20003','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif'),
-	('c20004','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif'),
-	('c20005','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif'),
-	('c20006','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif'),
-	('c20007','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif'),
-	('c20008','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif');
+	('c10000','imgEx'),
+	('c10000','imgEx'),
+	('c10000','imgEx'),
+	('c10001','imgEx'),
+	('c10001','imgEx'),
+	('c10001','imgEx'),
+	('c10002','imgEx'),
+	('c10002','imgEx'),
+	('c10002','imgEx'),
+	('m10003','imgEx'),
+	('m10003','imgEx'),
+	('m10003','imgEx'),
+	('m10003','imgEx'),
+	('m10004','imgEx'),
+	('m10004','imgEx'),
+	('m10004','imgEx'),
+	('m10005','imgEx'),
+	('c10006','imgEx'),
+	('c10007','imgEx'),
+	('c90002','imgEx'),
+	('c90003','imgEx'),
+	('c90004','imgEx'),
+	('c90005','imgEx'),
+	('c20001','imgEx'),
+	('c20002','imgEx'),
+	('c20003','imgEx'),
+	('c20004','imgEx'),
+	('c20005','imgEx'),
+	('c20006','imgEx'),
+	('c20007','imgEx'),
+	('c20008','imgEx');
 
 
 
@@ -463,14 +455,14 @@ select count(*) from boards;
 		
 INSERT INTO goods
 (gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay, gisonsale) values
-('c10998', '관리자 계정으로 로그인 시 보이는 상품2', 'coffee','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif',7500,5000, CURRENT_TIMESTAMP, 0, 0);
+('c10998', '관리자 계정으로 로그인 시 보이는 상품2', 'coffee','imgEx',7500,5000, CURRENT_TIMESTAMP, 0, 0);
 INSERT INTO goodsdetail
 (gcode, gdesc,gstock) values
 ('c10998', '상세-관리자 계정으로 로그인 시 보이는 상품2', 100);
 INSERT INTO goodsdetailimg
 (gcode, gdetailimg) values
-('c10998','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif'),
-('c10998','/2017/07/19/s_dc272752-dce4-4dc7-af32-2b716b729672_coffee1.gif');
+('c10998','imgEx'),
+('c10998','imgEx');
 		
 select MAX(gcode) from goods 
 		where gcategory like CONCAT('m','%');
@@ -484,9 +476,11 @@ from goods where gcode='m10003';
 		('c50009','상세설명','',100);*/
 /*	=================================================================================*/	
 
+/*
 INSERT INTO reviews
 (rno, gcode, uid, rtitle, rcontent, rregdate, ocode)
 VALUES(000001, 'c10999', 'admin', '리뷰제목', '리뷰내용:너무좋아요', CURRENT_TIMESTAMP, 'a00001');
+*/
 
 
 select MAX(rno)+1 from reviews;
@@ -517,34 +511,44 @@ select count(*) from goods WHERE gname like CONCAT('%','1','%');
 
 INSERT INTO orders
 (ocode,uid, oisbasket, gcode, oquantity, 
-odate, ototalprice) values
-('u00002', 'admin', 0, 'c10999', 2, 
-CURRENT_TIMESTAMP, 10000),
-('u00002', 'admin', 0, 'c90002', 1, 
-CURRENT_TIMESTAMP, 20000),
-('u00003', 'admin', 0, 'c90003', 1, 
-CURRENT_TIMESTAMP, 30000),
-('u00004', 'admin', 0, 'c90004', 2, 
-CURRENT_TIMESTAMP, 10000),
-('u00004','admin', 0, 'c90005', 3, 
-CURRENT_TIMESTAMP, 20000),
-('u00004', 'admin', 0, 'c90005', 3, 
-CURRENT_TIMESTAMP, 30000),
-('u00005','admin', 0, 'c90006', 5, 
-CURRENT_TIMESTAMP, 10000);
+odate, ototalprice, ocondition) values
+('ad00002', 'admin', 1, 'c90002', 2, 
+CURRENT_TIMESTAMP, 10000, 1),
+('ad00002', 'admin', 1, 'c90002', 2, 
+CURRENT_TIMESTAMP, 10000, 1),
+('ad00002', 'admin', 1, 'c90002', 2, 
+CURRENT_TIMESTAMP, 10000, 1),
+('ad00002', 'admin', 1, 'c90002', 2, 
+CURRENT_TIMESTAMP, 10000, 1),
+('ad00002', 'admin', 1, 'c90002', 1, 
+CURRENT_TIMESTAMP, 20000, 1),
+('us00003', 'user01', 1, 'c90002', 1, 
+CURRENT_TIMESTAMP, 30000, 1),
+('us00004', 'user01', 1, 'c90002', 2, 
+CURRENT_TIMESTAMP, 10000, -1),
+('us00004','user01', 1, 'c90002', 3, 
+CURRENT_TIMESTAMP, 20000, 1),
+('us00004', 'user02', 1, 'c90002', 3, 
+CURRENT_TIMESTAMP, 30000, -1),
+('us00004', 'user02', 1, 'c90002', 3, 
+CURRENT_TIMESTAMP, 30000, 0),
+('us00005','user02', 0, 'c90002', 5, 
+CURRENT_TIMESTAMP, 10000, 0);
 		
 UPDATE orders
 SET oisbasket=1, oquantity=2,  ototalprice=40000
-WHERE ocode='u00003';
+WHERE ocode='us00003';
 
 
 SELECT ocode, ono, uid, oisbasket, gcode, oquantity, odate, ototalprice
 FROM orders;
 
 
+/*
 INSERT INTO orders
 (ocode, uid, oisbasket, gcode, oquantity, odate, ototalprice)
-VALUES('u00007', 'admin', 0, 'c10999', 3, CURRENT_TIMESTAMP, 90000);
+VALUES('us00007', 'admin', 1, 'c10999', 3, CURRENT_TIMESTAMP, 90000);
+*/
 
 
 select MAX(ocode)+1 from orders;
@@ -560,4 +564,42 @@ where ono = 4;
 select ocode, ono, uid, oisbasket,  oquantity, odate, ototalprice, 
 		g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay, gisonsale	 
 		from orders o left join goods g on o.gcode=g.gcode
-where ocode = 'u00004';
+where ocode = 'us00004';
+
+select ocode, ono, uid, oisbasket,  oquantity, odate, ototalprice,
+		g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay, gisonsale	 
+		from orders o left join goods g on o.gcode=g.gcode
+		where uid = 'admin' and oisbasket = true;
+		
+select ocode from orders;
+
+select concat(left('user99',2),lpad(substring(MAX(ocode), 2)+1, 5,'0')) 
+		from orders;
+
+/*====================================================================*/
+/*리뷰*/
+
+INSERT INTO reviews
+(gcode, uid, rtitle, rcontent, rregdate, risexist, ono) values
+('c10001', 'admin', '리뷰01', '리뷰01-상세', CURRENT_TIMESTAMP, true, 1),
+('c10001', 'user01', '리뷰03', '리뷰03-상세', CURRENT_TIMESTAMP, true, 3),
+('c10001', 'user01', '리뷰04', '리뷰04-상세', CURRENT_TIMESTAMP, true,4),
+('c10001', 'user02', '리뷰06', '리뷰06-상세', CURRENT_TIMESTAMP, true,6),
+('c10001', 'user02', '리뷰07', '리뷰07-상세', CURRENT_TIMESTAMP, true,7),
+('c10001', 'user02', '리뷰09', '리뷰09-상세', CURRENT_TIMESTAMP, true,8);
+
+
+
+select ocode, o.ono, o.uid, oisbasket,  oquantity, odate, ototalprice,ocondition,
+		g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay, gisonsale,
+		rno, rtitle, rcontent, rregdate, risexist
+		from orders o left join goods g on o.gcode=g.gcode
+		left join reviews r on o.ono=r.ono
+		where o.uid = 'admin' and ocondition = 1 and (risexist = 0 or risexist is null);
+		
+SELECT * FROM reviews r join goods g on r.gcode=g.gcode
+		where rno = '1';
+/*		
+INSERT INTO comments
+		(rno, ccontent)
+		VALUES(1, "바보바보");		*/
