@@ -63,9 +63,15 @@ public class ReviewsVO {
 	}
 	@Override
 	public String toString() {
-		return "ReviewsVO [rno=" + rno + ", goods=" + ", uid=" + uid + ", rtitle=" + rtitle + ", rcontent="
+		String str = "null";
+		if(goods!=null){
+			str = goods.toString();
+		}
+		return "ReviewsVO [rno=" + rno + ", goods=" + str + ", uid=" + uid + ", rtitle=" + rtitle + ", rcontent="
 				+ rcontent + ", rregdate=" + rregdate + ", risexist=" + risexist + ", ono=" + ono + "]";
 	}
+	
+	
 
 	
 	

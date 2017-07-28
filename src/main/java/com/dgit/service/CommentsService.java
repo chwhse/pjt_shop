@@ -6,7 +6,11 @@ import com.dgit.domain.CommentsVO;
 import com.dgit.domain.Criteria;
 
 public interface CommentsService {
-	public CommentsVO commentsSelectByno(int no) throws Exception;
+	public CommentsVO commentsSelectByCno(int cno) throws Exception;
+	
+	public CommentsVO latestCommentsSelectByRno(int rno) throws Exception;
+	
+	public List<CommentsVO> list(int rno) throws Exception;
 	
 	public void addComment(CommentsVO vo) throws Exception;
 	

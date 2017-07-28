@@ -8,7 +8,6 @@
 		<result property="rtitle" column="rtitle"/>
 		<result property="rcontent" column="rcontent"/>
 		<result property="rregdate" column="rregdate"/>
-		<result property="risexist" column="risexist"/>
 		<result property="ono" column="ono"/>
 		<collection property="goods" ofType="GoodsVO" resultMap="reviewGoodResult"/>
 	</resultMap>
@@ -41,9 +40,14 @@
 		SELECT * FROM reviews r join goods g on r.gcode=g.gcode
 		<include refid="wheresql_rno"/>
 	</select>
+	<select id="reviewsSelectByCode" resultMap="reviewResult">
+		SELECT uid, rtitle, rcontent,rregdate, ono, g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay, gisonsale 
+		FROM reviews r join goods g on r.gcode=g.gcode
+		where g.gcode = #{gcode}
+	</select>
 	
 	<select id="listSearch" resultType="ReviewsVO">
-		SELECT rno, gcode, uid, rtitle, rcontent, rregdate, risexist, ono FROM reviews
+		SELECT rno, gcode, uid, rtitle, rcontent, rregdate,  ono FROM reviews
 		<include refid="search"/>
 		order by rno desc,rregdate desc
 		limit #{pageStart},#{perPageNum}
@@ -79,8 +83,8 @@
 	
 	<insert id="reviewsInsert">
 		INSERT INTO reviews
-		(gcode, uid, rtitle, rcontent, risexist, ono) values
-		(#{goods.gcode}, #{uid}, #{rtitle}, #{rcontent}, #{risexist}, #{ono})
+		(gcode, uid, rtitle, rcontent, ono) values
+		(#{goods.gcode}, #{uid}, #{rtitle}, #{rcontent}, #{ono})
 	</insert>
 	
 	<update id="reviewsUpdate">
@@ -91,9 +95,6 @@
 			</if>
 			<if test="rcontent != null">
 				rcontent=#{rcontent},
-			</if>
-			<if test="risexist != null">
-				risexist=#{risexist},
 			</if>
 		</set>
 		<include refid="wheresql_rno"/>

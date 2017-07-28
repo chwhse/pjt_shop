@@ -19,8 +19,8 @@ public class GoodsDAOImpl implements GoodsDAO {
 	private static String namespace = "com.dgit.persistence.GoodsDAO";
 	
 	@Override
-	public List<GoodsVO> goodsListForAdmin(SearchCriteria cri) throws Exception {
-		return session.selectList(namespace+".goodsListForAdmin", cri);
+	public List<GoodsVO> listSearch4Admin(SearchCriteria cri) throws Exception {
+		return session.selectList(namespace+".listSearch4Admin", cri);
 	}
 
 	@Override
@@ -50,8 +50,11 @@ public class GoodsDAOImpl implements GoodsDAO {
 	public void goodsDetailInsert(GoodsVO vo) throws Exception {
 		session.insert(namespace+".goodsDetailInsert", vo);
 	}
+	@Override
+	public void goodsStockInsert(GoodsVO vo) throws Exception {
+		session.insert(namespace+".goodsStockInsert", vo);
+	}
 
-	
 	
 	@Override
 	public GoodsVO goodsSelectByCode(String code) throws Exception {
@@ -74,6 +77,10 @@ public class GoodsDAOImpl implements GoodsDAO {
 	public void goodsDetailDelete(String code) throws Exception {
 		session.delete(namespace+".goodsDetailDelete", code);
 	}
+	@Override
+	public void goodsStockDelete(String code) throws Exception {
+		session.delete(namespace+".goodsStockDelete", code);
+	}
 
 	@Override
 	public void goodsUpdate(GoodsVO vo) throws Exception {
@@ -83,6 +90,10 @@ public class GoodsDAOImpl implements GoodsDAO {
 	@Override
 	public void goodsDetailUpdate(GoodsVO vo) throws Exception {
 		session.update(namespace+".goodsDetailUpdate", vo);
+	}
+	@Override
+	public void goodsStockUpdate(GoodsVO vo) throws Exception {
+		session.update(namespace+".goodsStockUpdate", vo);
 	}
 
 
@@ -135,6 +146,10 @@ public class GoodsDAOImpl implements GoodsDAO {
 	@Override
 	public int searchCount(SearchCriteria cri) throws Exception {
 		return session.selectOne(namespace+".searchCount",cri);
+	}
+	@Override
+	public int searchCount4Admin(SearchCriteria cri) throws Exception {
+		return session.selectOne(namespace+".searchCount4Admin",cri);
 	}
 	@Override
 	public List<GoodsVO> listSearch(SearchCriteria cri) throws Exception {

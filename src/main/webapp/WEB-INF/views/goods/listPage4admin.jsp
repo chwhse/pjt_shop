@@ -89,7 +89,23 @@
 			        
            
           </div><!-- /.blog-post --><br><br><br>  <br><br><br>
-	
+		  	<div> <!-- 페이징처리div -->
+				<div class="text-center">
+					<ul class="pagination">
+						<c:if test="${pageMaker.prev }">
+							<li><a href="listPage${pageMaker.makeSearch(pageMaker.startPage-1)}">&laquo;</a></li>
+						</c:if>
+						<c:forEach begin="${pageMaker.startPage }" end="${pageMaker.endPage }" var="idx">
+							<li ${pageMaker.cri.page==idx?'class=active':''}>
+								<a href="listPage${pageMaker.makeSearch(idx) }">${idx}</a>
+							</li>
+						</c:forEach>
+						<c:if test="${pageMaker.next }">
+							<li><a href="listPage${pageMaker.makeSearch(pageMaker.endPage+1)}">&raquo;</a></li>
+						</c:if>
+					</ul>
+				</div>
+			</div>	
 	</body>
 <%@ include file="../include/footer.jsp"%>
 <script src="${pageContext.request.contextPath}/resources/dist/js/bootstrap.min.js"></script>

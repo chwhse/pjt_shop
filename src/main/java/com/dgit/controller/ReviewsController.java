@@ -58,9 +58,11 @@ public class ReviewsController {
 			vo.setRno(rno);
 			vo.setCcontent(ccontent);
 			cservice.addComment(vo);
-			logger.info("===============Add Comment POST===============");
-			CommentsVO res_vo  = cservice.commentsSelectByno(rno);
 			
+			CommentsVO res_vo  = cservice.latestCommentsSelectByRno(rno);
+			if(res_vo==null){
+				System.out.println("널");
+			};
 			entity = new ResponseEntity<CommentsVO>(res_vo, HttpStatus.OK);
 		}catch(Exception e){
 			e.printStackTrace();
@@ -89,9 +91,12 @@ public class ReviewsController {
 		if(uid == null){
 			response.sendRedirect("/users/login");
 		}
-		model.addAttribute("orderslist", 
-				oservice.ordersSelectByIdWithOcondition1AndRisexist0(uid));
-		List<OrdersVO> list = oservice.ordersSelectByIdWithOcondition1AndRisexist0(uid);
+		
+		List<OrdersVO> list = oservice.ordersSelectById4Review(uid);
+		if(list.size()>0){
+			model.addAttribute("orderslist", list);
+		}
+		
 		System.out.println("리스트개수"+list.size());
 		for(OrdersVO vo : list){
 			System.out.println(vo.getGoods().getGname()+":"+vo.getOdate());
@@ -117,6 +122,7 @@ public class ReviewsController {
 		ReviewsVO vo = service.reviewsSelectByNo(rno);
 		System.out.println("reviewVO:"+vo.getGoods().getGname());
 		model.addAttribute("review", vo);
+		model.addAttribute("commentlist", cservice.list(rno));
 		return "reviews/read";
 	}
 			

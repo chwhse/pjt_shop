@@ -38,7 +38,6 @@
 		<interceptor>
 			<mapping path="/boards/register"/>
 			<mapping path="/boards/modify"/>
-<!-- 			<mapping path="/boards/read"/> -->
 			<mapping path="/boards/delete"/>
 			<beans:ref bean="authInterceptor"/>
 		</interceptor>
@@ -46,15 +45,24 @@
 			<mapping path="/goods/register"/>
 			<mapping path="/goods/listPage4admin"/>
 			<mapping path="/goods/modify"/>
- 			<mapping path="/goods/read"/> 
 			<mapping path="/goods/delete"/>
 			<beans:ref bean="authInterceptor"/>
 		</interceptor>
 		<interceptor>
 			<mapping path="/reviews/register"/>
 			<mapping path="/reviews/modify"/>
- 			<mapping path="/reviews/read"/> 
 			<mapping path="/reviews/delete"/>
+			<beans:ref bean="authInterceptor"/>
+		</interceptor>
+		<interceptor>
+			<mapping path="/homes/myPage"/>
+			<beans:ref bean="authInterceptor"/>
+		</interceptor>
+		<interceptor>
+			<mapping path="/orders/listPage"/>
+			<mapping path="/orders/orderHistory"/>
+			<mapping path="/orders/settle"/>
+			<mapping path="/orders/shoppingCart"/>
 			<beans:ref bean="authInterceptor"/>
 		</interceptor>
 

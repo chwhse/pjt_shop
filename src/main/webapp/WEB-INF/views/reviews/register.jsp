@@ -16,9 +16,13 @@
 		$(".error").css("display","none");
 		$(".error2").css("display","none");
 	
-/* 		if(checkInputEmpty($("input[name]"))==false){
+ 		if(checkInputEmpty($("input[name]"))==false){
 			return false;
-		}; */
+		};
+		
+		var selval = $("#selectbox > option:selected").attr("value");
+		alert(selval);
+		
 		alert("등록 되었습니다.");
 
 	});
@@ -43,10 +47,15 @@
 				<label class="col-sm-3 control-label">review goods</label>
 				<div class="col-sm-6">
 					<select class="form-control" name="ono" id="selectbox">
+						<c:if test="${orderslist.size() }>0">
 						<c:forEach var="order" items="${orderslist }">
 							<option value="${order.ono }" value2="${order.goods.gcode }" >
 							${order.goods.gname } / 주문일 : ${order.odate }</option>
 						</c:forEach>
+						</c:if>
+						 <c:if test="${empty orderslist}">
+							<option value="-1">후기를 작성할 주문내역이 존재하지 않습니다.</option>
+						</c:if>
 					</select>
 				</div>
 			</div>
@@ -73,7 +82,9 @@
 			</div>
 			<div class="form-group"> 	<!-- 버튼 -->
 				<div class="col-sm-12 text-center">
-					<button class="btn btn-danger" >후기 등록</button>
+					<c:if test="${!empty orderslist}">
+						<button class="btn btn-danger" >후기 등록</button>
+					</c:if>
 					<button class="btn btn-default" type="button" onclick="btnCancel()" >취소</button>
 				</div>
 			</div>

@@ -14,11 +14,21 @@ import com.dgit.persistence.ReviewsDAO;
 public class CommentsServiceImpl implements CommentsService {
 	@Autowired
 	private CommentsDAO dao;
-	
+
 	@Override
-	public CommentsVO commentsSelectByno(int no) throws Exception {
-		return dao.commentsSelectByno(no);
+	public CommentsVO commentsSelectByCno(int cno) throws Exception {
+		return dao.commentsSelectByCno(cno);
 	}
+	@Override
+	public CommentsVO latestCommentsSelectByRno(int rno) throws Exception{
+		return dao.latestCommentsSelectByRno(rno);
+	}
+
+	@Override
+	public List<CommentsVO> list(int rno) throws Exception {
+		return dao.list(rno);
+	}
+
 
 	@Override
 	public void addComment(CommentsVO vo) throws Exception {
@@ -43,5 +53,6 @@ public class CommentsServiceImpl implements CommentsService {
 	public int getRno(int no) throws Exception {
 		return dao.getRno(no);
 	}
+
 
 }

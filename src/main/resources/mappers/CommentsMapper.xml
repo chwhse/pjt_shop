@@ -8,17 +8,29 @@
 		<where>cno = #{cno}</where>
 	</sql>
 
-			
-	<select id="commentsSelectByno" resultType="CommentsVO">
+	<select id="list" resultType="CommentsVO">
 		select * from comments 
 		<include refid="whereSqlByRno"/>
 		order by cno desc
+	</select>	
+		
+	<select id="commentsSelectByCno" resultType="CommentsVO">
+		select * from comments 
+		<include refid="whereSqlByCno"/>
+		order by cno desc
+	</select>
+	
+	<select id="latestCommentsSelectByRno" resultType="CommentsVO">
+		select * from comments 
+		<include refid="whereSqlByRno"/> 
+		and cno=(select max(cno) from comments)  
+		order by cdate desc;
 	</select>
 
 	<insert id="add">
-		INSERT INTO comments
-		(rno, ccontent)
-		VALUES(#{rno}, #{ccontent});
+		INSERT INTO comments 
+		(rno, ccontent) 
+		VALUES(#{rno}, #{ccontent})
 	</insert>
 	
 	<update id="modify">

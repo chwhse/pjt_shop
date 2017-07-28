@@ -7,7 +7,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class GoodsVO {
 	private String gcode;
 	private String gname;
-	private String gcategory;
 	private String gtitleimg;
 	private int gprice;
 	private int gsupprice;
@@ -15,9 +14,13 @@ public class GoodsVO {
 	private boolean gisdisplay;
 	private boolean gisonsale;
 	
+	private String gcategory;
+	
 	private String gdesc;
 	private List<String> gdetailimg;
+
 	private int gstock;
+	
 	
 	public String getGcode() {
 		return gcode;

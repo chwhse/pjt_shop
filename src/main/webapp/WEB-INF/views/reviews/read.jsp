@@ -64,8 +64,10 @@
             </form>
 		</div>
 		<div class="btn-group btn-group-sm">
-			<button class="btn btn-warning " onclick="btnModify()">후기 수정</button>
-			<button class="btn btn-danger" onclick="btnDelete()">후기 삭제</button>
+			<c:if test="${review.uid==login }">
+				<button class="btn btn-warning " onclick="btnModify()">후기 수정</button>
+				<button class="btn btn-danger" onclick="btnDelete()">후기 삭제</button>
+			</c:if>	
 			<button class="btn btn-success" onclick="btnCancel()">돌아가기</button>
 		</div><br><br><br><br>
 		
@@ -75,13 +77,19 @@
 			<div class="col-md-8">
 				<div class="box box-success">
 					<div class="box-body" id="div_comment_display">
-							
+						<c:if test="${!empty commentlist}">
+						<c:forEach var="comment" items="${commentlist }">
+							<p>${comment.ccontent }</p>
+						</c:forEach>
+						</c:if>	
 					</div>
-					<div class="box-body">
-						<br>
-							<input type="text" id="ccontent" placeholder="Comment content"  class="form-control">
-							<button class="btn btn-primary" type="button" id="btnAdd">Add Comment</button>
-					</div> <!-- end of body -->
+					<c:if test='${login=="admin" }'> 
+						<div class="box-body">
+							<br>
+								<input type="text" id="ccontent" placeholder="Comment content"  class="form-control">
+								<button class="btn btn-primary" type="button" id="btnAdd">Add Comment</button>
+						</div> <!-- end of body -->
+					</c:if>	
 					<br>
 				</div>
 			</div>
@@ -103,6 +111,7 @@
 							var ccontent = data.ccontent;
 							obj = "<p>"+ccontent+"</p>";
 							$("#div_comment_display").append(obj);
+							$("#ccontent").val("");
 						}
 						
 					})

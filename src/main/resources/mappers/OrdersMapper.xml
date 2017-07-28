@@ -27,7 +27,7 @@
 	</resultMap>
 	
 	<select id="ordersSelectByCode" parameterType="String" resultMap="orderResultByOcode">
-		select ocode, ono, uid, oisbasket,  oquantity, odate, ototalprice,ocondition,
+		select ocode, ono, uid, oisbasket, oquantity, odate, ototalprice,ocondition,
 		g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay, gisonsale	 
 		from orders o left join goods g on o.gcode=g.gcode
 		<include refid="wheresql_ocode"/>
@@ -44,13 +44,17 @@
 		from orders o left join goods g on o.gcode=g.gcode
 		where uid = #{uid} and oisbasket = true
 	</select>
-	<select id="ordersSelectByIdWithOcondition1AndRisexist0" parameterType="String" resultMap="orderResultByOcode">
+	<select id="ordersSelectByIdWithOcondition1" parameterType="String" resultMap="orderResultByOcode">
 		select ocode, o.ono, o.uid, oisbasket,  oquantity, odate, ototalprice,ocondition,
 		g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay, gisonsale,
-		rno, rtitle, rcontent, rregdate, risexist
+		rno, rtitle, rcontent, rregdate
 		from orders o left join goods g on o.gcode=g.gcode
 		left join reviews r on o.ono=r.ono
-		where o.uid = #{uid} and ocondition = 1 and (risexist = 0 or risexist is null)
+		where o.uid = #{uid} and rno is null
+		and ocondition in (1,-1)
+		<if test="ocondtion == 1">
+			and ocondition = 1
+		</if>
 	</select>
 
 	<sql id="wheresql_ocode">
@@ -106,12 +110,6 @@
 		</if>
 	</sql>
 	
-	<insert id="createShoppingBag">
-		INSERT INTO orders
-		(ocode, uid,  gcode, oquantity)
-		VALUES(#{ocode}, #{uid}, #{goods.gcode}, #{oquantity})
-	</insert>
-	
 	<insert id="insertShoppingBag">
 		INSERT INTO orders
 		(ocode,uid, gcode, oquantity) values
@@ -121,18 +119,22 @@
 	<update id="ordersTotalUpdate">
 		UPDATE orders
 		<set>
-			<if test="oisbasket != null">
-				oisbasket=#{oisbasket},
-			</if>	
-			<if test="oquantity != null">
+			<if test="oquantity >0">
 				oquantity=#{oquantity}, 
 			</if>	
-			<if test="ototalprice != null">
+			<if test="ototalprice >0">
 				ototalprice=#{ototalprice},
 			</if>	
 			<if test="ocondition != null">
 				ocondition=#{ocondition},
 			</if>	
+		</set> 
+		<include refid="wheresql_ocode"/>
+	</update>
+	<update id="oisbasketTotalUpdate">
+		UPDATE orders
+		<set>
+				oisbasket=#{oisbasket},
 		</set> 
 		<include refid="wheresql_ocode"/>
 	</update>
@@ -152,16 +154,20 @@
 				ocondition=#{ocondition},
 			</if>	
 		</set>
-		<if test="ono > 0">
-			<include refid="wheresql_ono"/>
-		</if>
-		<if test="ocode != null">
-			<include refid="wheresql_ocode"/>
-		</if>
-		<if test="ocode != null and ono > 0">
-			<include refid="wheresql_ono"/>
-		</if>
+		<choose>
+			<when test="ono > 0">
+				<include refid="wheresql_ono"/>
+			</when>
+			<when test="ocode != null">
+				<include refid="wheresql_ocode"/>
+			</when>
+		</choose>
 	</update>
+	
+	<delete id="ordersDeleteByNo">
+		DELETE FROM  orders
+		<include refid="wheresql_ono"/>
+	</delete>
 	
 
 </mapper>

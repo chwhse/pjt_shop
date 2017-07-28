@@ -19,8 +19,17 @@ public class CommentsDAOImpl implements CommentsDAO {
 	private static final String namespace = "com.dgit.persistence.CommentsDAO";
 	
 	@Override
-	public CommentsVO commentsSelectByno(int no) throws Exception {
-		return session.selectOne(namespace+".commentsSelectByno", no);
+	public List<CommentsVO> list(int rno) throws Exception {
+		return session.selectList(namespace+".list", rno);
+	}
+	
+	@Override
+	public CommentsVO commentsSelectByCno(int cno) throws Exception {
+		return session.selectOne(namespace+".commentsSelectByCno", cno);
+	}
+	@Override
+	public CommentsVO latestCommentsSelectByRno(int rno) throws Exception {
+		return session.selectOne(namespace+".latestCommentsSelectByRno", rno);
 	}
 
 	@Override
@@ -48,5 +57,6 @@ public class CommentsDAOImpl implements CommentsDAO {
 	public int getRno(int no) throws Exception {
 		return session.selectOne(namespace+".getRno", no);
 	}
-	
+
+
 }

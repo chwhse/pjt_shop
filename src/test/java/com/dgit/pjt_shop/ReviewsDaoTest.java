@@ -25,6 +25,14 @@ public class ReviewsDaoTest {
 	private CommentsDAO cdao;
 	
 	
+	@Test
+	public void testCommentInsert()throws Exception{
+		
+		
+		dao.reviewsSelectByCode("c10001");
+		
+	}
+	
 /*	@Test
 	public void testCommentInsert()throws Exception{
 		CommentsVO vo = new CommentsVO();

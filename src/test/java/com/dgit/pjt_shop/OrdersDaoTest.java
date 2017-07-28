@@ -31,34 +31,33 @@ public class OrdersDaoTest {
 		}
 		
 	}*/
-/*	@Test
+	@Test
 	public void testUpdatOrder() throws Exception{
 		OrdersVO vo = new OrdersVO();
-		vo.setOcode("us00005");
-		vo.setOcondition(-1);
+		vo.setOisbasket(true);
+		vo.setOcode("쀍쀍");
+		vo.setOquantity(5);
+		vo.setOtotalprice(175000);
+		vo.setOcondition(0);
+		vo.setOno(1);
 		System.out.println(vo.toString());
 		dao.ordersEachUpdate(vo);
-		170725 10000 0 ordersSelectByIdWithOcondition1
-	}*/
+		System.out.println(dao.ordersSelectByNo(1).toString());
+	}
 	
 /*	@Test
 	public void testinsertShoppingBag() throws Exception{
-		System.out.println("######1");
 		OrdersVO order = new OrdersVO();
 		
 		GoodsVO good = new GoodsVO();
 		
 		good.setGcode("c90002");
-		System.out.println("######4");
 		order.setGoods(good);
 		order.setUid("admin");
-		System.out.println("######5");
-		String res = dao.getMaxOcode(order.getUid());
-		order.setOcode(res);
-		dao.createShoppingBag(order);
-		System.out.println("######2"+order.getOcode());
-		System.out.println("######3"+order.getGoods().getGcode());
-		System.out.println("######6");
+
+		order.setOcode("ad00001");
+		
+		dao.insertShoppingBag(order);
 	}*/
 /*	@Test
 	public void testOrdersSelectByCode() throws Exception{

@@ -17,8 +17,8 @@ public class GoodsServiceImpl implements GoodsService {
 	private GoodsDAO dao;
 	
 	@Override
-	public List<GoodsVO> goodsListForAdmin(SearchCriteria cri) throws Exception {
-		return dao.goodsListForAdmin(cri);
+	public List<GoodsVO> listSearch4Admin(SearchCriteria cri) throws Exception {
+		return dao.listSearch4Admin(cri);
 	}
 	
 	@Transactional
@@ -94,12 +94,13 @@ public class GoodsServiceImpl implements GoodsService {
 		dao.goodsCategoryDelete(gcategory);
 	}
 
-	
-	
-
 	@Override
 	public int searchCount(SearchCriteria cri) throws Exception {
 		return dao.searchCount(cri);
+	}
+	@Override
+	public int searchCount4Admin(SearchCriteria cri) throws Exception {
+		return dao.searchCount4Admin(cri);
 	}
 
 	@Override

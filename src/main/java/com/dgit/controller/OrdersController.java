@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -55,7 +56,7 @@ public class OrdersController {
 	
 	
 	@RequestMapping(value = "/changeQtt/{ono}/{oqtt}/{tPrice}", method=RequestMethod.POST)
-	public ResponseEntity<String> changeGoodGET(@PathVariable("ono")int ono,
+	public ResponseEntity<String> changeQuantityPOST(@PathVariable("ono")int ono,
 						@PathVariable("oqtt")int oqtt,@PathVariable("tPrice")int tPrice) throws Exception {
 		ResponseEntity<String> entity = null;
 		try{
@@ -71,7 +72,20 @@ public class OrdersController {
 		return entity;
 	}
 	
-	@RequestMapping(value = "listPage", method = RequestMethod.GET)
+	@RequestMapping(value = "/removeOrdr/{ono}", method=RequestMethod.POST)
+	public ResponseEntity<Object> removeOrderPOST(@PathVariable("ono")int ono, HttpSession sess) throws Exception {
+		ResponseEntity<Object> entity = null;
+		try{
+			service.ordersRemoveByNo(ono);
+			
+			entity = new ResponseEntity<Object>( ono, HttpStatus.OK);
+		} catch (Exception e) {
+			entity = new ResponseEntity<>("FAIL",HttpStatus.BAD_REQUEST);
+		}
+		return entity;
+	}
+	
+	@RequestMapping(value = "/listPage", method = RequestMethod.GET)
 	public String listPageGET(@ModelAttribute("cri")SearchCriteria cri,Model model) throws Exception {
 		model.addAttribute("list", service.listSearch(cri) );
 		
@@ -83,8 +97,49 @@ public class OrdersController {
 		return "orders/listPage";
 	}
 	
+	@RequestMapping(value ="/shoppingCart", method = RequestMethod.GET)
+	public String shoppingCartGET(Model model,
+								  HttpSession session,
+								  HttpServletResponse response) throws Exception {
+		
+		logger.info("=============shoppingCart GET=============");
+		
+		
+		String uid = (String) session.getAttribute("login");
+		if(uid == null){
+			response.sendRedirect("/users/login");
+		}
+		List<OrdersVO> list = new ArrayList<>();
+		OrdersVO vo = new OrdersVO();
+		vo.setUid(uid);
+		// 장바구니 조회 후 가져오기
+		 list = service.ordersSelectById(uid); // oisbasket = true인 값 가져옴
+		if(list.isEmpty()){
+			return "orders/shoppingCart";
+		}
+		
+		vo.setOcode(list.get(0).getOcode());
+		
+		list = service.ordersSelectByCode(vo.getOcode());
+		int totalPrice = 0;
+		for(OrdersVO ovo : list){
+			System.out.println("넣은후 확인:"+ovo.toString());
+			if(ovo.getGoods()!=null){
+				totalPrice += ovo.getGoods().getGprice()*ovo.getOquantity();
+				System.out.println(totalPrice+"");
+			}
+		}
+		vo.setOtotalprice(totalPrice);
+		service.ordersUpdateWithTotalPriceByCode(vo);
+		list = service.ordersSelectByCode(vo.getOcode());
+		model.addAttribute("list", list);
+		logger.info("총합:"+list.get(0).getOtotalprice());
+		
+		return "orders/shoppingCart";
+	}
 	
 	
+	@Transactional
 	@RequestMapping(value="/buy", method=RequestMethod.GET)
 	public String buyGET(String mygcode, Model model,
 						HttpSession session,
@@ -105,19 +160,23 @@ public class OrdersController {
 			String newOcode = service.createShoppingBag(vo);
 			vo.setOcode(newOcode);
 		}else{
+			System.out.println("오코드:"+list.get(0).getOcode());
 			vo.setOcode(list.get(0).getOcode());
 		}
 		vo.setGoods(gservice.goodsSelectByCode(mygcode));
 		vo.setOquantity(1);
+		
 		System.out.println("넣기전 ono 확인:"+vo.toString());
-		service.insertShoppingBag(vo);
+		if(mygcode != null){
+			service.insertShoppingBag(vo);
+		}
+		
 		list = service.ordersSelectByCode(vo.getOcode());
 		int totalPrice = 0;
 		for(OrdersVO ovo : list){
 			System.out.println("넣은후 확인:"+ovo.toString());
 			if(ovo.getGoods()!=null){
 				totalPrice += ovo.getGoods().getGprice()*ovo.getOquantity();
-				System.out.println(totalPrice+"");
 			}
 		}
 		vo.setOtotalprice(totalPrice);
@@ -126,13 +185,13 @@ public class OrdersController {
 		model.addAttribute("list", list);
 		logger.info("총합:"+list.get(0).getOtotalprice());
 		
-		return "orders/buy";
+		return "orders/shoppingCart";
 	}
 	
 	@RequestMapping(value="/buy", method=RequestMethod.POST)
 	public String buyPOST(String ocodes, Model model) throws Exception{
 		logger.info("=============buy POST=============");
-		
+		logger.info("ocodes:"+ocodes);
 		
 		List<OrdersVO> list = service.ordersSelectByCode(ocodes);
 		for(OrdersVO vo : list){
@@ -143,17 +202,9 @@ public class OrdersController {
 		return "orders/settle";
 	}
 	
-	@RequestMapping(value="/read", method=RequestMethod.GET)
-	public String readGET(String ocode, Model model, @ModelAttribute("cri")SearchCriteria cri, boolean isModify) throws Exception{
-		List<OrdersVO> vo = service.ordersSelectByCode(ocode);
-		
-		model.addAttribute("list", vo);
-		return "orders/read";
-	}
-	
-	@RequestMapping(value="/delete", method=RequestMethod.POST)
-	public String deleteGET(String ocode) throws Exception{
-		logger.info("=============delete DELETE=============");
+	@RequestMapping(value="/cancel", method=RequestMethod.POST)
+	public String cancelPOST(String ocode) throws Exception{
+		logger.info("=========삭제가 아니라 주문취소화면 cancel=============");
 		service.ordersCancelByCode(ocode);
 		
 		return "redirect:listPage";

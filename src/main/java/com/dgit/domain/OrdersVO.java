@@ -19,6 +19,21 @@ public class OrdersVO {
 	public int getOcondition() {
 		return ocondition;
 	}
+	public String getOcondition2Str() {
+		String ocondition2Str = "주문상태";
+		switch (getOcondition()) {
+		case 1:
+			ocondition2Str = "주문완료";
+			break;
+		case -1:
+			ocondition2Str = "주문취소";
+			break;
+		default:
+			ocondition2Str = "주문미완료";
+			break;
+		}
+		return ocondition2Str;
+	}
 	public void setOcondition(int ocondition) {
 		this.ocondition = ocondition;
 	}
@@ -74,9 +89,13 @@ public class OrdersVO {
 	}
 	@Override
 	public String toString() {
-		return "OrdersVO [ocode=" + ocode + ", ono=" + ono + ", uid=" + uid + ", oisbasket=" + oisbasket
-				+ ", oquantity=" + oquantity + ", odate=" + odate + ", ototalprice=" + ototalprice + ", ocondition="
-				+ ocondition + "]";
+		String str = "null";
+		if(goods!=null){
+			str = goods.toString();
+		}
+		return "OrdersVO [ocode=" + ocode + ", ono=" + ono + ", uid=" + uid + ", oisbasket=" + oisbasket + ", goods="
+				+ str + ", oquantity=" + oquantity + ", odate=" + odate + ", ototalprice=" + ototalprice
+				+ ", ocondition=" + ocondition + "]";
 	}
 
 	

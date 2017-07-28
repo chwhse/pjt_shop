@@ -104,8 +104,8 @@
 			</ul>
 		</div>
 	</div>	            
-</div><br><br><br><br><br><br><br><br>
-	</body>
+</div>
+</body>
 <%@ include file="../include/footer.jsp"%>
 <script src="${pageContext.request.contextPath}/resources/dist/js/bootstrap.min.js"></script>
 

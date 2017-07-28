@@ -19,7 +19,7 @@
 			return false;
 		}
 	}
-	function btnCancel() {
+	function btnBack() {
         $("#f1").attr("action","listPage${pageMaker.makeSearch(pageMaker.cri.page)}");
         $("#f1").attr("method","get");
         $("#f1").submit();
@@ -65,10 +65,13 @@
             </form>
 		</div>
 		<div class="btn-group btn-group-sm">
-			<button class="btn btn-warning " onclick="btnModify()">게시글 수정</button>
-			<button class="btn btn-danger" onclick="btnDelete()">게시글 삭제</button>
-			<button class="btn btn-success" onclick="btnCancel()">돌아가기</button>
+			<c:if test="${board.uid==login }">			
+				<button class="btn btn-warning " onclick="btnModify()">게시글 수정</button>
+				<button class="btn btn-danger" onclick="btnDelete()">게시글 삭제</button>
+			</c:if>
+			<button class="btn btn-success" onclick="btnBack()">돌아가기</button>
 		</div>
 	</body>
 <%@ include file="../include/footer.jsp"%>
+<script src="${pageContext.request.contextPath}/resources/dist/js/bootstrap.min.js"></script>
 </html>

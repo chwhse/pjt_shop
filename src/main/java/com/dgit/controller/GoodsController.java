@@ -30,8 +30,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.dgit.domain.GoodsVO;
 import com.dgit.domain.PageMaker;
+import com.dgit.domain.ReviewsVO;
 import com.dgit.domain.SearchCriteria;
 import com.dgit.service.GoodsService;
+import com.dgit.service.ReviewsService;
 import com.dgit.util.MediaUtils;
 import com.dgit.util.UploadFileUtils;
 @Controller
@@ -41,6 +43,8 @@ public class GoodsController {
 	
 	@Autowired
 	GoodsService service;
+	@Autowired
+	ReviewsService rservice;
 	
 	@Resource(name="uploadPath")// id로(DI) 주입받을때사용
 	private String uploadPath;
@@ -67,6 +71,7 @@ public class GoodsController {
 			 if(!file.exists()){
 				 in = new FileInputStream(uploadPath + "/fileNotFound.jpg");
 			 }else{
+				 System.out.println("파일있음");
 				 in = new FileInputStream(uploadPath + "/" + filename);
 			 }
 	         entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in), header, HttpStatus.CREATED);
@@ -86,10 +91,10 @@ public class GoodsController {
 		
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(cri);
-		pageMaker.setTotalCount(service.searchCount(cri));
+		pageMaker.setTotalCount(service.searchCount4Admin(cri));
 		model.addAttribute("pageMaker",pageMaker);
 		
-		model.addAttribute("list", service.listSearch(cri) );
+		model.addAttribute("list", service.listSearch4Admin(cri) );
 		
 		
 		return "goods/listPage4admin";
@@ -159,6 +164,9 @@ public class GoodsController {
 		logger.info("=============read GET=============");
 		GoodsVO vo = service.goodsSelectByCode(gcode);
 		logger.info("===GoodVO:"+vo.toString());
+		List<ReviewsVO> rlist = rservice.reviewsSelectByCode(gcode);
+		logger.info("===reviewsize:"+rlist.size());
+		model.addAttribute("reviewslist", rlist);
 		model.addAttribute("good", vo);
 		return "goods/read";
 	}

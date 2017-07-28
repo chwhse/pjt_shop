@@ -13,20 +13,19 @@
 		            <span class="icon-bar"></span>
 		            <span class="icon-bar"></span>
 		          </button>
-		          <a class="navbar-brand" href="#">Cafe Atto</a>
+		          <a class="navbar-brand" href="${pageContext.request.contextPath}/homes/home">Cafe Atto</a>
 		        </div>
 		        <div id="navbar" class="collapse navbar-collapse">
 		          <ul class="nav navbar-nav">
-		            <li class="active"><a href="${pageContext.request.contextPath}/homes/home">Home</a></li>
-		            <li><a href="${pageContext.request.contextPath}/homes/aboutus">About Us</a></li>
+		            <li><a href="${pageContext.request.contextPath}/homes/aboutUs">About Us</a></li>
 		            <li><a href="${pageContext.request.contextPath}/goods/listPage">Shopping</a></li>
-		            <li><a href="${pageContext.request.contextPath}/reviews/listPage">Reviews</a></li>
 		            <li><a href="${pageContext.request.contextPath}/boards/listPage">Announcement</a></li>
-		            <li><a href="#">My Page</a></li>
-		            <li><a href="#">Shopping Cart</a></li>
+		            <li><a href="${pageContext.request.contextPath}/reviews/listPage">Reviews</a></li>
+		            <li><a href="${pageContext.request.contextPath}/homes/myPage">My Page</a></li>
+		            <li><a href="${pageContext.request.contextPath}/orders/shoppingCart">Shopping Cart</a></li>
 			        <c:if test='${login=="admin" }'>  
 			            <li class="dropdown">
-			              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">관리자메뉴 <span class="caret"></span></a>
+			              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">관리자<span class="caret"></span></a>
 			              <ul class="dropdown-menu">
 			                <li><a href="${pageContext.request.contextPath}/goods/listPage4admin">상품관리</a></li>
 			                <li><a href="${pageContext.request.contextPath}/orders/listPage">주문관리</a></li>

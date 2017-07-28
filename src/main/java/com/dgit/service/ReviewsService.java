@@ -8,6 +8,7 @@ import com.dgit.domain.SearchCriteria;
 public interface ReviewsService {
 	
 	public List<ReviewsVO> reviewsListAll() throws Exception;
+	public List<ReviewsVO> reviewsSelectByCode(String code) throws Exception;
 	public void reviewsInsert(ReviewsVO vo) throws Exception;
 	public ReviewsVO reviewsSelectByNo(int no) throws Exception;
 	public void reviewsDelete(int no) throws Exception;

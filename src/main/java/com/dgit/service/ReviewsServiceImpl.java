@@ -19,6 +19,10 @@ public class ReviewsServiceImpl implements ReviewsService {
 	public List<ReviewsVO> reviewsListAll() throws Exception {
 		return dao.reviewsListAll();
 	}
+	@Override
+	public List<ReviewsVO> reviewsSelectByCode(String code) throws Exception {
+		return dao.reviewsSelectByCode(code);
+	}
 
 	@Override
 	public void reviewsInsert(ReviewsVO vo) throws Exception {

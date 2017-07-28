@@ -28,7 +28,7 @@
 	
 	 <select id="goodsSelectByCode" resultType="GoodsVO">
 		select  g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate,
-		gisdisplay, gisonsale, gdesc, gdetailimg, gstock
+		gisdisplay, gisonsale, gdesc, gdetailimg
 		FROM goodsdetail gd join goods g
 		on g.gcode = gd.gcode
 		right outer join goodsdetailimg gdi
@@ -37,7 +37,7 @@
 		group by g.gcode <!-- 현재 쿼리는 여러개 상세이미지 중 하나만 출력 --> 
 	</select> 
 	
-	<select id="goodsListForAdmin" resultType="GoodsVO">
+	<select id="listSearch4Admin" resultType="GoodsVO">
 		select * from goods
 		<include refid="search"/>
 		order by gcode desc, gregdate desc
@@ -56,8 +56,20 @@
 		limit #{pageStart},#{perPageNum}
 	</select>	
 	<select id="searchCount" resultType="int">
-		select count(*) from goods 
-		<include refid="search"/>
+		select count(*) from goods where gisdisplay = true
+		<if test="searchType !=null">
+			<if test="searchType =='t'.toString()">
+				and gname like CONCAT('%',#{keyword},'%')
+			</if>
+		</if>
+	</select>
+	<select id="searchCount4Admin" resultType="int">
+		select count(*) from goods where gisdisplay = true
+		<if test="searchType !=null">
+			<if test="searchType =='t'.toString()">
+				and gname like CONCAT('%',#{keyword},'%')
+			</if>
+		</if>
 	</select>
 	
 	<sql id="search">
@@ -74,15 +86,7 @@
 		(gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay, gisonsale) values
 		(#{gcode},#{gname},#{gcategory},#{gtitleimg},#{gprice},#{gsupprice},#{gregdate},#{gisdisplay}, #{gisonsale})
 	</insert>
-	<insert id="goodsDetailInsert">
-		INSERT INTO goodsdetail
-		(gcode, gdesc,  gstock) values
-		(#{gcode},#{gdesc},#{gstock})
-	</insert>
-	<insert id="goodsCategoryInsert">
-		INSERT INTO goodscategory
-		(gcategory)	VALUES(#{gcategory});
-	</insert>
+
 	
 	<update id="goodsUpdate">
 		UPDATE goods
@@ -111,27 +115,53 @@
 		</set> 
 		<include refid="wheresql_gcode"/>
 	</update>
-	
-	<update id="goodsDetailUpdate">
-		UPDATE goodsdetail
-		<set>
-			<if test="gdesc != null">
-				gdesc=#{gdesc},
-			</if>
-			<if test="gstock != null">
-				gstock=#{gstock},
-			</if>
-		</set> 
-		<include refid="wheresql_gcode"/>
-	</update>
 	<delete id="goodsDelete">
 		DELETE FROM  goods
 		<include refid="wheresql_gcode"/>
 	</delete>
+	
+	
+	<!-- 상품재고 관련 매퍼 -->	
+	
+	<insert id="goodsStockInsert">
+		INSERT INTO goodsstock
+		(gcode, gstock) values
+		(#{gcode},#{gstock})
+	</insert>
+	<update id="goodsStockUpdate">
+		UPDATE goodsstock
+		set gstock= #{gstock}
+		<include refid="wheresql_gcode"/>
+	</update>
+	<delete id="goodsStockDelete">
+		DELETE FROM goodsstock
+		<include refid="wheresql_gcode"/>
+	</delete>
+	
+	<!-- 상품상세 관련 매퍼 -->	
+	
+	<insert id="goodsDetailInsert">
+		INSERT INTO goodsdetail
+		(gcode, gdesc) values
+		(#{gcode},#{gdesc})
+	</insert>
+	<update id="goodsDetailUpdate">
+		UPDATE goodsdetail
+		set gdesc=#{gdesc}
+		<include refid="wheresql_gcode"/>
+	</update>
 	<delete id="goodsDetailDelete">
 		DELETE FROM goodsdetail
 		<include refid="wheresql_gcode"/>
 	</delete>
+	
+	<!-- 상품카테고리 관련 매퍼 -->
+	
+	<insert id="goodsCategoryInsert">
+		INSERT INTO goodscategory
+		(gcategory)	VALUES(#{gcategory});
+	</insert>
+	
 	<delete id="goodsCategoryDelete">
 		DELETE FROM goodscategory
 		where gcategory = #{gcategory}
