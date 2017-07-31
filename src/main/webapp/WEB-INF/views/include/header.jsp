@@ -19,8 +19,8 @@
 		          <ul class="nav navbar-nav">
 		            <li><a href="${pageContext.request.contextPath}/homes/aboutUs">About Us</a></li>
 		            <li><a href="${pageContext.request.contextPath}/goods/listPage">Shopping</a></li>
-		            <li><a href="${pageContext.request.contextPath}/boards/listPage">Announcement</a></li>
 		            <li><a href="${pageContext.request.contextPath}/reviews/listPage">Reviews</a></li>
+		            <li><a href="${pageContext.request.contextPath}/boards/listPage">Archive</a></li>
 		            <li><a href="${pageContext.request.contextPath}/homes/myPage">My Page</a></li>
 		            <li><a href="${pageContext.request.contextPath}/orders/shoppingCart">Shopping Cart</a></li>
 			        <c:if test='${login=="admin" }'>  
@@ -34,8 +34,8 @@
 			                <li role="separator" class="divider"></li>
 			                <li class="dropdown-header">사장님</li>
 			                <li><a href="#">비밀메뉴</a></li>
-			                <li><a href="#">찡긋</a></li>
-			                <li><a href="#">헤헿</a></li>
+			                <li><a href="#">ㅇ_ㅇ</a></li>
+			                <li><a href="#">ㅎㅎㅎㅎ</a></li>
 			              </ul>
 			            </li>
 		            </c:if>  

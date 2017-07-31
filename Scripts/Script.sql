@@ -646,3 +646,6 @@ left join reviews r on o.ono=r.ono
 where o.uid = 'admin'  and ocondition in (1,-1); and ocondition = 1;
 	*/	
 		
+gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay, gisonsale, rno, rtitle, rcontent, 
+rregdate from orders o left join goods g on o.gcode=g.gcode left join reviews r on o.ono=r.ono 
+where o.uid = 'admin' and rno is null and ocondition in (1,-1);

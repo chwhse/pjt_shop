@@ -21,6 +21,14 @@ public class OrdersDaoTest {
 	@Autowired
 	private OrdersDAO dao;
 
+	@Test
+	public void testListPage()throws Exception{
+		List<OrdersVO> list = dao.ordersSelectByIdWithOcondition1("admin",1-1);
+		
+		for(OrdersVO vo : list){
+			System.out.println(vo.toString());
+		}
+	}
 /*
 	@Test
 	public void testListPage()throws Exception{

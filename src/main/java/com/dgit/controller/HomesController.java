@@ -36,6 +36,9 @@ public class HomesController {
 	@RequestMapping(value = "myPage", method = RequestMethod.GET)
 	public String myPageGET(Model model, HttpSession session, 
 							HttpServletResponse response) throws Exception{
+		
+		logger.info("=============myPage GET=============");
+		
 		String uid = (String) session.getAttribute("login");
 		if(uid == null){
 			response.sendRedirect("/users/login");
