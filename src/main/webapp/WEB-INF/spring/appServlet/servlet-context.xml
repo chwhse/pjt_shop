@@ -44,6 +44,7 @@
 		<interceptor>
 			<mapping path="/goods/register"/>
 			<mapping path="/goods/listPage4admin"/>
+			<mapping path="/goods/read4admin"/>
 			<mapping path="/goods/modify"/>
 			<mapping path="/goods/delete"/>
 			<beans:ref bean="authInterceptor"/>
@@ -62,7 +63,7 @@
 			<mapping path="/orders/listPage"/>
 			<mapping path="/orders/orderHistory"/>
 			<mapping path="/orders/settle"/>
-			<mapping path="/orders/shoppingCart"/>
+			<mapping path="/orders/buy"/>
 			<beans:ref bean="authInterceptor"/>
 		</interceptor>
 

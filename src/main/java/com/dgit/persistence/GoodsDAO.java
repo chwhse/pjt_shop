@@ -17,7 +17,6 @@ public interface GoodsDAO {
 	public void goodsCategoryInsert(String gcategory) throws Exception;
 	
 	public GoodsVO goodsSelectByCode(String code) throws Exception;
-	public List<GoodsVO> goodsSelectByUid(String code) throws Exception;	
 	
 	public void goodsDelete(String code) throws Exception;
 	public void goodsDetailDelete(String code) throws Exception;

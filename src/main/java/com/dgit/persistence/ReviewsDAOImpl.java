@@ -25,6 +25,10 @@ public class ReviewsDAOImpl implements ReviewsDAO {
 	public List<ReviewsVO> reviewsSelectByCode(String gcode) throws Exception {
 		return session.selectList(namespace+".reviewsSelectByCode",gcode);
 	}
+	@Override
+	public List<ReviewsVO> reviewsSelectById(String id) throws Exception {
+		return session.selectList(namespace+".reviewsSelectById",id);
+	}
 
 	@Override
 	public int getMaxRno() throws Exception {

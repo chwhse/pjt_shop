@@ -12,8 +12,6 @@ public interface GoodsService {
 	public void goodsInsert(GoodsVO vo) throws Exception;
 	
 	public GoodsVO goodsSelectByCode(String code) throws Exception;
-	public List<GoodsVO> goodsSelectByUid(String code) throws Exception;	
-	
 	
 	public void goodsDelete(String code) throws Exception;
 	public void goodsUpdate(GoodsVO vo, String[] delFiles) throws Exception;

@@ -21,8 +21,6 @@
 		};
 		
 		var selval = $("#selectbox > option:selected").attr("value");
-		alert(selval);
-		
 		alert("등록 되었습니다.");
 
 	});
@@ -42,18 +40,20 @@
 <%@ include file="../include/header.jsp"%> 
 	<body>
 		<form class="form-horizontal" action="register" name="f1" method="post">
+			
 			<input type="hidden" id="gcode" name="mygcode" value="${orderslist.get(0).goods.gcode }" >
 			<div class="form-group"> 
 				<label class="col-sm-3 control-label">review goods</label>
 				<div class="col-sm-6">
 					<select class="form-control" name="ono" id="selectbox">
-						<c:if test="${orderslist.size() }>0">
+						<c:if test="${orderslist.size()>0 }">
 						<c:forEach var="order" items="${orderslist }">
 							<option value="${order.ono }" value2="${order.goods.gcode }" >
 							${order.goods.gname } / 주문일 : ${order.odate }</option>
+							<input type="hidden" id="ono" name="ono" value="${order.ono }" >
 						</c:forEach>
 						</c:if>
-						 <c:if test="${empty orderslist}">
+						 <c:if test="${empty orderslist or orderslist.size()==0}">
 							<option value="-1">후기를 작성할 주문내역이 존재하지 않습니다.</option>
 						</c:if>
 					</select>

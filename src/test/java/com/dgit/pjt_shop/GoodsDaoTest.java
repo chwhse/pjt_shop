@@ -28,7 +28,7 @@ public class GoodsDaoTest {
 		System.out.println("@!!!!!!!!!###################");
 		SearchCriteria cri = new SearchCriteria();
 		cri.setPage(1);
-		cri.setPerPageNum(10);
+		cri.setPerPageNum(16);
 		List<GoodsVO> list = dao.listSearch(cri);
 		
 		for(GoodsVO vo : list){

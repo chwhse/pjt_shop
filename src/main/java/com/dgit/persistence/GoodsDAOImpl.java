@@ -26,9 +26,9 @@ public class GoodsDAOImpl implements GoodsDAO {
 	@Override
 	public String getMaxGcodePlus1(GoodsVO vo) throws Exception {
 		String gcategoryfl = vo.getGcategory().substring(0,1);//젤 첫 글자만 추출
-	//	System.out.println("gcategoryfl:"+gcategoryfl);
+		System.out.println("gcategoryfl:"+gcategoryfl);
 		String maxGcode = getMaxGcodeByCategory(vo.getGcategory());
-	//	System.out.println("maxGcode:"+maxGcode);
+		System.out.println("maxGcode:"+maxGcode);
 		Map<String, Object> map = new HashMap<>();
 		map.put("gcategoryfl", gcategoryfl);
 		map.put("gcode", maxGcode);
@@ -59,11 +59,6 @@ public class GoodsDAOImpl implements GoodsDAO {
 	@Override
 	public GoodsVO goodsSelectByCode(String code) throws Exception {
 		return session.selectOne(namespace+".goodsSelectByCode", code);
-	}
-	
-	@Override
-	public List<GoodsVO> goodsSelectByUid(String code) throws Exception {
-		return session.selectList(namespace+".goodsSelectByUid", code);
 	}
 	
 	

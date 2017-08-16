@@ -6,9 +6,17 @@
 
 <script src="${pageContext.request.contextPath}/resources/js/jquery-1.12.4.min.js"></script>
 <script type="text/javascript">
-			/*레디하고, $("#btnRegister").click(function () {location.href= "register";}); */
+			$(function () {
+				
+				$("#searchBtn").click(function () {
+					var keyword = $("input[name='keyword']").val();
+					var searchType = $("select").val();
+					location.href= "listPage?keyword="+keyword+"&searchType="+searchType;
+				});
+			
+			});	
 			function btnRegist(){
-				location.href="register";
+				location.href="register?ono=-1";
 			}
 </script>
 	<%@ include file="../include/header.jsp"%>
@@ -65,7 +73,7 @@
 					</div>
 	          	</div> 
        	</div><!-- /.blog-post --><br><br><br><br><br><br>
-		  	<div class="col-sm-9"> <!-- 페이징처리div -->
+		  	<div > <!-- 페이징처리div -->
 				<div class="text-center">
 					<ul class="pagination">
 						<c:if test="${pageMaker.prev }">

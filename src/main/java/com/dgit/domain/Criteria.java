@@ -2,7 +2,7 @@ package com.dgit.domain;
 
 public class Criteria {
 	private int page = 1;
-	private int perPageNum = 10;
+	private int perPageNum = 16;
 	
 	
 	public int getPage() {

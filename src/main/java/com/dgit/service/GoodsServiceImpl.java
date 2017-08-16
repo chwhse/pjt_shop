@@ -28,6 +28,7 @@ public class GoodsServiceImpl implements GoodsService {
 		vo.setGcode(dao.getMaxGcodePlus1(vo));
 		dao.goodsInsert(vo);
 		dao.goodsDetailInsert(vo);
+		dao.goodsStockInsert(vo);
 		if(vo.getGdetailimg() != null){//보호처리
        	 for(String gdetailimg : vo.getGdetailimg()){
                 dao.addAttach(gdetailimg, vo.getGcode());
@@ -46,15 +47,12 @@ public class GoodsServiceImpl implements GoodsService {
 		return vo;
 	}
 	
-	@Override
-	public List<GoodsVO> goodsSelectByUid(String code) throws Exception {
-		return dao.goodsSelectByUid(code);
-	}
 
 	@Override
 	public void goodsDelete(String code) throws Exception {
 		dao.goodsDelete(code);
 		dao.goodsDetailDelete(code);
+		dao.goodsStockDelete(code);
 		dao.deleteAttachByCode(code);
 	}
 
@@ -76,6 +74,7 @@ public class GoodsServiceImpl implements GoodsService {
 		
 		dao.goodsUpdate(vo);
 		dao.goodsDetailUpdate(vo);
+		dao.goodsStockUpdate(vo);
 	}
 
 

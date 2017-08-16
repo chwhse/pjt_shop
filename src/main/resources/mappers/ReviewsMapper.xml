@@ -4,11 +4,11 @@
 	<resultMap id="reviewResult" type="ReviewsVO" >
 		<id property="rno" column="rno" />
 		
+		<result property="ono" column="ono"/>
 		<result property="uid" column="uid"/>
 		<result property="rtitle" column="rtitle"/>
 		<result property="rcontent" column="rcontent"/>
 		<result property="rregdate" column="rregdate"/>
-		<result property="ono" column="ono"/>
 		<collection property="goods" ofType="GoodsVO" resultMap="reviewGoodResult"/>
 	</resultMap>
 	
@@ -21,7 +21,6 @@
 		<result property="gsupprice" column="gsupprice"/>
 		<result property="gregdate" column="gregdate"/>
 		<result property="gisdisplay" column="gisdisplay"/>
-		<result property="gisonsale" column="gisonsale"/>
 	</resultMap>
 	<sql id="wheresql_rno">
 		where rno = #{rno}
@@ -41,13 +40,18 @@
 		<include refid="wheresql_rno"/>
 	</select>
 	<select id="reviewsSelectByCode" resultMap="reviewResult">
-		SELECT uid, rtitle, rcontent,rregdate, ono, g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay, gisonsale 
+		SELECT uid, ono, rtitle, rcontent,rregdate, g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay
 		FROM reviews r join goods g on r.gcode=g.gcode
 		where g.gcode = #{gcode}
 	</select>
+	<select id="reviewsSelectById" resultMap="reviewResult">
+		SELECT uid, ono, rtitle, rcontent,rregdate,  g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay
+		FROM reviews r join goods g on r.gcode=g.gcode
+		where uid = #{uid}
+	</select>
 	
 	<select id="listSearch" resultType="ReviewsVO">
-		SELECT rno, gcode, uid, rtitle, rcontent, rregdate,  ono FROM reviews
+		SELECT rno, ono, gcode, uid, rtitle, rcontent, rregdate FROM reviews
 		<include refid="search"/>
 		order by rno desc,rregdate desc
 		limit #{pageStart},#{perPageNum}
@@ -83,8 +87,8 @@
 	
 	<insert id="reviewsInsert">
 		INSERT INTO reviews
-		(gcode, uid, rtitle, rcontent, ono) values
-		(#{goods.gcode}, #{uid}, #{rtitle}, #{rcontent}, #{ono})
+		(gcode, uid, ono, rtitle, rcontent) values
+		(#{goods.gcode}, #{uid}, #{ono}, #{rtitle}, #{rcontent})
 	</insert>
 	
 	<update id="reviewsUpdate">

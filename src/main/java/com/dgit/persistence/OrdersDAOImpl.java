@@ -35,11 +35,8 @@ public class OrdersDAOImpl implements OrdersDAO {
 		return session.selectList(namespace+".ordersSelectById", id);
 	}
 	@Override
-	public List<OrdersVO> ordersSelectByIdWithOcondition1(String id, int ocondtion) throws Exception {
-		Map<String, Object> map = new HashMap<>();
-		map.put("uid", id);
-		map.put("ocondtion", ocondtion);
-		return session.selectList(namespace+".ordersSelectByIdWithOcondition1", map);
+	public List<OrdersVO> ordersSelectByIdWithNoReview(String id) throws Exception {
+		return session.selectList(namespace+".ordersSelectByIdWithNoReview", id);
 	}
 	@Override
 	public List<OrdersVO> ordersSelectByCode(String code) throws Exception {
@@ -59,6 +56,10 @@ public class OrdersDAOImpl implements OrdersDAO {
 	public List<OrdersVO> listSearch(SearchCriteria cri) throws Exception {
 		return session.selectList(namespace+".listSearch", cri);
 	}
+	@Override
+	public List<OrdersVO> listSearchGroupbyOcode(SearchCriteria cri) throws Exception {
+		return session.selectList(namespace+".listSearchGroupbyOcode", cri);
+	}
 
 	@Override
 	public void insertShoppingBag(OrdersVO vo) throws Exception {
@@ -67,16 +68,17 @@ public class OrdersDAOImpl implements OrdersDAO {
 
 	@Override
 	public void ordersTotalUpdate(OrdersVO vo) throws Exception {
+		
 		session.update(namespace+".ordersTotalUpdate", vo);
 	}
-	@Override
+/*	@Override
 	public void oisbasketTotalUpdate(String ocode, boolean oisbasket) throws Exception {
 		Map<String, Object> map = new HashMap<>();
 		map.put("ocode", ocode);
 		map.put("oisbasket", oisbasket);
 		session.update(namespace+".oisbasketTotalUpdate", map);
 	}
-
+*/
 	@Override
 	public void ordersEachUpdate(OrdersVO vo) throws Exception {
 		session.update(namespace+".ordersEachUpdate", vo);

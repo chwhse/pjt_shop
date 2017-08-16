@@ -12,7 +12,6 @@ public class GoodsVO {
 	private int gsupprice;
 	private Date gregdate;
 	private boolean gisdisplay;
-	private boolean gisonsale;
 	
 	private String gcategory;
 	
@@ -70,12 +69,6 @@ public class GoodsVO {
 	public void setGisdisplay(boolean gisdisplay) {
 		this.gisdisplay = gisdisplay;
 	}
-	public boolean isGisonsale() {
-		return gisonsale;
-	}
-	public void setGisonsale(boolean gisonsale) {
-		this.gisonsale = gisonsale;
-	}
 	public String getGdesc() {
 		return gdesc;
 	}
@@ -96,9 +89,13 @@ public class GoodsVO {
 	}
 	@Override
 	public String toString() {
-		return "GoodsVO [gcode=" + gcode + ", gname=" + gname + ", gcategory=" + gcategory + ", gtitleimg=" + gtitleimg
+		int size = 0;
+		if(gdetailimg!=null){
+			size = gdetailimg.size();
+		}
+		return "GoodsVO [gcode=" + gcode + ", gname=" + gname + ", gcategory=" + gcategory + ", gtitleimg size=" + size
 				+ ", gprice=" + gprice + ", gsupprice=" + gsupprice + ", gregdate=" + gregdate + ", gisdisplay="
-				+ gisdisplay + ", gisonsale=" + gisonsale + ", gdesc=" + gdesc + ", gstock=" + gstock + "]";
+				+ gisdisplay + ", gdesc=" + gdesc + ", gstock=" + gstock + "]";
 	}
 
 	

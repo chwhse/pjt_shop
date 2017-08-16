@@ -6,6 +6,7 @@ import java.util.List;
 public class OrdersVO {
 	private String ocode;
 	private int ono;
+	private int rno;
 	private String uid;
 	private boolean oisbasket;
 	private GoodsVO goods;
@@ -16,33 +17,51 @@ public class OrdersVO {
 	
 	
 	
-	public int getOcondition() {
-		return ocondition;
-	}
+
 	public String getOcondition2Str() {
 		String ocondition2Str = "주문상태";
-		switch (getOcondition()) {
-		case 1:
-			ocondition2Str = "주문완료";
+		switch (this.ocondition) {
+		case -2:
+			ocondition2Str = "주문 취소";
 			break;
 		case -1:
-			ocondition2Str = "주문취소";
+			ocondition2Str = "미입금";
+			break;
+		case 1:
+			ocondition2Str = "주문 완료";
 			break;
 		default:
-			ocondition2Str = "주문미완료";
+			ocondition2Str = "주문 미완료";
 			break;
 		}
 		return ocondition2Str;
 	}
+
+	public int getOcondition() {
+		return ocondition;
+	}
 	public void setOcondition(int ocondition) {
 		this.ocondition = ocondition;
 	}
+
+	
+	
+	public int getRno() {
+		return rno;
+	}
+
+	public void setRno(int rno) {
+		this.rno = rno;
+	}
+
 	public boolean isOisbasket() {
 		return oisbasket;
 	}
+
 	public void setOisbasket(boolean oisbasket) {
 		this.oisbasket = oisbasket;
 	}
+
 	public GoodsVO getGoods() {
 		return goods;
 	}
@@ -93,7 +112,7 @@ public class OrdersVO {
 		if(goods!=null){
 			str = goods.toString();
 		}
-		return "OrdersVO [ocode=" + ocode + ", ono=" + ono + ", uid=" + uid + ", oisbasket=" + oisbasket + ", goods="
+		return "OrdersVO [ocode=" + ocode + ", ono=" + ono + ", uid=" + uid + ", rno=" + rno + ", oisbasket=" + oisbasket + ", goods="
 				+ str + ", oquantity=" + oquantity + ", odate=" + odate + ", ototalprice=" + ototalprice
 				+ ", ocondition=" + ocondition + "]";
 	}

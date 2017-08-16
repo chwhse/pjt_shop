@@ -5,24 +5,24 @@ import java.util.Date;
 public class ReviewsVO {
 	private int rno;
 	private GoodsVO goods;
+	private int ono;
 	private String uid;
 	private String rtitle;
 	private String rcontent;
 	private Date rregdate;
-	private int risexist;
-	private int ono;
 
-	public int getRno() {
-		return rno;
-	}
-	public void setRno(int rno) {
-		this.rno = rno;
-	}
+	
 	public int getOno() {
 		return ono;
 	}
 	public void setOno(int ono) {
 		this.ono = ono;
+	}
+	public int getRno() {
+		return rno;
+	}
+	public void setRno(int rno) {
+		this.rno = rno;
 	}
 	
 	public GoodsVO getGoods() {
@@ -55,20 +55,14 @@ public class ReviewsVO {
 	public void setRregdate(Date rregdate) {
 		this.rregdate = rregdate;
 	}
-	public int getRisexist() {
-		return risexist;
-	}
-	public void setRisexist(int risexist) {
-		this.risexist = risexist;
-	}
 	@Override
 	public String toString() {
 		String str = "null";
 		if(goods!=null){
 			str = goods.toString();
 		}
-		return "ReviewsVO [rno=" + rno + ", goods=" + str + ", uid=" + uid + ", rtitle=" + rtitle + ", rcontent="
-				+ rcontent + ", rregdate=" + rregdate + ", risexist=" + risexist + ", ono=" + ono + "]";
+		return "ReviewsVO [rno=" + rno + ", ono=" + ono + ", goods=" + str + ", uid=" + uid + ", rtitle=" + rtitle + ", rcontent="
+				+ rcontent + ", rregdate=" + rregdate + "]";
 	}
 	
 	

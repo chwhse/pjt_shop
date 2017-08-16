@@ -10,6 +10,7 @@ public interface ReviewsDAO {
 	
 	public List<ReviewsVO> reviewsListAll() throws Exception;
 	public List<ReviewsVO> reviewsSelectByCode(String gcode) throws Exception;
+	public List<ReviewsVO> reviewsSelectById(String id) throws Exception;
 	public int getMaxRno() throws Exception;
 	public ReviewsVO reviewsSelectByNo(int no) throws Exception;
 	public void reviewsInsert(ReviewsVO vo);

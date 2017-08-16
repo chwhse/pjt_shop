@@ -5,7 +5,8 @@
 		<id property="ono" column="ono" />
 		<result property="ocode" column="ocode"/>
 		<result property="uid" column="uid"/>
-		<result property="oisbasket" column="oisbasket"/>
+		<result property="rno" column="rno"/>
+		<result property="oisbasket" column="oisbasket" javaType="BOOLEAN"/>
 		
 		<result property="oquantity" column="oquantity"/>
 		<result property="odate" column="odate"/>
@@ -23,38 +24,35 @@
 		<result property="gsupprice" column="gsupprice"/>
 		<result property="gregdate" column="gregdate"/>
 		<result property="gisdisplay" column="gisdisplay"/>
-		<result property="gisonsale" column="gisonsale"/>
 	</resultMap>
 	
 	<select id="ordersSelectByCode" parameterType="String" resultMap="orderResultByOcode">
-		select ocode, ono, uid, oisbasket, oquantity, odate, ototalprice,ocondition,
-		g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay, gisonsale	 
+		select ocode, ono, uid, rno, oisbasket, oquantity, odate, ototalprice,ocondition,
+		g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay	 
 		from orders o left join goods g on o.gcode=g.gcode
 		<include refid="wheresql_ocode"/>
 	</select>
 	<select id="ordersSelectByNo" parameterType="int" resultMap="orderResultByOcode">
-		select ocode, ono, uid, oisbasket,  oquantity, odate, ototalprice,ocondition,
-		g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay, gisonsale	 
+		select ocode, ono, uid, rno, oisbasket,  oquantity, odate, ototalprice,ocondition,
+		g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay	 
 		from orders o left join goods g on o.gcode=g.gcode
 		<include refid="wheresql_ono"/>
 	</select>
 	<select id="ordersSelectById" parameterType="String" resultMap="orderResultByOcode">
-		select ocode, ono, uid, oisbasket,  oquantity, odate, ototalprice,ocondition,
-		g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay, gisonsale	 
+		select ocode, ono, uid, rno, oisbasket,  oquantity, odate, ototalprice,ocondition,
+		g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay	 
 		from orders o left join goods g on o.gcode=g.gcode
-		where uid = #{uid} and oisbasket = true
+		<include refid="wheresql_uid"/>
 	</select>
-	<select id="ordersSelectByIdWithOcondition1" parameterType="String" resultMap="orderResultByOcode">
-		select ocode, o.ono, o.uid, oisbasket,  oquantity, odate, ototalprice,ocondition,
-		g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay, gisonsale,
-		rno, rtitle, rcontent, rregdate
+	<select id="ordersSelectByIdWithNoReview" resultMap="orderResultByOcode">
+		select ocode, o.ono, o.uid, o.rno, oisbasket,  oquantity, odate, ototalprice, ocondition,
+		g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay,
+		rtitle, rcontent, rregdate
 		from orders o left join goods g on o.gcode=g.gcode
-		left join reviews r on o.ono=r.ono
-		where o.uid = #{uid} and rno is null
-		and ocondition in (1,-1)
-		<if test="ocondtion == 1">
-			and ocondition = 1
-		</if>
+		left join reviews r on o.rno=r.rno
+		where o.uid = #{uid} and o.rno is null 
+		and ocondition =1
+
 	</select>
 
 	<sql id="wheresql_ocode">
@@ -63,8 +61,11 @@
 	<sql id="wheresql_ono">
 		where ono = #{ono}
 	</sql>
+	<sql id="wheresql_uid">
+		where uid = #{uid}
+	</sql>
 	<select id="ordersListAll" resultType="OrdersVO">
-		select ocode, ono, uid, oisbasket, gcode, oquantity, odate, ototalprice
+		select ocode, ono, uid, rno, oisbasket, gcode, oquantity, odate, ototalprice
 		from orders
 		order by ocode desc, odate desc
 	</select>
@@ -72,12 +73,20 @@
 		SELECT * 
 		FROM orders
 		<include refid="search"/>
-		order by ocode desc, odate desc
+		order by odate desc
+		limit #{pageStart},#{perPageNum}
+	</select>	
+	<select id="listSearchGroupbyOcode" resultType="OrdersVO">
+		SELECT * 
+		FROM orders
+		<include refid="search"/>
+		group by ocode
+		order by odate desc
 		limit #{pageStart},#{perPageNum}
 	</select>	
 	
 	<select id="getMaxOcode" resultType="String">
-		select concat(left(#{uid},2),lpad(substring(MAX(ocode), 2)+1, 5,'0')) 
+		select concat(left(#{uid},2), lpad(MAX(substring(ocode, 3))+1, 5,'0')) 
 		from orders
 	</select>
 
@@ -112,13 +121,14 @@
 	
 	<insert id="insertShoppingBag">
 		INSERT INTO orders
-		(ocode,uid, gcode, oquantity) values
-		(#{ocode}, #{uid},#{goods.gcode}, #{oquantity})
+		(ocode,uid, gcode, oquantity, oisbasket) values
+		(#{ocode}, #{uid},#{goods.gcode}, #{oquantity}, #{oisbasket})
 	</insert>
 	
 	<update id="ordersTotalUpdate">
 		UPDATE orders
 		<set>
+				oisbasket=#{oisbasket},
 			<if test="oquantity >0">
 				oquantity=#{oquantity}, 
 			</if>	
@@ -131,13 +141,13 @@
 		</set> 
 		<include refid="wheresql_ocode"/>
 	</update>
-	<update id="oisbasketTotalUpdate">
+<!-- 	<update id="oisbasketTotalUpdate">
 		UPDATE orders
 		<set>
 				oisbasket=#{oisbasket},
 		</set> 
 		<include refid="wheresql_ocode"/>
-	</update>
+	</update> -->
 	<update id="ordersEachUpdate">
 		UPDATE orders
 		<set>
@@ -152,6 +162,9 @@
 			</if>	
 			<if test="ocondition != null">
 				ocondition=#{ocondition},
+			</if>	
+			<if test="rno != null">
+				rno=#{rno},
 			</if>	
 		</set>
 		<choose>

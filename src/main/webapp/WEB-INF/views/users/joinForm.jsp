@@ -79,10 +79,10 @@
 		    </div>
 		    
 		    <div class="form-group">
-		      <label class="col-sm-3 control-label" for="upwchk">비밀번호 확인</label>
+		      <label class="col-sm-3 control-label" for="upwchk">Password confirm</label>
 		      <div class="col-sm-6">
 		        <input class="form-control" id="upwchk" type="password" placeholder="Password Check" required>
-		          <p class="help-block">Password confirm.</p>
+		          <p class="help-block">input your password one more time.</p>
 		      </div>
 		    </div>
 		    

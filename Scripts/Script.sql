@@ -1,9 +1,11 @@
+
 -- 회원
-DROP TABLE IF EXISTS Comments;
-DROP TABLE IF EXISTS Reviews; 
-DROP TABLE IF EXISTS Orders;
-DROP TABLE IF EXISTS Users; 
-CREATE TABLE Users (
+DROP TABLE IF EXISTS comments;
+
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS reviews; 
+DROP TABLE IF EXISTS users; 
+CREATE TABLE users (
 	uid    varchar(20)  NOT NULL , -- 회원아이디
 	upw    varchar(20)  NOT NULL , -- 회원비밀번호
 	uname  varchar(20)  NOT NULL , -- 회원명
@@ -14,8 +16,8 @@ CREATE TABLE Users (
 );
 
 -- 회원
-ALTER TABLE Users
-	ADD CONSTRAINT PK_Users -- 회원 기본키
+ALTER TABLE users
+	ADD CONSTRAINT PK_users -- 회원 기본키
 		PRIMARY KEY (
 			uid -- 회원아이디
 		);
@@ -23,12 +25,12 @@ ALTER TABLE Users
 
 -- 상품
 
-DROP TABLE IF EXISTS GoodsStock; 
-DROP TABLE IF EXISTS GoodsDetail; 
-DROP TABLE IF EXISTS GoodsDetailImg; 
-DROP TABLE IF EXISTS Goods; 
+DROP TABLE IF EXISTS goodsstock; 
+DROP TABLE IF EXISTS goodsdetail; 
+DROP TABLE IF EXISTS goodsdetailimg; 
+DROP TABLE IF EXISTS goods; 
 
-CREATE TABLE Goods (
+CREATE TABLE goods (
 	gcode     varchar(20) NOT NULL , -- 상품코드
 	gname     varchar(40) NOT NULL , -- 상품명
 	gcategory varchar(20) NOT NULL     , -- 상품분류
@@ -36,85 +38,84 @@ CREATE TABLE Goods (
 	gprice    INTEGER      NULL    , -- 상품가격
 	gsupprice    INTEGER      NULL    , -- 상품공급가격
 	gregdate  TIMESTAMP    NOT NULL default now(), -- 상품게시일
-	gisdisplay  BOOLEAN      NOT NULL default 1, -- 진열상태
-	gisonsale  BOOLEAN      NOT NULL default 1 -- 판매상태
+	gisdisplay  BOOLEAN      NOT NULL default 1 -- 진열상태
 );
 
 -- 상품
-ALTER TABLE Goods
-	ADD CONSTRAINT PK_Goods -- 상품 기본키
+ALTER TABLE goods
+	ADD CONSTRAINT PK_goods -- 상품 기본키
 		PRIMARY KEY (
 			gcode -- 상품코드
 		);
 		
 -- 상품상세
-CREATE TABLE GoodsDetail (
+CREATE TABLE goodsdetail (
 	gcode      varchar(20)  NOT NULL , -- 상품코드
 	gdesc      VARCHAR(2000) NULL   -- 상품설명
 );
 
 
 -- 상품상세
-ALTER TABLE GoodsDetail
-	ADD CONSTRAINT PK_Goods_detail -- 상품상세 기본키
+ALTER TABLE goodsdetail
+	ADD CONSTRAINT PK_goods_detail -- 상품상세 기본키
 		PRIMARY KEY (
 			gcode -- 상품코드
 		);
 		
 -- 상품상세
-ALTER TABLE GoodsDetail
-	ADD CONSTRAINT FK_Goods_TO_Goods_detail -- 상품 -> 상품상세
+ALTER TABLE goodsdetail
+	ADD CONSTRAINT FK_goods_TO_goods_detail -- 상품 -> 상품상세
 		FOREIGN KEY (
 			gcode -- 상품코드
 		)
-		REFERENCES Goods ( -- 상품
+		REFERENCES goods ( -- 상품
 			gcode -- 상품코드
 		);
 
 
 -- 상품재고
-CREATE TABLE GoodsStock (
+CREATE TABLE goodsstock (
 	gcode      varchar(20)  NOT NULL , -- 상품코드		
 	gstock int not null default 0   -- 상품재고
 );		
 		
 -- 상품재고
-ALTER TABLE GoodsStock
-	ADD CONSTRAINT FK_Goods_TO_GoodsStock -- 상품 -> 상품재고
+ALTER TABLE goodsstock
+	ADD CONSTRAINT FK_goods_TO_goodsstock -- 상품 -> 상품재고
 		FOREIGN KEY (
 			gcode -- 상품코드
 		)
-		REFERENCES Goods ( -- 상품
+		REFERENCES goods ( -- 상품
 			gcode -- 상품코드
 		);
 
 -- 상품상세이미지
-CREATE TABLE GoodsDetailImg (
+CREATE TABLE goodsdetailimg (
 	gcode      varchar(20)  NOT NULL , -- 상품코드		
 	gdetailimg text NULL   -- 상품상세이미지
 );		
 		
 -- 상품상세이미지
-ALTER TABLE GoodsDetailImg
-	ADD CONSTRAINT FK_Goods_TO_Goods_detail_img -- 상품 -> 상품상세이미지
+ALTER TABLE goodsdetailimg
+	ADD CONSTRAINT FK_goods_TO_goods_detail_img -- 상품 -> 상품상세이미지
 		FOREIGN KEY (
 			gcode -- 상품코드
 		)
-		REFERENCES Goods ( -- 상품
+		REFERENCES goods ( -- 상품
 			gcode -- 상품코드
 		);
 
 
 
-DROP TABLE IF EXISTS GoodsCategory; 		
+DROP TABLE IF EXISTS goodscategory; 		
 -- 상품분류
-CREATE TABLE GoodsCategory (
+CREATE TABLE goodscategory (
 	gcategory      varchar(20)  NOT NULL  -- 상품분류
 );
 
 -- 상품분류
-ALTER TABLE GoodsCategory
-	ADD CONSTRAINT PK_Goods_Category -- 상품분류 기본키
+ALTER TABLE goodscategory
+	ADD CONSTRAINT PK_goods_category -- 상품분류 기본키
 		PRIMARY KEY (
 			gcategory -- 상품분류
 		);
@@ -142,9 +143,10 @@ ALTER TABLE Recipient
 */
 -- 주문
 
-CREATE TABLE Orders (
+CREATE TABLE orders (
 	ono         int not null  AUTO_INCREMENT primary key, -- 주문번호
 	ocode       varchar(50) not null , -- 주문코드
+	rno       	int			 null , -- 후기번호
 	uid         varchar(20) NULL     , -- 회원아이디
 	oisbasket   BOOLEAN      default 1, -- 장바구니여부
 	gcode       varchar(20) NULL     , -- 상품코드
@@ -156,8 +158,8 @@ CREATE TABLE Orders (
 
 /*
 -- 주문
-ALTER TABLE Orders
-	ADD CONSTRAINT PK_Orders -- 주문 기본키
+ALTER TABLE orders
+	ADD CONSTRAINT PK_orders -- 주문 기본키
 		PRIMARY KEY (
 			ono -- 주문번호
 		);
@@ -165,60 +167,47 @@ ALTER TABLE Orders
 
 		/*외래키 제약 없앰 (자바에서 처리)*/
 /*-- 주문  
-ALTER TABLE Orders
-	ADD CONSTRAINT FK_Goods_TO_Orders -- 상품 -> 주문
+ALTER TABLE orders
+	ADD CONSTRAINT FK_goods_TO_orders -- 상품 -> 주문
 		FOREIGN KEY (
 			gcode -- 상품코드
 		)
-		REFERENCES Goods ( -- 상품
+		REFERENCES goods ( -- 상품
 			gcode -- 상품코드
 		);*/
 
 -- 상품후기
-CREATE TABLE Reviews (
+CREATE TABLE reviews (
 	rno      INTEGER       NOT NULL auto_increment primary key, -- 상품후기번호
 	gcode    varchar(20)  NULL     , -- 상품코드
 	uid      varchar(20)  NULL     , -- 회원아이디
 	rtitle   varchar(100) NOT NULL , -- 상품후기제목
 	rcontent TEXT          NOT NULL , -- 상품후기내용
-	rregdate TIMESTAMP     NOT NULL default now(), -- 상품후기등록일
-	ono      int  		  NULL  -- 주문번호	
+	rregdate TIMESTAMP     NOT NULL default now(),
+	ono      INTEGER       NOT NULL-- 상품후기등록일
 );
-
+	-- 주문
+/*ALTER TABLE orders
+	ADD CONSTRAINT FK_Review_TO_orders -- 상품후기 -> 주문
+		FOREIGN KEY (
+			rno -- 후기번호
+		)
+		REFERENCES reviews ( -- 후기
+			rno -- 후기번호
+		) ON DELETE SET NULL ON UPDATE cascade
+;*/
+	
 /*-- 상품후기
-ALTER TABLE Reviews
+ALTER TABLE reviews
 	ADD CONSTRAINT PK_Review -- 상품후기 기본키
 		PRIMARY KEY (
 			rno -- 상품후기번호
 		);*/
 
-		/*외래키 제약 없앰 (자바에서 처리)*/
-/*
--- 상품후기
-ALTER TABLE Reviews
-	ADD CONSTRAINT FK_Goods_TO_Review -- 상품 -> 상품후기
-		FOREIGN KEY (
-			gcode -- 상품코드
-		)
-		REFERENCES Goods ( -- 상품
-			gcode -- 상품코드
-		);
-*/
 
-				/*외래키 제약 없앰 (자바에서 처리)*/
-/*-- 상품후기
-ALTER TABLE Reviews
-	ADD CONSTRAINT FK_Orders_TO_Review -- 주문 -> 상품후기
-		FOREIGN KEY (
-			ocode -- 주문코드
-		)
-		REFERENCES Orders ( -- 주문
-			ocode -- 주문코드
-		);
-		
-	*/		
+	
 -- 상품후기코멘트
-CREATE TABLE Comments (
+CREATE TABLE comments (
 	cno      INTEGER        auto_increment primary key , -- 상품후기코멘트번호
 	rno      INTEGER        NULL  , -- 상품후기번호
 	ccontent varchar(1000) NULL   , -- 상품후기코멘트내용
@@ -226,7 +215,7 @@ CREATE TABLE Comments (
 );
 
 /*-- 상품후기코멘트
-ALTER TABLE Comments
+ALTER TABLE comments
 	ADD CONSTRAINT PK_Comment -- 상품후기코멘트 기본키
 		PRIMARY KEY (
 			cno -- 상품후기코멘트번호
@@ -234,8 +223,8 @@ ALTER TABLE Comments
 
 
 -- 주문내역
-DROP TABLE IF EXISTS OrdersHistory; 
-CREATE TABLE OrdersHistory (
+DROP TABLE IF EXISTS ordershistory; 
+CREATE TABLE ordershistory (
 	ono         int  NULL , -- 주문번호	
 	ocode       varchar(50) NULL , -- 주문코드
 	uid         varchar(20) NULL , -- 회원아이디
@@ -252,9 +241,9 @@ CREATE TABLE OrdersHistory (
 		
 		
 		-- 게시판
-DROP TABLE IF EXISTS BoardsContent;
-DROP TABLE IF EXISTS Boards; 
-CREATE TABLE Boards (
+DROP TABLE IF EXISTS boardscontent;
+DROP TABLE IF EXISTS boards; 
+CREATE TABLE boards (
 	bno      INTEGER       NOT NULL DEFAULT 0, -- 게시글번호
 	btitle   varchar(100) NOT NULL , -- 게시글제목
 	uid      varchar(20)  NULL     , -- 회원아이디
@@ -263,26 +252,26 @@ CREATE TABLE Boards (
 );
 
 -- 게시판
-ALTER TABLE Boards
-	ADD CONSTRAINT PK_Boards -- 게시판 기본키
+ALTER TABLE boards
+	ADD CONSTRAINT PK_boards -- 게시판 기본키
 		PRIMARY KEY (
 			bno -- 게시글번호
 		);
 		
 -- 게시판내용
 
-CREATE TABLE BoardsContent (
+CREATE TABLE boardscontent (
 	bno      INTEGER NULL, -- 게시글번호
 	bcontent TEXT    NULL -- 게시판내용
 );
 
 -- 게시판내용
-ALTER TABLE BoardsContent
-	ADD CONSTRAINT FK_Boards_TO_Boards_content -- 게시판 -> 게시판내용
+ALTER TABLE boardscontent
+	ADD CONSTRAINT FK_boards_TO_boards_content -- 게시판 -> 게시판내용
 		FOREIGN KEY (
 			bno -- 게시글번호
 		)
-		REFERENCES Boards ( -- 게시판
+		REFERENCES boards ( -- 게시판
 			bno -- 게시글번호
 		) ON DELETE CASCADE;
 
@@ -336,18 +325,6 @@ INSERT INTO boardscontent
 
 select MAX(bno)+1 from boards;
 
-select * from boards
-		order by bno desc, bregdate desc;
-
-SELECT b.bno, b.btitle, bc.bcontent, b.uid, b.bregdate, b.breadcnt
-FROM boards b join boardscontent bc on b.bno=bc.bno
-where b.bno = 1;
-
-UPDATE boardscontent
-	set bcontent='99999'
-	where bno = 10;
-
-select count(*) from boards;	
 
 /*	=================================================================================*/	
 
@@ -359,123 +336,106 @@ select count(*) from boards;
 	('etc');
 
 	INSERT INTO goods
-	(gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay, gisonsale) values
-	('c10000', '관리자 계정으로 로그인 시 보이는 상품', 'coffee','',7500,5000, CURRENT_TIMESTAMP, 0, 0),
-	('c10001', '코스타리카 돈 마요 100g', 'coffee','',7500,5000, CURRENT_TIMESTAMP, 1, 1),
-	('c10002', '코스타리카 카틀레야 게이샤 100g', 'coffee','',16000,10000, CURRENT_TIMESTAMP, 1, 1),
-	('m10003', '파나마 핀카 자미슨 모건 게이샤 100g', 'machines coffee','',32000,20000, CURRENT_TIMESTAMP, 1, 1),
-	('m10004', '파나마 핀카 자미슨 모건 게이샤 200g', 'machines coffee','',64000,41000, CURRENT_TIMESTAMP, 0, 1),
-	('m10005', '예멘 모카 마타리 200g', 'machines coffee','',22000,15000, CURRENT_TIMESTAMP, 0, 1),
-	('c10006', '자메이카 블루마운틴 200g', 'coffee','',45000,30000, CURRENT_TIMESTAMP, 0, 1),
-	('c10007', '하와이안 코나 엑스트라 팬시 200g', 'coffee','',43000,28000, CURRENT_TIMESTAMP, 0, 1),
-	('c90002', '카뮤 더치 블렌드 500g', 'coffee','',35000,22000, CURRENT_TIMESTAMP, 0, 1),
-	('c90003', '카뮤 블렌드 500g', 'coffee','',30000,20000, CURRENT_TIMESTAMP, 1, 1),
-	('c90004', '에스프레소 블렌드 500g', 'coffee','',30000,20000, CURRENT_TIMESTAMP, 1, 1),
-	('c90005', '카뮤 다크 블렌드 500g', 'coffee','',30000,20000, CURRENT_TIMESTAMP, 1, 1),
-	('c20001', '케냐 클래식 500g', 'coffee','',35000,22000, CURRENT_TIMESTAMP, 1, 1),
-	('c20002', '에티오피아 예가체프 500g', 'coffee','',37500,23000, CURRENT_TIMESTAMP, 1, 1),
-	('c20003', '에티오피아 시다모 500g', 'coffee','',35000,22000, CURRENT_TIMESTAMP, 1, 1),
-	('c20004', '에티오피아 코케 500g', 'coffee','',45000,30000, CURRENT_TIMESTAMP, 1, 1),
-	('c20005', '인도네시아 만델링 500g', 'coffee','',35000,22000, CURRENT_TIMESTAMP, 1, 1),
-	('c20006', '파푸아뉴기니 마라와카 블루마운틴 500g', 'coffee','',37500,23000, CURRENT_TIMESTAMP, 1, 1),
-	('c20007', '콜롬비아 라 유니온 500g', 'coffee','',37500,23000, CURRENT_TIMESTAMP, 1, 0),
-	('c20008', '과테말라 클래식 500g', 'coffee','',35000,22000, CURRENT_TIMESTAMP, 1, 1);
+	(gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay) values
+	('i10001', '관리자 계정으로 로그인 시 보이는 상품', 'items coffee','',7500,5000, CURRENT_TIMESTAMP, 0),
+	('i10002', '코스타리카 돈 마요 100g', 'items coffee','',7500,5000, CURRENT_TIMESTAMP, 1),
+	('i10003', '코스타리카 카틀레야 게이샤 100g', 'items coffee','',16000,10000, CURRENT_TIMESTAMP, 1),
+	('m10001', '파나마 핀카 자미슨 모건 게이샤 100g', 'machines coffee','',32000,20000, CURRENT_TIMESTAMP, 1),
+	('m10002', '파나마 핀카 자미슨 모건 게이샤 200g', 'machines coffee','',64000,41000, CURRENT_TIMESTAMP, 1),
+	('m10003', '예멘 모카 마타리 200g', 'machines coffee','',22000,15000, CURRENT_TIMESTAMP, 1),
+	('e10001', '자메이카 블루마운틴 200g', 'etc','',45000,30000, CURRENT_TIMESTAMP, 1),
+	('e10002', '하와이안 코나 엑스트라 팬시 200g', 'etc','',43000,28000, CURRENT_TIMESTAMP, 1),
+	('e10003', '카뮤 더치 블렌드 500g', 'etc','',35000,22000, CURRENT_TIMESTAMP, 1),
+	('e10004', '카뮤 블렌드 500g', 'etc','',30000,20000, CURRENT_TIMESTAMP,1),
+	('e10005', '에스프레소 블렌드 500g', 'etc','',30000,20000, CURRENT_TIMESTAMP, 1),
+	('e10006', '카뮤 다크 블렌드 500g', 'etc','',30000,20000, CURRENT_TIMESTAMP, 1),
+	('e20001', '케냐 클래식 500g', 'etc','',35000,22000, CURRENT_TIMESTAMP, 1),
+	('e20002', '에티오피아 예가체프 500g', 'etc','',37500,23000, CURRENT_TIMESTAMP, 1),
+	('e20003', '에티오피아 시다모 500g', 'etc','',35000,22000, CURRENT_TIMESTAMP, 1),
+	('e20004', '에티오피아 코케 500g', 'etc','',45000,30000, CURRENT_TIMESTAMP,1),
+	('e20005', '인도네시아 만델링 500g', 'etc','',35000,22000, CURRENT_TIMESTAMP, 1),
+	('c10001', '파푸아뉴기니 마라와카 BM 500g', 'etc','',37500,23000, CURRENT_TIMESTAMP, 1),
+	('c10002', '콜롬비아 라 유니온 500g', 'etc','',37500,23000, CURRENT_TIMESTAMP, 1),
+	('c10003', '과테말라 클래식 500g', 'etc','',35000,22000, CURRENT_TIMESTAMP, 1);
 
 	INSERT INTO goodsdetail 
 	(gcode, gdesc) values
-	('c10000', '상세-관리자 계정으로 로그인 시 보이는 상품'),
-	('c10001', '상세-코스타리카 돈 마요 100g'),
-	('c10002', '상세-코스타리카 카틀레야 게이샤 100g'),
-	('m10003', '상세-파나마 핀카 자미슨 모건 게이샤 100g'),
-	('m10004', '상세-파나마 핀카 자미슨 모건 게이샤 200g'),
-	('m10005', '상세-예멘 모카 마타리 200g'),
-	('c10006', '상세-자메이카 블루마운틴 200g'),
-	('c10007', '상세-하와이안 코나 엑스트라 팬시 200g'),
-	('c90002', '상세-카뮤 더치 블렌드 500g'),
-	('c90003', '상세-카뮤 블렌드 500g'),
-	('c90004', '상세-에스프레소 블렌드 500g'),
-	('c90005', '상세-카뮤 다크 블렌드 500g'),
-	('c20001', '상세-케냐 클래식 500g'),
-	('c20002', '상세-에티오피아 예가체프 500g'),
-	('c20003', '상세-에티오피아 시다모 500g'),
-	('c20004', '상세-에티오피아 코케 500g'),
-	('c20005', '상세-인도네시아 만델링 500g'),
-	('c20006', '상세-파푸아뉴기니 마라와카 블루마운틴 500g'),
-	('c20007', '상세-콜롬비아 라 유니온 500g'),
-	('c20008', '상세-과테말라 클래식 500g');
-
+	('i10001', '상세-관리자 계정으로 로그인 시 보이는 상품'),
+	('i10002', '상세-코스타리카 돈 마요 100g'),
+	('i10003', '상세-코스타리카 카틀레야 게이샤 100g'),
+	('m10001', '상세-파나마 핀카 자미슨 모건 게이샤 100g'),
+	('m10002', '상세-파나마 핀카 자미슨 모건 게이샤 200g'),
+	('m10003', '상세-예멘 모카 마타리 200g'),
+	('e10001', '상세-자메이카 블루마운틴 200g'),
+	('e10002', '상세-하와이안 코나 엑스트라 팬시 200g'),
+	('e10003', '상세-카뮤 더치 블렌드 500g'),
+	('e10004', '상세-카뮤 블렌드 500g'),
+	('e10005', '상세-에스프레소 블렌드 500g'),
+	('e10006', '상세-카뮤 다크 블렌드 500g'),
+	('e20001', '상세-케냐 클래식 500g'),
+	('e20002', '상세-에티오피아 예가체프 500g'),
+	('e20003', '상세-에티오피아 시다모 500g'),
+	('e20004', '상세-에티오피아 코케 500g'),
+	('e20005', '상세-인도네시아 만델링 500g'),
+	('c10001', '상세-파푸아뉴기니 마라와카 블루마운틴 500g'),
+	('c10002', '상세-콜롬비아 라 유니온 500g'),
+	('c10003', '상세-과테말라 클래식 500g');
+INSERT INTO goodsstock
+(gcode, gstock) values
+	('i10001', 40),
+	('i10002', 50),
+	('i10003', 60),
+	('m10001', 70),
+	('m10002', 80),
+	('m10003', 40),
+	('e10001', 30),
+	('e10002', 20),
+	('e10003', 20),
+	('e10004', 10),
+	('e10005', 20),
+	('e10006', 30),
+	('e20001', 40),
+	('e20002', 50),
+	('e20003', 60),
+	('e20004', 70),
+	('e20005', 60),
+	('c10001', 50),
+	('c10002', 40),
+	('c10003', 30);
 	INSERT INTO goodsdetailimg 
 	(gcode, gdetailimg) values
-	('c10000',''),
-	('c10000',''),
-	('c10000',''),
-	('c10001',''),
-	('c10001',''),
-	('c10001',''),
-	('c10002',''),
-	('c10002',''),
-	('c10002',''),
-	('m10003',''),
-	('m10003',''),
-	('m10003',''),
-	('m10003',''),
-	('m10004',''),
-	('m10004',''),
-	('m10004',''),
-	('m10005',''),
-	('c10006',''),
-	('c10007',''),
-	('c90002',''),
-	('c90003',''),
-	('c90004',''),
-	('c90005',''),
-	('c20001',''),
-	('c20002',''),
-	('c20003',''),
-	('c20004',''),
-	('c20005',''),
-	('c20006',''),
-	('c20007',''),
-	('c20008','');
+	('i10001', ''),
+	('i10002', ''),
+	('i10003', ''),
+	('m10001', ''),
+	('m10002', ''),
+	('m10003', ''),
+	('e10001', ''),
+	('e10002', ''),
+	('e10003', ''),
+	('e10004', ''),
+	('e10005', ''),
+	('e10006', ''),
+	('e20001', ''),
+	('e20002', ''),
+	('e20003', ''),
+	('e20004', ''),
+	('e20005', ''),
+	('c10001', ''),
+	('c10002', ''),
+	('c10003', '');
 
-SELECT uid, rtitle, rcontent, ono, g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay, gisonsale FROM reviews r join goods g on r.gcode=g.gcode
+SELECT uid, rtitle, rcontent, g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay 
+FROM reviews r join goods g on r.gcode=g.gcode
 		where g.gcode = 'c10001';
 		
 	select right(gcode, 5)+1 from goods where gcode='c20008';
 	
-	select  g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate,
-	gisdisplay, gisonsale, gdesc, gdetailimg
-		FROM goodsdetail gd join goods g
-		on g.gcode = gd.gcode
-		right outer join goodsdetailimg gdi
-		on g.gcode = gdi.gcode
-		where g.gcode = 'm10007'
-		group by g.gcode;
-/*	
-	UPDATE goods
-	SET gname='과테말라 클래식 500g', gcategory='coffee', gtitleimg= gprice=35000, gisdisplay=1
-	WHERE gcode='c20007';
-	
-	UPDATE goodsdetail
-	SET gdesc='상세-과테말라 클래식 500g'
-	WHERE gcode='c20007';
-	*/
 
 	select * from goods
 	where gisdisplay = true
 		order by gcode desc, gregdate desc;
 	
-		
-INSERT INTO goods
-(gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay, gisonsale) values
-('c10998', '관리자 계정으로 로그인 시 보이는 상품2', 'coffee','',7500,5000, CURRENT_TIMESTAMP, 0, 0);
-INSERT INTO goodsdetail
-(gcode, gdesc) values
-('c10998', '상세-관리자 계정으로 로그인 시 보이는 상품2');
-INSERT INTO goodsdetailimg
-(gcode, gdetailimg) values
-('c10998',''),
-('c10998','');
 		
 select MAX(gcode) from goods 
 		where gcategory like CONCAT('m','%');
@@ -484,13 +444,10 @@ select MAX(gcode) from goods
 select CONCAT('m',right(gcode, 5)+1) 
 from goods where gcode='m10003';
 
-/*INSERT INTO goodsdetail
-		(gcode, gdesc, gdetailimg) values
-		('c50009','상세설명','',100);*/
 
 
 select  g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate,
-		gisdisplay, gisonsale, gdesc, gdetailimg
+		gisdisplay, gdesc, gdetailimg
 		FROM goodsdetail gd join goods g
 		on g.gcode = gd.gcode
 		right outer join goodsdetailimg gdi
@@ -526,102 +483,23 @@ select count(*) from goods WHERE gname like CONCAT('%','1','%');
 /*리뷰*/
 
 
-		
-		
-		
-
-		
-/*	=================================================================================*/	
-/*주문*/
-
-
-INSERT INTO orders
-(ocode,uid, oisbasket, gcode, oquantity, 
-odate, ototalprice, ocondition) values
-('ad00002', 'admin', 1, 'c90002', 2, 
-CURRENT_TIMESTAMP, 10000, 1),
-('ad00002', 'admin', 1, 'c90002', 2, 
-CURRENT_TIMESTAMP, 10000, 1),
-('ad00002', 'admin', 1, 'c90002', 2, 
-CURRENT_TIMESTAMP, 10000, 1),
-('ad00002', 'admin', 1, 'c90002', 2, 
-CURRENT_TIMESTAMP, 10000, 1),
-('ad00002', 'admin', 1, 'c90002', 1, 
-CURRENT_TIMESTAMP, 20000, 1),
-('us00003', 'user01', 1, 'c90002', 1, 
-CURRENT_TIMESTAMP, 30000, 1),
-('us00004', 'user01', 1, 'c90002', 2, 
-CURRENT_TIMESTAMP, 10000, -1),
-('us00004','user01', 1, 'c90002', 3, 
-CURRENT_TIMESTAMP, 20000, 1),
-('us00004', 'user02', 1, 'c90002', 3, 
-CURRENT_TIMESTAMP, 30000, -1),
-('us00004', 'user02', 1, 'c90002', 3, 
-CURRENT_TIMESTAMP, 30000, 0),
-('us00005','user02', 0, 'c90002', 5, 
-CURRENT_TIMESTAMP, 10000, 0);
-		
-UPDATE orders
-SET oisbasket=1, oquantity=2,  ototalprice=40000
-WHERE ocode='us00003';
-
-
-SELECT ocode, ono, uid, oisbasket, gcode, oquantity, odate, ototalprice
-FROM orders;
-
-
-/*
-INSERT INTO orders
-(ocode, uid, oisbasket, gcode, oquantity, odate, ototalprice)
-VALUES('us00007', 'admin', 1, 'c10999', 3, CURRENT_TIMESTAMP, 90000);
-*/
-
-
-select MAX(ocode)+1 from orders;
-select * from orders;
-
-
-select ocode, uid, oisbasket,  oquantity, odate, ototalprice, 
-g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay, gisonsale	 
-from orders o
-left join goods g on o.gcode=g.gcode
-where ono = 4;
-
-select ocode, ono, uid, oisbasket,  oquantity, odate, ototalprice, 
-		g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay, gisonsale	 
-		from orders o left join goods g on o.gcode=g.gcode
-where ocode = 'us00004';
-
-select ocode, ono, uid, oisbasket,  oquantity, odate, ototalprice,
-		g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay, gisonsale	 
-		from orders o left join goods g on o.gcode=g.gcode
-		where uid = 'admin' and oisbasket = true;
-		
-select ocode from orders;
-
-select concat(left('user99',2),lpad(substring(MAX(ocode), 2)+1, 5,'0')) 
-		from orders;
-
-/*====================================================================*/
-/*리뷰*/
-
 INSERT INTO reviews
-(gcode, uid, rtitle, rcontent, rregdate,  ono) values
-('c10001', 'admin', '리뷰01', '리뷰01-상세', CURRENT_TIMESTAMP,  1),
-('c10001', 'user01', '리뷰03', '리뷰03-상세', CURRENT_TIMESTAMP, 3),
-('c10001', 'user01', '리뷰04', '리뷰04-상세', CURRENT_TIMESTAMP, 4),
-('c10001', 'user02', '리뷰06', '리뷰06-상세', CURRENT_TIMESTAMP, 6),
-('c10001', 'user02', '리뷰07', '리뷰07-상세', CURRENT_TIMESTAMP, 7),
-('c10001', 'user02', '리뷰09', '리뷰09-상세', CURRENT_TIMESTAMP, 8);
+(gcode, uid, rtitle, rcontent, rregdate, ono) values
+('c10001', 'admin', '좋구만', '강추', CURRENT_TIMESTAMP, 1),
+('c10001', 'user01', '좋아요', '두번째 구매', CURRENT_TIMESTAMP, 8),
+('c10001', 'user01', '별루에여', '★☆★', CURRENT_TIMESTAMP, 9),
+('c10002', 'user02', '괜차나여', '다에죠부', CURRENT_TIMESTAMP, 11),
+('c10002', 'user02', '나쁘지않네요', '낫배드', CURRENT_TIMESTAMP, 12),
+('c10002', 'user02', '젠젠', '내돈--', CURRENT_TIMESTAMP, 13);
 
 
 
 select ocode, o.ono, o.uid, oisbasket,  oquantity, odate, ototalprice,ocondition,
-		g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay, gisonsale,
-		rno, rtitle, rcontent, rregdate
+		g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay, 
+		o.rno, rtitle, rcontent, rregdate
 		from orders o left join goods g on o.gcode=g.gcode
-		left join reviews r on o.ono=r.ono
-		where o.uid = 'admin' and ocondition = 1 and rno is null;
+		left join reviews r on o.rno=r.rno
+		where o.uid = 'admin' and ocondition = 1 and o.rno is null;
 		
 SELECT * FROM reviews r join goods g on r.gcode=g.gcode
 		where rno = '1';
@@ -638,14 +516,130 @@ SELECT * FROM reviews r join goods g on r.gcode=g.gcode
 SELECT * FROM reviews r join goods g on r.gcode=g.gcode
 where g.gcode='c10001';
 
+		
+		
+		
+
+		
+/*	=================================================================================*/	
+/*주문*/
+
+
+INSERT INTO orders
+(ocode, uid, rno, gcode, oquantity, oisbasket, 
+odate, ototalprice, ocondition) values
+('ad00001', 'admin', 1, 'c10001', 1, 0,
+CURRENT_TIMESTAMP, 10000, 1),
+('ad00001', 'admin', null, 'e10001', 1, 0, 
+CURRENT_TIMESTAMP, 10000, -1),
+('ad00001', 'admin', null, 'e10002', 1,  0,
+CURRENT_TIMESTAMP, 10000, -2),
+('ad00001', 'admin', null,'c10002', 1,  0,
+CURRENT_TIMESTAMP, 10000, 1),
+('ad00002', 'admin', null, 'c10003', 1,  0,
+CURRENT_TIMESTAMP, 10000, -1),
+('ad00002', 'admin', null, 'i10002', 1,  0,
+CURRENT_TIMESTAMP, 10000, -1),
+('ad00002', 'admin', null, 'i10002', 1, 0, 
+CURRENT_TIMESTAMP, 20000, -2),
+('us00003', 'user01', 2, 'c10001', 1,  0,
+CURRENT_TIMESTAMP, 30000, 1),
+('us00004', 'user01', 3, 'c10001', 1,  0,
+CURRENT_TIMESTAMP, 10000, -1),
+('us00004','user01', null, 'c10001', 1,  0,
+CURRENT_TIMESTAMP, 20000, 1),
+('us00005', 'user02', 4, 'c10002', 1,  0,
+CURRENT_TIMESTAMP, 30000, -1),
+('us00005', 'user02', 5, 'c10002', 1,  0,
+CURRENT_TIMESTAMP, 30000, 1),
+('us00006','user02', 6, 'c10002', 1,  0,
+CURRENT_TIMESTAMP, 10000, 1);
+		
+
+select MAX(ocode)+1 from orders;
+select * from orders;
+
+
+select ocode, uid, oisbasket,  oquantity, odate, ototalprice, 
+g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay	 
+from orders o
+left join goods g on o.gcode=g.gcode
+where ono = 4;
+
+select ocode, ono, uid, oisbasket,  oquantity, odate, ototalprice, 
+		g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay 
+		from orders o left join goods g on o.gcode=g.gcode
+where ocode = 'us00004';
+
+select ocode, ono, uid, oisbasket,  oquantity, odate, ototalprice,
+		g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay	 
+		from orders o left join goods g on o.gcode=g.gcode
+where uid = 'admin' and oisbasket = true;
+		
+
+select concat(left('user99',2),lpad(substring(MAX(ocode), 2)+1, 5,'0')) 
+		from orders;
+
+/*====================================================================*/
+
+
 /*select ocode, o.ono, o.uid, oisbasket,  oquantity, odate, ototalprice,ocondition,
-g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay, gisonsale,
+g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay,
 rno, rtitle, rcontent, rregdate
 from orders o left join goods g on o.gcode=g.gcode
 left join reviews r on o.ono=r.ono
 where o.uid = 'admin'  and ocondition in (1,-1); and ocondition = 1;
 	*/	
 		
-gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay, gisonsale, rno, rtitle, rcontent, 
+/*gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay, rno, rtitle, rcontent, 
 rregdate from orders o left join goods g on o.gcode=g.gcode left join reviews r on o.ono=r.ono 
-where o.uid = 'admin' and rno is null and ocondition in (1,-1);
+where o.uid = 'admin' and rno is null and ocondition in (1,-1);*/
+
+		
+SELECT * FROM goods g join goodsstock gs on g.gcode= gs.gcode 
+where gisdisplay = true and gstock > 0 
+order by g.gcode desc, gregdate desc limit 0,16 ;
+
+
+select ocode, ono, uid, oisbasket, oquantity, odate, ototalprice,ocondition, g.gcode, gname, 
+gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay from orders o left 
+join goods g on o.gcode=g.gcode where uid = 'admin';
+
+
+SELECT * 
+		FROM orders
+		group by ocode
+		order by ocode desc, odate desc
+		limit 1,10;
+		
+select  g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate,
+		gisdisplay, gstock, gdesc, gdetailimg
+		FROM goodsdetail gd join goods g
+		on g.gcode = gd.gcode
+		join goodsstock gs
+		on g.gcode = gs.gcode
+		right outer join goodsdetailimg gdi
+		on g.gcode = gdi.gcode
+		where g.gcode = 'c90005'
+		group by g.gcode;
+		
+		select MAX(gcode) 
+		from goods 
+		where gcategory like CONCAT('e','%');
+		
+select concat(left('admin',2),lpad(MAX(substring(ocode, 3))+1, 5,'0')) from orders ;
+
+select MAX(substring(ocode, 3)) from orders;
+select max(ocode) from orders;
+
+SELECT uid, rtitle, rcontent,rregdate, g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay
+		FROM reviews r join goods g on r.gcode=g.gcode
+		where uid = 'admin';
+		
+		select ocode, o.ono, o.uid, o.rno, oisbasket,  oquantity, odate, ototalprice, ocondition,
+		g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay,
+		rtitle, rcontent, rregdate
+		from orders o left join goods g on o.gcode=g.gcode
+		left join reviews r on o.rno=r.rno
+		where o.uid = 'admin' and o.rno is null 
+		and ocondition =1;

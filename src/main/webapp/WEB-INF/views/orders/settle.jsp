@@ -13,14 +13,14 @@
 </head>
 <%@ include file="../include/header.jsp"%>
 <script type="text/javascript">
-	function btnBack() {
-		  location.href ="listPage"; 
+	function btnGoMyPage() {
+		  location.href = "${pageContext.request.contextPath}/homes/myPage";
 	}
 </script>
 <body>
  	<h1>결제 화면</h1>
  	
- 	<button class="btn btn-default" type="button" onclick="btnBack()" >돌아가기</button>
+ 	<button class="btn btn-default" type="button" onclick="btnGoMyPage()" >주문내역 보러가기</button>
 
 </body>
 <%@ include file="../include/footer.jsp"%>

@@ -38,49 +38,41 @@
 				<button type="button" class="btn btn-default" style="width:30%; padding:5px;" id="searchBtn"> 검색 </button>	
 			</div>
 
-			<div class="box-body"> <!-- 주문목록 div -->
-				
-				<c:if test="${list.size() == 0 }">
-					등록된 상품이 없습니다.
-				</c:if>
-				
-				<c:if test="${list.size() > 0 }">
-					<table border="1">
-							<tr>
-								<th>주문코드</th>
-								<th>주문번호</th>
-								<th>회원아이디</th>
-								<th>장바구니여부</th>
-								<th>상품코드</th>
-								<th>주문수량</th>
-								<th>주문날짜</th>
-								<th>최종가격</th>
-								<th>주문상태</th>
-							</tr>
-							
+			<div class="box-body row"> <!-- 주문목록 div -->
+					<div class="col-sm-9"><br><br>
+						<c:if test="${list.size() == 0 }">
+							등록된 상품이 없습니다.
+						</c:if>
+						
+						<c:if test="${list.size() > 0 }">
+							<table class="table table-list-search">
+		                    	<thead>
+									<tr>
+										<th>주문코드</th>
+										<th>회원아이디</th>
+										<th>주문날짜</th>
+										<th>최종가격</th>
+										<th>주문상태</th>
+									</tr>
+								</thead>
+							<tbody>	
 							<c:forEach var="order" items="${list }">
 								<tr>
-									<td>${order.ocode}</td>
-									<td><a href="read${pageMaker.makeSearch(pageMaker.cri.page)}&rno=${order.ono}">
-										${order.ono}</a></td>
+									<td><a href="read${pageMaker.makeSearch(pageMaker.cri.page)}&ocode=${order.ocode}">
+										${order.ocode}</a></td>
 									<td>${order.uid}</td>
-									<td>${order.oisbasket}</td>
-									<td>${order.goods.gcode}</td>
-									<td>${order.oquantity}</td>
 									<td><fmt:formatDate value="${order.odate}" pattern="yyyy-MM-dd HH:mm"/></td>
 									<td>${order.ototalprice}</td>
-									<td>${order.ocondition}</td>
+									<td>${order.getOcondition2Str()}</td>
 								</tr>
 							</c:forEach>
-										
+						</tbody>				
 					</table>	
 	
 				</c:if>
 			</div>
-			
-			        
-           
-          </div><!-- /.blog-post --><br><br><br><br><br><br>
+		</div>
+     </div><!-- /.blog-post --><br><br><br><br><br><br>
 		  <div> <!-- 페이징처리div -->
 			<div class="text-center">
 				<ul class="pagination">

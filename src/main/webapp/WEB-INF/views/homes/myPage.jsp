@@ -111,7 +111,8 @@
 		color: #F0AD4E;
 	}
 	.table-filter .media-photo {
-		width: 35px;
+		width: 120px;
+		height: auto;
 	}
 	.table-filter .media-body {
 	    display: block;
@@ -177,6 +178,39 @@
 	
 	}); 
 	
+	$(document).on("click","#btnWrtReview",function(){
+    	 var res = confirm("해당 주문에 대한 후기작성을 하시겠습니까?");
+    	 var rono = parseInt($(this).parent().parent().parent().prev().prev().prev().find("#ono").text());
+    	 if(res){
+			
+    		location.href="${pageContext.request.contextPath}/reviews/register?ono="+rono;
+	  	  	
+    	 }
+	})
+	$(document).on("click","#btnRdReview",function(){
+		var rno = parseInt($(this).find("span").text());
+    		location.href="${pageContext.request.contextPath}/reviews/read?rno="+rno;
+	})
+	$(document).on("click","#btnCancel",function(){
+    	 var res = confirm("해당 주문에 대한 취소요청을 하시겠습니까?");
+    	 var cono = parseInt($(this).parent().parent().parent().prev().prev().prev().find("#ono").text());
+    	 if(res){
+	     	cancelOrder(cono);
+    	 }
+	})
+	
+  	function cancelOrder(cono) {
+  		$.ajax({	
+			url: "${pageContext.request.contextPath}/orders/cancelOrdr/"+cono,
+			type:"post",
+			dataType:"text",
+			success:function(data){
+				console.log(data);
+				location.href = "${pageContext.request.contextPath}/homes/myPage";
+			}
+		}); 
+	}	
+	
 </script>
 </head>
 <%@ include file="../include/header.jsp"%>
@@ -192,22 +226,30 @@
 				<div class="panel-body">
 					<div class="pull-right">
 						<div class="btn-group">
-							<button type="button" class="btn btn-success btn-filter" data-target="pagado">주문 완료</button>
-							<button type="button" class="btn btn-warning btn-filter" data-target="pendiente">주문 미완료</button>
-							<button type="button" class="btn btn-danger btn-filter" data-target="cancelado">주문 취소</button>
-							<button type="button" class="btn btn-default btn-filter" data-target="all">주문 전체</button>
+							<button type="button" class="btn btn-success btn-filter" data-target="pagado">주문 완료 건</button>
+							<button type="button" class="btn btn-warning btn-filter" data-target="pendiente">미입금 건</button>
+							<button type="button" class="btn btn-danger btn-filter" data-target="cancelado">주문 취소 건</button>
+							<button type="button" class="btn btn-default btn-filter" data-target="all">주문 전체 건</button>
 						</div>
 					</div>
 					<div class="table-container">
 						<table class="table table-filter">
 						<tbody>
 							<c:if test="${orderslist.size()>0 }">
-							<c:forEach items="${orderslist}" var="order">
+							<c:forEach  var="order" items="${orderslist}" varStatus="i">
+								<c:if test="${order.ocondition==1}">
 								<tr data-status="pagado">
+								</c:if>
+								<c:if test="${order.ocondition==-1}">
+								<tr data-status="pendiente">
+								</c:if>
+								<c:if test="${order.ocondition==-2}">
+								<tr data-status="cancelado">
+								</c:if>
 									<td>
 										<div class="ckbox">
 											<input type="checkbox" id="checkbox1">
-											<label for="checkbox1">${order.ono}</label>
+											<label for="checkbox1" id="ono">${order.ono}</label>
 										</div>
 									</td>
 									<td>
@@ -216,12 +258,12 @@
 										</a>
 									</td>
 									<td>
-										<div>
-										<a href="#" class="pull-left">
-											<c:if test="${!empty good.gtitleimg}">
-												<img class="media-photo"  src="displayFile?filename=${good.gtitleimg}" >
+										<div style="text-align:center">
+										<a href="${pageContext.request.contextPath}/goods/read?gcode=${order.goods.gcode}">
+											<c:if test="${!empty order.goods.gtitleimg}">
+												<img class="media-photo"  src="displayFile?filename=${order.goods.gtitleimg}" >
 											</c:if>
-											<c:if test="${empty good.gtitleimg}">
+											<c:if test="${empty order.goods.gtitleimg}">
 												<img style="width:120px" src="${pageContext.request.contextPath}/resources/images/failthumb.jpg" alt="사진 업로드 실패 ㅠ_ㅠ" />
 											</c:if>
 										</a>
@@ -230,14 +272,46 @@
 									<td>
 										<div class="media">
 												<span class="media-meta pull-right">${order.odate}</span>
-												<h4 class="title">
-													${order.goods.gname}
-													<span class="pull-right pagado">(done)</span>
-												</h4>
+												<h4 class="title"> ${order.goods.gname}</h4>
+												<p class="pull-right">
+													<script type="text/javascript">
+														document.write(${order.goods.gprice}*${order.oquantity});
+													</script>
+												</p>
 												<p class="summary">${order.goods.gprice} x ${order.oquantity}</p>
+												
+												
+												<c:if test="${order.ocondition==1}">
+												<div class="pull-right pagado"><h4 class="text-success text-right">${order.getOcondition2Str() }</h4>
+													
+													<c:if test="${(order.rno==0)}">
+														<button type="button" class="btn btn-sm btn-primary" id="btnWrtReview">
+								                            <span class="glyphicon glyphicon-pencil"></span>후기쓰기
+								                        </button>
+								                    </c:if>    
+								                    
+							                        <c:if test="${(order.rno!=0)}">
+														<button type="button" class="btn btn-sm btn-primary" id="btnRdReview" hidden="${order.rno}">
+								                            <span style="display:none">${order.rno}</span>후기작성 완료
+								                        </button>
+													</c:if>
+													<button type="button" class="btn btn-sm btn-danger" id="btnCancel">
+							                            <span class="glyphicon glyphicon-remove"></span>주문취소요청
+							                        </button>
+												</div>
+												</c:if>
+												<c:if test="${order.ocondition==-1}">
+													<div class="pull-right pendiente"><h4 class="text-warning text-right">${order.getOcondition2Str() }</h4>
+														<button type="button" class="btn btn-sm btn-danger" id="btnCancel">
+								                            <span class="glyphicon glyphicon-remove"></span>주문취소요청
+								                        </button>
+													</div>
+												</c:if>
+												<c:if test="${order.ocondition==-2}">
+													<div class="pull-right cancelado"><h4 class="text-danger text-right">${order.getOcondition2Str() }</h4></div>
+												</c:if>
 										</div>
 									</td>
-									<td>${order.ocondition}</td>
 								</tr>
 							</c:forEach>
 							</c:if>

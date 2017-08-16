@@ -149,18 +149,6 @@
 					</c:if>
 				</div>	
 			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">진열 상품 판매여부</label>
-				<div class="col-sm-6">
-					<c:if test="${good.gisonsale}">
-						<input class="form-control" type="checkbox" checked="checked" name="gisonsale" id="gisonsale">
-					</c:if>
-					<c:if test="!${!good.gisonsale}">
-						<input class="form-control" type="checkbox" name="gisonsale" id="gisonsale">
-					</c:if>
-				</div>	
-			</div>
-			
 			
 			<div class="form-group"><!-- 버튼 -->
 				<div class="col-sm-12 text-center">

@@ -1,5 +1,6 @@
 package com.dgit.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -86,22 +87,26 @@ public class ReviewsController {
 	@RequestMapping(value="/register", method=RequestMethod.GET)
 	public String registerGET(Model model, 
 								HttpSession session, 
-								HttpServletResponse response) throws Exception{
+								HttpServletResponse response, int ono) throws Exception{
+		logger.info("=============Register Get=============");
 		String uid = (String) session.getAttribute("login");
 		if(uid == null){
 			response.sendRedirect("/users/login");
 		}
-		
-		List<OrdersVO> list = oservice.ordersSelectById4Review(uid);
-		if(list.size()>0){
-			model.addAttribute("orderslist", list);
+		if(ono>0){
+			List<OrdersVO> list = new ArrayList<>();
+			list.add(oservice.ordersSelectByNo(ono));
+				model.addAttribute("orderslist", list);
+		}else{
+			List<OrdersVO> list = oservice.ordersSelectById4Review(uid);
+			if(list.size()>0){
+				model.addAttribute("orderslist", list);
+			}
+			System.out.println("리스트개수"+list.size());
 		}
 		
-		System.out.println("리스트개수"+list.size());
-		for(OrdersVO vo : list){
-			System.out.println(vo.getGoods().getGname()+":"+vo.getOdate());
-			System.out.println("ono:"+vo.getOno());
-		}
+		
+		
 		
 		return "reviews/register";
 	}
@@ -127,9 +132,10 @@ public class ReviewsController {
 	}
 			
 	@RequestMapping(value="/delete", method=RequestMethod.POST)
-	public String deleteGET(int rno) throws Exception{
+	public String deleteGET(int rno, int ono) throws Exception{
 		logger.info("=============delete DELETE=============");
-		service.reviewsDelete(rno);
+		service.reviewsDelete(rno, ono);
+		
 		
 		return "redirect:listPage";
 	}

@@ -10,7 +10,6 @@
 <script type="text/javascript">
 	function btnDelete() {
 		var res = confirm("정말로 삭제하시겠습니까?");
-		var rno = ${review.rno};
 		if(res == true){
 			 $("#f1").attr("action","${pageContext.request.contextPath}/reviews/delete"); //post형식의 delete커맨드 호출됨
 	         $("#f1").submit();
@@ -61,6 +60,7 @@
 		<div>
 			<form role="form" method="post" id="f1">
                <input type="hidden" name="rno" value="${review.rno}">
+               <input type="hidden" name="ono" value="${review.ono}">
             </form>
 		</div>
 		<div class="btn-group btn-group-sm">

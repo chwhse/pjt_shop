@@ -42,7 +42,7 @@
 			<div class="form-group"> 
 				<label class="col-sm-3 control-label">상품명</label>
 				<div class="col-sm-6">
-					<input class="form-control" type="text" placeholder="상품명입력"  name="gname" id="gname" value="">
+					<input class="form-control" type="text" placeholder="상품명 10자 이내 입력"  name="gname" id="gname" value="">
 					<span class="error">input the goods name.</span>
 				</div>
 			</div>
@@ -60,14 +60,14 @@
 			<div class="form-group"> 
 				<label class="col-sm-3 control-label">상품 가격</label>
 				<div class="col-sm-6">
-					<input class="form-control" type="number" min="0" step="1000" value="10000" name="gprice"  id="gprice" >
+					<input class="form-control" type="number" min="0" value="10000" name="gprice"  id="gprice" >
 					<span class="error">input the good's price.</span>
 				</div>	
 			</div>
 			<div class="form-group"> 
 				<label class="col-sm-3 control-label">상품 공급 가격</label>
 				<div class="col-sm-6">
-					<input class="form-control" type="number" min="0" step="1000" value="10000" name="gsupprice"  id="gsupprice" >
+					<input class="form-control" type="number" min="0" value="10000" name="gsupprice"  id="gsupprice" >
 					<span class="error">input the good's supply price.</span>
 				</div>	
 			</div>
@@ -102,12 +102,6 @@
 				<label class="col-sm-3 control-label">상품 진열여부</label>
 				<div class="col-sm-6">
 					<input class="form-control" type="checkbox" checked="checked" name="gisdisplay" id="gisdisplay">
-				</div>	
-			</div>
-			<div class="form-group"> 
-				<label class="col-sm-3 control-label">진열 상품 판매여부</label>
-				<div class="col-sm-6">
-					<input class="form-control" type="checkbox" checked="checked" name="gisonsale" id="gisonsale">
 				</div>	
 			</div>
 

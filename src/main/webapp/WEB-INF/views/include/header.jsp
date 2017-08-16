@@ -22,7 +22,7 @@
 		            <li><a href="${pageContext.request.contextPath}/reviews/listPage">Reviews</a></li>
 		            <li><a href="${pageContext.request.contextPath}/boards/listPage">Archive</a></li>
 		            <li><a href="${pageContext.request.contextPath}/homes/myPage">My Page</a></li>
-		            <li><a href="${pageContext.request.contextPath}/orders/shoppingCart">Shopping Cart</a></li>
+		            <li><a href="${pageContext.request.contextPath}/orders/buy">Shopping Cart</a></li>
 			        <c:if test='${login=="admin" }'>  
 			            <li class="dropdown">
 			              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">관리자<span class="caret"></span></a>

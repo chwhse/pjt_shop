@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
-	img{max-width:100%;}
+	img{max-width:100%; height:200px;}
 		*{transition: all .5s ease;-moz-transition: all .5s ease;-webkit-transition: all .5s ease}
 	.my-list {
 	    width: 100%;
@@ -23,12 +23,15 @@
 	    text-align: left;
 	    font-size: 14px;
 	    font-weight: 500;
-	    line-height: 21px;
+	    line-height:21px;
+	    max-height: 38px;
+	    max-width: 323px;
 	    margin: 0px;
 	    padding: 0px;
 	    border-bottom: 1px solid #ccc4c4;
 	    margin-bottom: 5px;
 	    padding-bottom: 5px;
+	    padding-top: 5px;
     }
 	.my-list span{float:left;font-weight: bold;}
 	.my-list span:last-child{float:right;}
@@ -44,10 +47,11 @@
 	.detail {
 	    position: absolute;
 	    top: -100%;
-	    padding-top: 15px;
+	    padding-top: 5px;
+	    padding-left:10px;
 	    left: 0;
 	    text-align: center;
-	    background: #fff;height: 100%;width:100%;
+	    background: #fff;	height: 100%;	width:100%;
 		
 	}
 		
@@ -57,6 +61,7 @@
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
+
 	$(function () {
 		
 		$("#searchBtn").click(function () {
@@ -116,7 +121,11 @@
 						<span class="pull-right">${good.gprice}</span>
 						<div class="offer">Only Cafe Atto</div>
 						<div class="detail">
-							<p>사장님 강력 추천! </p>
+							<p style="margin-bottom:3px; height:20px; color:OrangeRed; font-weight:bold;">
+								<c:if test="${good.gstock>50}">
+									사장님 강력 추천! 
+								</c:if>
+							</p>
 						<div>
 							<c:if test="${!empty good.gtitleimg}">
 								<img src="displayFile?filename=${good.gtitleimg}" >
@@ -125,16 +134,40 @@
 								<img src="${pageContext.request.contextPath}/resources/images/failthumb.jpg" alt="사진 업로드 실패 ㅠ_ㅠ" />
 							</c:if>
 						</div>
-						<a href="${pageContext.request.contextPath}/orders/buy?mygcode=${good.gcode}" class="btn btn-primary">구매하기</a>
-						<a href="read${pageMaker.makeSearch(pageMaker.cri.page)}&gcode=${good.gcode}" class="btn btn-primary" >상세보기</a>
+						<h3 class="product-title">${good.gname}</h3>
+						<c:if test="${good.gstock>0}">
+							<a href="${pageContext.request.contextPath}/orders/buy?mygcode=${good.gcode}" class="btn btn-success">구매하기</a>
+						</c:if>
+						<c:if test="${good.gstock<1}">
+							<button type="button" class="btn btn-danger" disabled="disabled">품절</button>
+						</c:if>
+						<a href="read${pageMaker.makeSearch(pageMaker.cri.page)}&gcode=${good.gcode}" class="btn btn-warning">상세보기</a>
+						
 						</div>
 					</div>
 			</div>
 			</c:forEach>	
-			</c:if>	
-				
+			</c:if>
 		</div> <!-- 상품 리스트  end-->	
-	</div>		
+		
+	</div>
+	<div> <!-- 페이징처리div -->
+		<div class="text-center">
+			<ul class="pagination">
+				<c:if test="${pageMaker.prev }">
+					<li><a href="listPage${pageMaker.makeSearch(pageMaker.startPage-1)}">&laquo;</a></li>
+				</c:if>
+				<c:forEach begin="${pageMaker.startPage }" end="${pageMaker.endPage }" var="idx">
+					<li ${pageMaker.cri.page==idx?'class=active':''}>
+						<a href="listPage${pageMaker.makeSearch(idx) }">${idx}</a>
+					</li>
+				</c:forEach>
+				<c:if test="${pageMaker.next }">
+					<li><a href="listPage${pageMaker.makeSearch(pageMaker.endPage+1)}">&raquo;</a></li>
+				</c:if>
+			</ul>
+		</div>
+	</div>			
 </div>
 </body>
 <%@ include file="../include/footer.jsp"%>

@@ -23,10 +23,10 @@ public class OrdersDaoTest {
 
 	@Test
 	public void testListPage()throws Exception{
-		List<OrdersVO> list = dao.ordersSelectByIdWithOcondition1("admin",1-1);
+		List<OrdersVO> list = dao.ordersSelectByIdWithNoReview("admin");
 		
 		for(OrdersVO vo : list){
-			System.out.println(vo.toString());
+			System.out.println("테스트:"+vo.toString());
 		}
 	}
 /*
@@ -39,7 +39,7 @@ public class OrdersDaoTest {
 		}
 		
 	}*/
-	@Test
+/*	@Test
 	public void testUpdatOrder() throws Exception{
 		OrdersVO vo = new OrdersVO();
 		vo.setOisbasket(true);
@@ -52,7 +52,7 @@ public class OrdersDaoTest {
 		dao.ordersEachUpdate(vo);
 		System.out.println(dao.ordersSelectByNo(1).toString());
 	}
-	
+	*/
 /*	@Test
 	public void testinsertShoppingBag() throws Exception{
 		OrdersVO order = new OrdersVO();

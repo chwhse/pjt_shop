@@ -1,5 +1,7 @@
 package com.dgit.controller;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -49,7 +51,6 @@ public class GoodsController {
 	@Resource(name="uploadPath")// id로(DI) 주입받을때사용
 	private String uploadPath;
 	
-	
 	@ResponseBody
 	   @RequestMapping(value = "displayFile") // displayFile?filename=##############.jpg
 	   public ResponseEntity<byte[]> displayFile(String filename) throws IOException {
@@ -61,18 +62,23 @@ public class GoodsController {
 	      
 	      try {
 	    	 HttpHeaders header = new HttpHeaders();
-	    	 if(filename.trim().length()!=0){
+	    	 if(filename.trim().length()>0){
 		         String formatName = filename.substring(filename.lastIndexOf(".") + 1);
 		         MediaType mType = MediaUtils.getMediaType(formatName);
 		         
 		         header.setContentType(mType);
+		         
+		         File file= new File(uploadPath+"/"+filename);
+		         if(file.exists() && filename.length()>0){
+					 System.out.println("파일있음,"+uploadPath + "/" + filename);
+					  
+					 in = new FileInputStream(uploadPath + "/" + filename);
+				 }else{
+					 in = new FileInputStream(uploadPath + "/fileNotFound.jpg");
+				 }
 	    	 }
-	         File file= new File(uploadPath+"/"+filename);
-			 if(!file.exists()){
+	         else{
 				 in = new FileInputStream(uploadPath + "/fileNotFound.jpg");
-			 }else{
-				 System.out.println("파일있음");
-				 in = new FileInputStream(uploadPath + "/" + filename);
 			 }
 	         entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in), header, HttpStatus.CREATED);
 	      } catch (Exception e) {
@@ -109,6 +115,11 @@ public class GoodsController {
 		model.addAttribute("pageMaker",pageMaker);
 		
 		model.addAttribute("list", service.listSearch(cri) );
+		
+		List<GoodsVO> list = service.listSearch(cri);
+		for(GoodsVO gvo : list){
+			logger.info("gstock:"+gvo.getGstock());
+		}
 		
 		
 		return "goods/listPage";
@@ -148,7 +159,7 @@ public class GoodsController {
 		
 		service.goodsInsert(vo);
 		logger.info(vo.toString());
-		return "redirect:listPage";
+		return "redirect:listPage4admin";
 	}
 	
 	private String registerImg(MultipartFile file,int size) throws IOException{
@@ -162,6 +173,7 @@ public class GoodsController {
 	@RequestMapping(value="/read", method=RequestMethod.GET)
 	public String readGET(String gcode, Model model, @ModelAttribute("cri")SearchCriteria cri) throws Exception{
 		logger.info("=============read GET=============");
+		System.out.println("gcode:"+gcode);
 		GoodsVO vo = service.goodsSelectByCode(gcode);
 		logger.info("===GoodVO:"+vo.toString());
 		List<ReviewsVO> rlist = rservice.reviewsSelectByCode(gcode);
