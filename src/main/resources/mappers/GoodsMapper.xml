@@ -39,7 +39,7 @@
 		SELECT g.gcode, gstock, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay 
 		FROM goods g join goodsstock gs on g.gcode= gs.gcode
 		<include refid="search"/>
-		order by g.gcode desc, gregdate desc
+		order by gregdate desc
 		limit #{pageStart},#{perPageNum}
 	</select>	
 		

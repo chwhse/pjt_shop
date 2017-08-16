@@ -560,10 +560,10 @@ select MAX(ocode)+1 from orders;
 select * from orders;
 
 
-select ocode, uid, oisbasket,  oquantity, odate, ototalprice, 
-g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay	 
-from orders o
-left join goods g on o.gcode=g.gcode
+select ocode, ono, uid, rno, oisbasket,  oquantity, odate, ototalprice,ocondition,
+		g.gcode, gstock, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay	 
+		from orders o left join goods g on o.gcode=g.gcode
+		join goodsstock gs on o.gcode= gs.gcode
 where ono = 4;
 
 select ocode, ono, uid, oisbasket,  oquantity, odate, ototalprice, 

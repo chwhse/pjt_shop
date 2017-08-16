@@ -100,5 +100,4 @@
 </body>
 <%@ include file="../include/footer.jsp"%>
 <script src="${pageContext.request.contextPath}/resources/dist/js/bootstrap.min.js"></script>
-
 </html>

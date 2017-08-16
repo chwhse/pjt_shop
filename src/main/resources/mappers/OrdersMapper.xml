@@ -24,24 +24,28 @@
 		<result property="gsupprice" column="gsupprice"/>
 		<result property="gregdate" column="gregdate"/>
 		<result property="gisdisplay" column="gisdisplay"/>
+		<result property="gstock" column="gstock"/>
 	</resultMap>
 	
 	<select id="ordersSelectByCode" parameterType="String" resultMap="orderResultByOcode">
 		select ocode, ono, uid, rno, oisbasket, oquantity, odate, ototalprice,ocondition,
-		g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay	 
+		g.gcode, gstock, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay	 
 		from orders o left join goods g on o.gcode=g.gcode
+		join goodsstock gs on o.gcode= gs.gcode
 		<include refid="wheresql_ocode"/>
 	</select>
 	<select id="ordersSelectByNo" parameterType="int" resultMap="orderResultByOcode">
 		select ocode, ono, uid, rno, oisbasket,  oquantity, odate, ototalprice,ocondition,
-		g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay	 
+		g.gcode, gstock, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay	 
 		from orders o left join goods g on o.gcode=g.gcode
+		join goodsstock gs on o.gcode= gs.gcode
 		<include refid="wheresql_ono"/>
 	</select>
 	<select id="ordersSelectById" parameterType="String" resultMap="orderResultByOcode">
 		select ocode, ono, uid, rno, oisbasket,  oquantity, odate, ototalprice,ocondition,
-		g.gcode, gname, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay	 
+		g.gcode, gname, gstock, gcategory, gtitleimg, gprice, gsupprice, gregdate, gisdisplay	 
 		from orders o left join goods g on o.gcode=g.gcode
+		join goodsstock gs on o.gcode= gs.gcode
 		<include refid="wheresql_uid"/>
 	</select>
 	<select id="ordersSelectByIdWithNoReview" resultMap="orderResultByOcode">

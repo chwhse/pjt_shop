@@ -105,7 +105,11 @@ public class OrdersServiceImpl implements OrdersService {
 	@Override
 	public void ordersComplete(OrdersVO vo) throws Exception {
 		vo.setOisbasket(false);
-		vo.getGoods().setGstock(vo.getGoods().getGstock()-vo.getOquantity());
+/*		OrdersVO ovo = dao.ordersSelectByNo(vo.getOno());
+ 		System.out.println("gstock:"+ovo.getGoods().getGstock());
+		System.out.println("oquantity:"+ovo.getOquantity());
+		gvo.setGstock(ovo.getGoods().getGstock()-(ovo.getOquantity()));
+		System.out.println("gstock:"+ovo.getGoods().getGstock());*/
 		vo.setOcondition(-1);
 		System.out.println("service ordersComplete"+vo.toString());
 		dao.ordersEachUpdate(vo);
@@ -126,7 +130,10 @@ public class OrdersServiceImpl implements OrdersService {
 		OrdersVO ovo = dao.ordersSelectByNo(no);
 		GoodsVO gvo = new GoodsVO();
 		gvo.setGcode(ovo.getGoods().getGcode());
+		System.out.println("gstock:"+ovo.getGoods().getGstock());
+		System.out.println("oquantity:"+ovo.getOquantity());
 		gvo.setGstock(ovo.getGoods().getGstock()+ovo.getOquantity());
+		System.out.println("gstock:"+ovo.getGoods().getGstock());
 		gdao.goodsStockUpdate(gvo);
 		
 		ovo.setOcondition(-2);
@@ -137,9 +144,12 @@ public class OrdersServiceImpl implements OrdersService {
 		OrdersVO ovo = dao.ordersSelectByNo(no);
 		GoodsVO gvo = new GoodsVO();
 		gvo.setGcode(ovo.getGoods().getGcode());
+		System.out.println("gstock:"+ovo.getGoods().getGstock());
+		System.out.println("oquantity:"+ovo.getOquantity());
 		gvo.setGstock(ovo.getGoods().getGstock()-(ovo.getOquantity()));
-		gdao.goodsStockUpdate(gvo);
 		
+		gdao.goodsStockUpdate(gvo);
+		System.out.println("gstock:"+ovo.getGoods().getGstock());
 		ovo.setOcondition(1);
 		dao.ordersEachUpdate(ovo);
 	}

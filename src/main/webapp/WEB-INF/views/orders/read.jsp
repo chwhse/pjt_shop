@@ -24,6 +24,8 @@
 	                <tbody>
 	                    <tr>
 	                    	<th><input type="checkbox" id="selectAllCheckbox"></th>
+	                        <th class="text-center">gcode</th>
+	                        <th class="text-center">gname</th>
 	                        <th class="text-center">ocode</th>
 	                        <th class="text-center">ono</th>
 	                        <th class="text-center">uid</th>
@@ -40,6 +42,8 @@
 			                    	<input type="hidden" name="ono" id="ono" value="${order.ono}">
 			                    	<input type="checkbox" >
 		                    	</td>
+		                        <td>${order.goods.gcode}</td>
+		                        <td>${order.goods.gname}</td>
 		                        <td>${order.ocode}</td>
 		                        <td>${order.ono}</td>
 		                        <td>${order.uid}</td>

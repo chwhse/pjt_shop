@@ -183,6 +183,19 @@ public class GoodsController {
 		return "goods/read";
 	}
 	
+	@RequestMapping(value="/read4admin", method=RequestMethod.GET)
+	public String read4adminGET(String gcode, Model model, @ModelAttribute("cri")SearchCriteria cri) throws Exception{
+		logger.info("=============read4admin GET=============");
+		System.out.println("gcode:"+gcode);
+		GoodsVO vo = service.goodsSelectByCode(gcode);
+		logger.info("===GoodVO:"+vo.toString());
+		List<ReviewsVO> rlist = rservice.reviewsSelectByCode(gcode);
+		logger.info("===reviewsize:"+rlist.size());
+		model.addAttribute("reviewslist", rlist);
+		model.addAttribute("good", vo);
+		return "goods/read4admin";
+	}
+	
 	@RequestMapping(value="/delete", method=RequestMethod.POST)
 	public String deleteGET(String gcode) throws Exception{
 		logger.info("=============delete DELETE=============");

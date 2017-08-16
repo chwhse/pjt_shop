@@ -79,7 +79,7 @@
 									</c:if>
 								</div>
 							</td>
-							<td><a href="read${pageMaker.makeSearch(pageMaker.cri.page)}&gcode=${good.gcode}">
+							<td><a href="read4admin${pageMaker.makeSearch(pageMaker.cri.page)}&gcode=${good.gcode}">
 								${good.gcode}</a></td>
 							<td> ${good.gname}</td>
 							<td>${good.gprice }</td>

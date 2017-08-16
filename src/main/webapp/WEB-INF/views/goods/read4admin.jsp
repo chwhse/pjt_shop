@@ -98,10 +98,6 @@
 					<td>${good.gisdisplay}</td>
 				</tr>
 				<tr>
-					<th>상품 판매상태</th>
-					<td>${good.gisonsale}</td>
-				</tr>
-				<tr>
 					<th>상품 등록일</th>
 					<td>${good.gregdate}</td>
 				</tr>
