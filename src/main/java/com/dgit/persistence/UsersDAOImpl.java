@@ -43,6 +43,11 @@ public class UsersDAOImpl implements UsersDAO {
 		map.put("uid", uid);
 		map.put("upw", upw);
 		return session.selectOne(namespace+".login", map);
+	}	
+	
+	@Override
+	public String idDuCheck(String uid) throws Exception {
+		return session.selectOne(namespace+".idDuCheck", uid);
 	}
 
 }

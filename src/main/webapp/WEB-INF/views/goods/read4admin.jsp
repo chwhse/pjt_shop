@@ -19,7 +19,7 @@
 		var res = confirm("정말로 삭제하시겠습니까?");
 		var gcode = ${good.gcode};
 		if(res == true){
-			/* location.href = "delete?gcode="+gcode;  */
+			location.href = "delete?gcode="+gcode;  */
 			 $("#f1").attr("action","${pageContext.request.contextPath}/goods/delete"); //post형식의 delete커맨드 호출됨
 	         $("#f1").submit();
 		}else{

@@ -24,6 +24,11 @@
 		and upw = #{upw}
 	</select>
 	
+	<select id="idDuCheck" resultType="String">
+		select uid from users 
+		<include refid="wheresql_uid"/>
+	</select>	
+	
 	<delete id="usersDelete">
 		DELETE FROM  users
 		<include refid="wheresql_uid"/>

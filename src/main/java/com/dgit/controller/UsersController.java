@@ -35,7 +35,7 @@ public class UsersController {
 		
 
 		logger.info(vo.toString());
-		model.addAttribute("loginVO", vo);
+		model.addAttribute("loginVO", vo); //빼도 될듯.
 		return "redirect:/boards/listPage";
 	}
 	

@@ -8,4 +8,5 @@ public interface UsersService {
 	public void usersDelete(String uid) throws Exception;
 	public void usersUpdate(UsersVO vo) throws Exception;
 	public UsersVO login(String uid, String upw) throws Exception;
+	public String idDuCheck(String uid) throws Exception;
 }

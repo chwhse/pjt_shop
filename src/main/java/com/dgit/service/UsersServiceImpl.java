@@ -37,5 +37,10 @@ public class UsersServiceImpl implements UsersService {
 	public UsersVO login(String uid, String upw) throws Exception {
 		return dao.login(uid, upw);
 	}
+	
+	@Override
+	public String idDuCheck(String uid) throws Exception {
+		return dao.idDuCheck(uid);
+	}
 
 }
