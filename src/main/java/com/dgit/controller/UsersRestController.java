@@ -42,12 +42,12 @@ public class UsersRestController {
 		try{
 			if(vo.getUid()!=null){
 				service.usersInsert(vo);
-				entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+				entity = new ResponseEntity<String>("success", HttpStatus.OK);
 			}else{
-				entity = new ResponseEntity<String>("FAIL", HttpStatus.BAD_REQUEST);
+				entity = new ResponseEntity<String>("fail", HttpStatus.BAD_REQUEST);
 			}
 		}catch(Exception e){
-			entity = new ResponseEntity<String>("FAIL", HttpStatus.BAD_REQUEST);
+			entity = new ResponseEntity<String>("fail", HttpStatus.BAD_REQUEST);
 		}
 		return entity;
 				
@@ -55,35 +55,47 @@ public class UsersRestController {
 
 	
 	@RequestMapping(value="/loginPost", method=RequestMethod.POST)
-	public ResponseEntity<UsersVO> LoginRestPost(UsersVO user) throws Exception{
+	public ResponseEntity<UsersVO> LoginRestPost(UsersVO vo) throws Exception{
 		logger.info("=======LoginRestPost=======");
-		
-		UsersVO uvo = service.login(user.getUid(), user.getUpw());
-		System.out.println(uvo);
 		
 		ResponseEntity<UsersVO> entity = null;
 		
-		try{
-			if(uvo == null){
-				// 회원가입을 한 적이 없으면, memberVO키가 없음
-				// interceptor에서 memberVO키가 없으면 login화면으로 다시 가도록 처리
-				System.out.println("회원없음.");
-				entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400 error
-			}else{
-				entity = new ResponseEntity<UsersVO>(uvo, HttpStatus.OK);
-
-			}
-		}catch(Exception e){
+		String uid = vo.getUid();
+		if(uid==null){
+			uid="";
+			System.out.println("들어온 uid key값 null");
 			entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400 error
+		}else{
+			UsersVO uvo = service.login(vo.getUid(), vo.getUpw());
+			System.out.println(uvo);
+			
+			try{
+				if(uvo == null){
+					// 회원가입을 한 적이 없으면, memberVO키가 없음
+					// interceptor에서 memberVO키가 없으면 login화면으로 다시 가도록 처리
+					System.out.println("회원없음.");
+					entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400 error
+				}else{
+					entity = new ResponseEntity<UsersVO>(uvo, HttpStatus.OK);
+
+				}
+			}catch(Exception e){
+				entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400 error
+			}
 		}
+		
+		
+		
+		
 		return entity;
 	}
 	
-	@RequestMapping(value="validateId", method=RequestMethod.POST)
-	public ResponseEntity<String> ValidateIdRestGet(String uid) throws Exception{
+	@RequestMapping(value="validateId", method=RequestMethod.GET)
+	public ResponseEntity<String> ValidateIdRestGet(UsersVO vo) throws Exception{
 		
-		logger.info("=======ValidateIdRestGet=======");
+		logger.info("=======ValidateIdRestGet======="+vo.getUid());
 		
+		String uid = vo.getUid();
 		if(uid==null){
 			uid="";
 			System.out.println("들어온 uid key값 null");
