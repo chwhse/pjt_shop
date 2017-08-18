@@ -7,9 +7,14 @@
 	</sql>
 	
 	<select id="usersSelectByid" resultType="UsersVO">
-		SELECT uid, upw, uname, uemail, uaddr, uphone, ugrade
+		SELECT uid, uname, uemail, uaddr, uphone, ugrade
 		FROM users
 		<include refid="wheresql_uid"/>
+	</select>
+	
+	<select id="usersListAll" resultType="UsersVO">
+		SELECT uid, uname, uemail, uaddr, uphone, ugrade
+		FROM users
 	</select>
 	
 	<insert id="usersInsert">

@@ -1,6 +1,8 @@
 package com.dgit.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,7 +36,7 @@ public class UsersRestController {
 
 	@Transactional
 	@RequestMapping(value="/joinForm", method=RequestMethod.POST)
-	public ResponseEntity<String> JoinFormRestPost(UsersVO vo) throws Exception{
+	public ResponseEntity<String> JoinFormRestPost(@RequestBody UsersVO vo) throws Exception{
 		logger.info("=========JoinFormRestPost========");
 		
 		logger.info(vo.toString());
@@ -55,10 +58,11 @@ public class UsersRestController {
 
 	
 	@RequestMapping(value="/loginPost", method=RequestMethod.POST)
-	public ResponseEntity<UsersVO> LoginRestPost(UsersVO vo) throws Exception{
+	public ResponseEntity<Map<String, Object>> LoginRestPost(@RequestBody UsersVO vo) throws Exception{ //@RequestBody써줘야 VO안에 변수값 json으로 받음
 		logger.info("=======LoginRestPost=======");
+		logger.info(vo.toString());
 		
-		ResponseEntity<UsersVO> entity = null;
+		ResponseEntity<Map<String, Object>> entity = null;
 		
 		String uid = vo.getUid();
 		if(uid==null){
@@ -67,26 +71,67 @@ public class UsersRestController {
 			entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400 error
 		}else{
 			UsersVO uvo = service.login(vo.getUid(), vo.getUpw());
-			System.out.println(uvo);
+
+			Map<String, Object> map = new HashMap<>();
+			map.put("user", uvo);
 			
 			try{
 				if(uvo == null){
 					// 회원가입을 한 적이 없으면, memberVO키가 없음
 					// interceptor에서 memberVO키가 없으면 login화면으로 다시 가도록 처리
 					System.out.println("회원없음.");
-					entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400 error
+					map.put("success", false);
+					entity = new ResponseEntity<Map<String, Object>>(map,HttpStatus.BAD_REQUEST); // 400 error
 				}else{
-					entity = new ResponseEntity<UsersVO>(uvo, HttpStatus.OK);
+					map.put("success", true);
+					entity = new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 
 				}
 			}catch(Exception e){
-				entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400 error
+				map.put("success", false);
+				entity = new ResponseEntity<Map<String, Object>>(HttpStatus.BAD_REQUEST); // 400 error
 			}
 		}
+		return entity;
+	}
+	
+	@RequestMapping(value="/listUser", method=RequestMethod.GET)
+	public ResponseEntity<Map<String, Object>> listUserRestGet() throws Exception{ 
+		logger.info("=======listUserRestGet=======");
+		
+		ResponseEntity<Map<String, Object>> entity = null;
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		try{
+			List<UsersVO> userslist = service.usersListAll();
+			map.put("userlist", userslist);
+			map.put("success", "true");
+			System.out.println(map.toString());
+			entity = new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK); 
+			
+		}catch(Exception e){
+			map.put("success", "false");
+			entity = new ResponseEntity<Map<String, Object>>(map, HttpStatus.BAD_REQUEST); // 400 error
+		}
+		return entity;
+	}
+	
+	@RequestMapping(value="/deleteUser", method=RequestMethod.POST)
+	public ResponseEntity<String> deleteUserRestPost(String uid) throws Exception{ 
+		logger.info("=======deleteUserRestPost=======");
+		logger.info(uid.toString());
+		
+		ResponseEntity<String> entity = null;
 		
 		
-		
-		
+		try{
+			service.usersDelete(uid);
+			entity = new ResponseEntity<String>("success", HttpStatus.OK); 
+			
+		}catch(Exception e){
+			entity = new ResponseEntity<String>("fail", HttpStatus.BAD_REQUEST); // 400 error
+		}
 		return entity;
 	}
 	
