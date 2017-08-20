@@ -1,6 +1,7 @@
 package com.dgit.persistence;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -25,6 +26,10 @@ public class UsersDAOImpl implements UsersDAO {
 	@Override
 	public void usersInsert(UsersVO vo) throws Exception {
 		session.insert(namespace+".usersInsert", vo);
+	}
+	@Override
+	public List<UsersVO> usersListAll() throws Exception {
+		return session.selectList(namespace+".usersListAll");
 	}
 
 	@Override

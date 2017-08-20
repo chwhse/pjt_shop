@@ -1,5 +1,7 @@
 package com.dgit.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,10 @@ public class UsersServiceImpl implements UsersService {
 	public void usersInsert(UsersVO vo) throws Exception {
 		dao.usersInsert(vo);
 		
+	}
+	@Override
+	public List<UsersVO> usersListAll() throws Exception {
+		return dao.usersListAll();
 	}
 
 	@Override
