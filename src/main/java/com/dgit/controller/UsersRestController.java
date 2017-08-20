@@ -29,7 +29,6 @@ public class UsersRestController {
 
 	@Autowired
 	private UsersService service;
-	
 
 	@Transactional
 	@RequestMapping(value="/joinForm", method=RequestMethod.POST)

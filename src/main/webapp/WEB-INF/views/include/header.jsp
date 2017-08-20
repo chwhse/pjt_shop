@@ -17,12 +17,12 @@
 		        </div>
 		        <div id="navbar" class="collapse navbar-collapse">
 		          <ul class="nav navbar-nav">
-		            <li><a href="${pageContext.request.contextPath}/homes/aboutUs">About Us</a></li>
-		            <li><a href="${pageContext.request.contextPath}/goods/listPage">Shopping</a></li>
-		            <li><a href="${pageContext.request.contextPath}/reviews/listPage">Reviews</a></li>
-		            <li><a href="${pageContext.request.contextPath}/boards/listPage">Archive</a></li>
-		            <li><a href="${pageContext.request.contextPath}/homes/myPage">My Page</a></li>
-		            <li><a href="${pageContext.request.contextPath}/orders/buy">Shopping Cart</a></li>
+		            <li><a href="${pageContext.request.contextPath}/homes/aboutUs">아토는요,</a></li>
+		            <li><a href="${pageContext.request.contextPath}/goods/listPage">장보기</a></li>
+		            <li><a href="${pageContext.request.contextPath}/reviews/listPage">후기 게시판</a></li>
+		            <li><a href="${pageContext.request.contextPath}/boards/listPage">공지사항</a></li>
+		            <li><a href="${pageContext.request.contextPath}/homes/myPage">MY Page</a></li>
+		            <li><a href="${pageContext.request.contextPath}/orders/buy">장바구니</a></li>
 			        <c:if test='${login=="admin" }'>  
 			            <li class="dropdown">
 			              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">관리자<span class="caret"></span></a>

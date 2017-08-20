@@ -25,9 +25,9 @@
 </head>
 <body>
 	<div class="page-post">
-		<h2 class="page-post-title">Atto Archive</h2>
+		<h2 class="page-post-title">공지사항</h2>
 	         <p>Foot Print & Photos.. </p>
-	         <p class="page-post-meta">July 13, 2017 by <a href="#">조시은</a></p>
+	         <p class="page-post-meta">August 25, 2017 by <a href="#">조시은</a></p>
 	         	
 	    <hr> 
 	            <div class="box-body input-group">

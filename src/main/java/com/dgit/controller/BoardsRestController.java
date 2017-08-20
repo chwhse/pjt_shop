@@ -35,27 +35,6 @@ public class BoardsRestController {
 	
 	@Autowired
 	BoardsService service;
-/*	
-	public ResponseEntity<JSONObject> listPageGet(){
-		
-		ResponseEntity<JSONObject> entity = null;
-		BoardsVO bvo = new BoardsVO();
-		bvo.setBno(999); bvo.setBtitle("구구구");
-		Date date = new Date(DateUtils.MILLIS_PER_SECOND);
-		bvo.setBcontent("구구"); bvo.setBreadcnt(1); bvo.setBregdate(date);
-		bvo.setUid("user");
-		JSONObject jsonData = JSONObject.fromObject(JSONSerializer.toJSON(bvo )); 
-		HttpHeaders responseHeaders = new HttpHeaders(); 
-		responseHeaders.add("Content-Type", "application/json; charset=UTF-8"); 
-		
-		try{
-			entity = new ResponseEntity<JSONObject>(jsonData, responseHeaders, HttpStatus.OK);
-
-		} catch (Exception e) {
-			entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400 error
-		}
-		return entity;
-	}*/
 	
 	@RequestMapping(value = "listPage", method = RequestMethod.GET)
 	public ResponseEntity<List<BoardsVO>> listPageGetRest() throws Exception{
