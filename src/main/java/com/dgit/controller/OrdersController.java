@@ -125,48 +125,7 @@ public class OrdersController {
 		
 		return "orders/listPage";
 	}
-	
-/*	@RequestMapping(value ="/shoppingCart", method = RequestMethod.GET)
-	public String shoppingCartGET(Model model,
-								  HttpSession session,
-								  HttpServletResponse response) throws Exception {
-		
-		logger.info("=============shoppingCart GET=============");
-		
-		
-		String uid = (String) session.getAttribute("login");
-		if(uid == null){
-			response.sendRedirect("/users/login");
-		}
-		List<OrdersVO> list = new ArrayList<>();
-		OrdersVO vo = new OrdersVO();
-		vo.setUid(uid);
-		// 장바구니 조회 후 가져오기
-		 list = service.ordersSelectById4ShoppingCart(uid); 
-		if(list.isEmpty()){
-			return "orders/shoppingCart";
-		}
-		
-		vo.setOcode(list.get(0).getOcode());
-		
-		list = service.ordersSelectByCode(vo.getOcode());
-		int totalPrice = 0;
-		for(OrdersVO ovo : list){
-			System.out.println("넣은후 확인:"+ovo.toString());
-			if(ovo.getGoods()!=null){
-				totalPrice += ovo.getGoods().getGprice()*ovo.getOquantity();
-				System.out.println(totalPrice+"->총합");
-			}
-		}
-		vo.setOtotalprice(totalPrice);
-		service.ordersUpdateWithTotalPriceByCode(vo);
-		list = service.ordersSelectByCode(vo.getOcode());
-		model.addAttribute("list", list);
-		logger.info("총합:"+list.get(0).getOtotalprice());
-		
-		return "orders/shoppingCart";
-	}*/
-	
+
 	
 	@Transactional
 	@RequestMapping(value="/buy", method=RequestMethod.GET)

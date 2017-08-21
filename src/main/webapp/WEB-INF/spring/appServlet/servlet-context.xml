@@ -33,6 +33,7 @@
 	<interceptors>
 		<interceptor>
 			<mapping path="/users/loginPost"/>
+			<mapping path="/users/rest/loginPost"/>
 			<beans:ref bean="loginInterceptor"/>
 		</interceptor>
 		<interceptor>
