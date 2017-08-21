@@ -40,12 +40,9 @@ public class BoardsRestController {
 	
 	@RequestMapping(value = "listPage", method = RequestMethod.GET)
 	public ResponseEntity<Map<String, Object>> listPageGetRest() throws Exception{
-		
+		logger.info("=============listPageGetRest=============");
 		ResponseEntity<Map<String, Object>> entity = null;
 		Map<String, Object> map = new HashMap<>();
-		
-		
-		
 		try{
 			List<BoardsVO> bvo = service.boardsListAll();
 			map.put("boardlist", bvo);
@@ -58,6 +55,7 @@ public class BoardsRestController {
 		return entity;
 	}
 	
+	/*
 	@RequestMapping(value="/register", method=RequestMethod.GET)
 	public String registerGetRest() throws Exception{
 		return "boards/register";
@@ -117,5 +115,5 @@ public class BoardsRestController {
 		return "redirect:read";
 		
 	}
-	
+	*/
 }
