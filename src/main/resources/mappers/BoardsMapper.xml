@@ -6,9 +6,11 @@
 		where bno = #{bno}
 	</sql>
 	<select id="boardsListAll" resultType="BoardsVO">
-		select bno, btitle, uid, bregdate, breadcnt from boards
-		where bno > 0
-		order by bno desc, bregdate desc
+		select b.bno, btitle, bcontent, uid, bregdate, breadcnt 
+		FROM boards b join boardscontent bc
+		on b.bno=bc.bno
+		where b.bno > 0
+		order by b.bno desc, bregdate desc
 	</select>
 	
 	<select id="getMaxBno" resultType="int">

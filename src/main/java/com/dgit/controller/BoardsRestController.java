@@ -1,7 +1,9 @@
 package com.dgit.controller;
 
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
@@ -37,16 +39,21 @@ public class BoardsRestController {
 	BoardsService service;
 	
 	@RequestMapping(value = "listPage", method = RequestMethod.GET)
-	public ResponseEntity<List<BoardsVO>> listPageGetRest() throws Exception{
+	public ResponseEntity<Map<String, Object>> listPageGetRest() throws Exception{
 		
-		ResponseEntity<List<BoardsVO>> entity = null;
-		List<BoardsVO> bvo = service.boardsListAll();
+		ResponseEntity<Map<String, Object>> entity = null;
+		Map<String, Object> map = new HashMap<>();
+		
+		
 		
 		try{
-			entity = new ResponseEntity<List<BoardsVO>>(bvo, HttpStatus.OK);
+			List<BoardsVO> bvo = service.boardsListAll();
+			map.put("boardlist", bvo);
+			map.put("success", true);
+			entity = new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 
 		} catch (Exception e) {
-			entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400 error
+			entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		return entity;
 	}

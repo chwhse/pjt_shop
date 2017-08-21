@@ -643,3 +643,11 @@ SELECT uid, rtitle, rcontent,rregdate, g.gcode, gname, gcategory, gtitleimg, gpr
 		left join reviews r on o.rno=r.rno
 		where o.uid = 'admin' and o.rno is null 
 		and ocondition =1;
+		
+		select b.bno, btitle, bcontent, uid, bregdate, breadcnt 
+		FROM boards b join boardscontent bc
+		on b.bno=bc.bno
+		where b.bno > 0
+		order by b.bno desc, bregdate desc;
+		
+		
