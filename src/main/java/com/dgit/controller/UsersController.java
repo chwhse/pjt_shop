@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -44,17 +45,20 @@ public class UsersController {
 	}
 	
 	@RequestMapping(value="/loginPost", method=RequestMethod.POST)
-	public void postLogin(UsersVO user, Model model) throws Exception{
-		UsersVO vo = service.login(user.getUid(), user.getUpw());
-		System.out.println(vo);
+	public void postLogin(@RequestBody UsersVO user, Model model) throws Exception{
+		logger.info("=======Login Post=======");
 		
+		System.out.println(user);
+		UsersVO vo = service.login(user.getUid(), user.getUpw());
 		if(vo == null){
 			// 회원가입을 한 적이 없으면, memberVO키가 없음
 			// interceptor에서 memberVO키가 없으면 login화면으로 다시 가도록 처리
 			System.out.println("회원없음.");
-			return;
+			model.addAttribute("UserIsExist", false);
+		}else{
+			model.addAttribute("loginVO", vo);
+			model.addAttribute("UserIsExist", true);
 		}
-		model.addAttribute("loginVO", vo);
 	}
 	
 	@RequestMapping(value="/logout", method=RequestMethod.GET)

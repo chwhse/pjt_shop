@@ -23,7 +23,7 @@
         <p class="login-box-msg">Sign in to start your session</p>
 
 		<form action="loginPost" method="post">
-		  <div class="form-group has-feedback">
+		  <div class="form-group has-feedback"><input type="hidden" name="isweb" value="true">
 		    <input type="text" name="uid" class="form-control" placeholder="USER ID"/>
 		    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
 		  </div>

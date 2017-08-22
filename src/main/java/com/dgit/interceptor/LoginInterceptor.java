@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -25,10 +26,11 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 			ModelAndView modelAndView) throws Exception {
 		System.out.println("Login Interceptor PostHandle ---------@");
 		UsersVO vo = (UsersVO) modelAndView.getModel().get("loginVO");
-		
-		if(vo == null){
+		if(vo == null && (boolean)modelAndView.getModel().get("UserIsExist")){
+			System.out.println("Login Interceptor PostHandle ---------@123456");
 			response.sendRedirect("login?UserIsExist="+false);// 회원가입으로 유도해야하나, 화면X 이리 처리함.
-		}else{
+			
+		}else if(vo != null ){
 			//로그인 처리시 session영역에 login한 사람의 정보 넣음
 			HttpSession session = request.getSession();
 			session.setAttribute(LOGIN, vo.getUid());

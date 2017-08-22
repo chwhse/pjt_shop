@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -51,43 +52,6 @@ public class UsersRestController {
 				
 	}
 
-	
-	@RequestMapping(value="/loginPost", method=RequestMethod.POST)
-	public ResponseEntity<Map<String, Object>> LoginRestPost(@RequestBody UsersVO vo) throws Exception{ //@RequestBody써줘야 VO안에 변수값 json으로 받음
-		logger.info("=======LoginRestPost=======");
-		logger.info(vo.toString());
-		
-		ResponseEntity<Map<String, Object>> entity = null;
-		
-		String uid = vo.getUid();
-		if(uid==null){
-			uid="";
-			System.out.println("들어온 uid key값 null");
-			entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400 error
-		}else{
-			try{
-				UsersVO uvo = service.login(vo.getUid(), vo.getUpw());
-
-				Map<String, Object> map = new HashMap<>();
-				map.put("user", uvo);
-				if(uvo == null){
-					// 회원가입을 한 적이 없으면, memberVO키가 없음
-					// interceptor에서 memberVO키가 없으면 login화면으로 다시 가도록 처리
-					System.out.println("회원없음.");
-					map.put("success", false);
-					entity = new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
-				}else{
-					map.put("success", true);
-					entity = new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
-
-				}
-			}catch(Exception e){
-				entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400 error
-			}
-		}
-		return entity;
-	}
-	
 	@RequestMapping(value="/listUser", method=RequestMethod.GET)
 	public ResponseEntity<Map<String, Object>> listUserRestGet() throws Exception{ 
 		logger.info("=======listUserRestGet=======");
