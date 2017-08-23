@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -89,7 +90,28 @@ public class UsersRestController {
 			entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400 error
 		}
 		return entity;
-	}
+	}	
+	
+/*
+    private static final String LOGIN = "login";
+	@RequestMapping(value="/loginPost", method=RequestMethod.POST)
+	public ResponseEntity<String> loginPosttest(HttpServletRequest request,UsersVO user) throws Exception{ 
+		logger.info("=======loginPosttest=======");
+		HttpSession session = request.getSession();
+		session.setAttribute(LOGIN, user.getUid());
+		
+		
+		ResponseEntity<String> entity = null;
+		
+		
+		try{
+			entity = new ResponseEntity<String>("success", HttpStatus.OK); 
+			
+		}catch(Exception e){
+			entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400 error
+		}
+		return entity;
+	}*/
 	
 	@RequestMapping(value="validateId", method=RequestMethod.GET)
 	public ResponseEntity<String> ValidateIdRestGet(UsersVO vo) throws Exception{
