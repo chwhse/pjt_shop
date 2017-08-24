@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,24 +76,22 @@ public class OrdersRestController {
 		return entity;
 	}
 	@RequestMapping(value = "/mypage", method = RequestMethod.GET)
-	public ResponseEntity<Map<String, Object>> myPagePostRest(String mygcode,
+	public ResponseEntity<Map<String, Object>> myPagePostRest(String uid,
 														HttpSession session,
 														HttpServletResponse response) throws Exception{
 		logger.info("=============myPage PostRest=============");
 		ResponseEntity<Map<String, Object>> entity = null;
 		Map<String, Object> map = new HashMap<>();
 		try{
-			String uid = (String) session.getAttribute("login");
 			if(uid == null){
-			//	map.put("success", false);
+				map.put("success", false);
+			}else{
+				System.out.println(service.ordersSelectById4MyPage(uid).size());
+				map.put("orderlist",service.ordersSelectById4MyPage(uid));
+				
+				map.put("success", true);
+				entity = new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 			}
-			System.out.println(service.ordersSelectById4MyPage(uid).size());
-			map.put("orderlist",service.ordersSelectById4MyPage(uid));
-			
-			
-			map.put("success", true);
-			entity = new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
-	
 		} catch (Exception e) {
 			entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -100,17 +99,23 @@ public class OrdersRestController {
 	}
 	
 	@RequestMapping(value = "/shopcart", method = RequestMethod.GET)
-	public ResponseEntity<Map<String, Object>> buyGetRest(String mygcode,
-														HttpSession session,
-														HttpServletResponse response) throws Exception{
+	public ResponseEntity<Map<String, Object>> buyGetRest( String uid,String gcode
+														/*HttpSession session,
+														HttpServletResponse response*/) throws Exception{
 		logger.info("=============shopcart GetRest=============");
 		ResponseEntity<Map<String, Object>> entity = null;
 		Map<String, Object> map = new HashMap<>();
 		try{
+/*			String uid = (String) session.getAttribute("login");
+			System.out.println("--------------4");
+			Enumeration se = session.getAttributeNames();
+			while(se.hasMoreElements()){
+				String getse = se.nextElement()+"";
+				System.out.println("@@@Session:"+getse+":"+session.getAttribute(getse));
+			} 세션 못 받음. ㅜ*/
 			
-			
-			String uid = (String) session.getAttribute("login");
 			if(uid == null){
+				System.out.println("아이디값 못 받음");
 				map.put("success", false);
 				entity = new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 				return entity;
@@ -131,8 +136,8 @@ public class OrdersRestController {
 			}
 			
 			System.out.println("넣기전 ono 확인:"+vo.toString());
-			if(mygcode != null){
-				vo.setGoods(gservice.goodsSelectByCode(mygcode));
+			if(gcode != null){
+				vo.setGoods(gservice.goodsSelectByCode(gcode));
 				vo.setOquantity(1);
 				service.insertShoppingBag(vo);
 			}

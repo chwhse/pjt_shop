@@ -15,8 +15,6 @@ body {
   font-family: 'open sans';
   overflow-x: hidden; }
 
-img {
-  max-width: 100%; }
 
 .preview {
   display: -webkit-box;

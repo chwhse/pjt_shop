@@ -32,7 +32,8 @@
 	<beans:bean id="authInterceptor" class="com.dgit.interceptor.AuthInterceptor"/>
 	<interceptors>
 		<interceptor>
-			<mapping path="/users/loginPost"/>
+			<mapping path="/users/mloginPost"/>
+			<mapping path="/users/wloginPost"/>
 			<beans:ref bean="loginInterceptor"/>
 		</interceptor>
 		<interceptor>

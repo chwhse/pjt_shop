@@ -44,20 +44,31 @@ public class UsersController {
 	public void getLogin(){
 	}
 	
-	@RequestMapping(value="/loginPost", method=RequestMethod.POST)
-	public void postLogin(@RequestBody UsersVO user, Model model) throws Exception{
-		logger.info("=======Login Post=======");
-		
-		System.out.println(user);
+	@RequestMapping(value="/mloginPost", method=RequestMethod.POST)
+	public void postmLogin(@RequestBody UsersVO user, Model model) throws Exception{
+		logger.info("=======mLogin Post=======");
+
 		UsersVO vo = service.login(user.getUid(), user.getUpw());
-		if(vo == null){
-			// 회원가입을 한 적이 없으면, memberVO키가 없음
-			// interceptor에서 memberVO키가 없으면 login화면으로 다시 가도록 처리
-			System.out.println("회원없음.");
-			model.addAttribute("UserIsExist", false);
-		}else{
+		System.out.println("user:"+user.getUid());
+		if(vo!=null){
 			model.addAttribute("loginVO", vo);
 			model.addAttribute("UserIsExist", true);
+		}else {
+			System.out.println("회원없음.");
+			model.addAttribute("UserIsExist", false);
+		}
+	}
+	@RequestMapping(value="/wloginPost", method=RequestMethod.POST)
+	public void postwLogin(UsersVO user, Model model) throws Exception{
+		logger.info("=======wLogin Post=======");
+		
+		System.out.println("user:"+user);
+		UsersVO vo = service.login(user.getUid(), user.getUpw());
+		if(vo!=null){
+			model.addAttribute("loginVO", vo);
+			model.addAttribute("UserIsExist", true);
+		}else {
+			System.out.println("회원없음.");
 		}
 	}
 	

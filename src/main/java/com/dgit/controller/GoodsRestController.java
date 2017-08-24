@@ -84,6 +84,30 @@ public class GoodsRestController {
 		return entity;
 	}
 	
+	@RequestMapping(value = "read", method = RequestMethod.GET)
+	public ResponseEntity<Map<String, Object>> readGetRest(String gcode) throws Exception{
+		logger.info("=============read GET=============");
+		System.out.println("gcode:"+gcode);
+		ResponseEntity<Map<String, Object>> entity = null;
+		Map<String, Object> map = new HashMap<>();
+		try{
+			
+			GoodsVO vo = service.goodsSelectByCode(gcode);
+			logger.info("===GoodVO:"+vo.toString());
+			List<ReviewsVO> rlist = rservice.reviewsSelectByCode(gcode);
+			logger.info("===reviewsize:"+rlist.size());
+			map.put("reviewslist", rlist);
+			map.put("good", vo);
+			System.out.println("good:"+vo.toString());
+			map.put("success", true);
+			entity = new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+			
+		} catch (Exception e) {
+			entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		return entity;
+	}
+	
 	/*@RequestMapping(value = "1listPage", method = RequestMethod.GET)
 	public String listPageGET(@ModelAttribute("cri")SearchCriteria cri,Model model) throws Exception {
 		logger.info("=============listPage GET=============");
