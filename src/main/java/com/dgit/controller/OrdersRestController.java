@@ -46,6 +46,8 @@ import com.dgit.service.GoodsService;
 import com.dgit.service.OrdersService;
 import com.dgit.util.MediaUtils;
 
+import net.sf.json.JSONObject;
+
 
 @RestController
 @RequestMapping("/orders/rest/*")
@@ -98,11 +100,13 @@ public class OrdersRestController {
 		return entity;
 	}
 	
-	@RequestMapping(value = "/shopcart", method = RequestMethod.GET)
-	public ResponseEntity<Map<String, Object>> buyGetRest( String uid,String gcode
-														/*HttpSession session,
-														HttpServletResponse response*/) throws Exception{
-		logger.info("=============shopcart GetRest=============");
+	@RequestMapping(value = "/shopcart", method = RequestMethod.POST)
+	public ResponseEntity<Map<String, Object>> buyGetRest(@RequestBody Map<String, String> jsonStr){
+
+        Map<String, String> maps = jsonStr;
+        String uid = maps.get("uid");
+        String gcode = maps.get("gcode");
+		logger.info("=============shopcart POST Rest============="+uid+"gcode:"+gcode);
 		ResponseEntity<Map<String, Object>> entity = null;
 		Map<String, Object> map = new HashMap<>();
 		try{
