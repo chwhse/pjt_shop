@@ -249,7 +249,7 @@
 									<td>
 										<div class="ckbox">
 											<input type="checkbox" id="checkbox1">
-											<label for="checkbox1" id="ono">${order.ono}</label>
+											<label for="checkbox1" id="ono"></label>
 										</div>
 									</td>
 									<td>

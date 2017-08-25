@@ -32,10 +32,10 @@
 			                <li><a href="#">회원관리</a></li>
 			                <li><a href="#">기타등등</a></li>
 			                <li role="separator" class="divider"></li>
-			                <li class="dropdown-header">사장님</li>
-			                <li><a href="#">비밀메뉴</a></li>
-			                <li><a href="#">ㅇ_ㅇ</a></li>
-			                <li><a href="#">ㅎㅎㅎㅎ</a></li>
+			                <li class="dropdown-header">추가할 기능</li>
+			                <li><a href="#">배송관리</a></li>
+			                <li><a href="#">공급처관리</a></li>
+			                <li><a href="#">고객불만관리</a></li>
 			              </ul>
 			            </li>
 		            </c:if>  

@@ -33,6 +33,7 @@
 		from orders o left join goods g on o.gcode=g.gcode
 		join goodsstock gs on o.gcode= gs.gcode
 		<include refid="wheresql_ocode"/>
+		order by odate desc
 	</select>
 	<select id="ordersSelectByNo" parameterType="int" resultMap="orderResultByOcode">
 		select ocode, ono, uid, rno, oisbasket,  oquantity, odate, ototalprice,ocondition,
@@ -40,6 +41,7 @@
 		from orders o left join goods g on o.gcode=g.gcode
 		join goodsstock gs on o.gcode= gs.gcode
 		<include refid="wheresql_ono"/>
+		order by odate desc
 	</select>
 	<select id="ordersSelectById" parameterType="String" resultMap="orderResultByOcode">
 		select ocode, ono, uid, rno, oisbasket,  oquantity, odate, ototalprice,ocondition,
@@ -47,6 +49,7 @@
 		from orders o left join goods g on o.gcode=g.gcode
 		join goodsstock gs on o.gcode= gs.gcode
 		<include refid="wheresql_uid"/>
+		order by odate desc
 	</select>
 	<select id="ordersSelectByIdWithNoReview" resultMap="orderResultByOcode">
 		select ocode, o.ono, o.uid, o.rno, oisbasket,  oquantity, odate, ototalprice, ocondition,

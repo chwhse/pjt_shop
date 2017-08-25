@@ -61,9 +61,29 @@ public class OrdersRestController {
 	GoodsService gservice;
 	
 	
+	@RequestMapping(value = "/removeOrdr", method=RequestMethod.POST)
+	public ResponseEntity<String> removeOrderPOST(int ono) throws Exception {
+		logger.info("=======removeOrderPOST======="+ono);
+		ResponseEntity<String> entity = null;
+		try{
+
+			logger.info("order:"+service.ordersSelectByNo(ono).toString());
+			service.ordersRemoveByNo(ono);
+			
+			entity = new ResponseEntity<String>("success", HttpStatus.OK);
+		} catch (Exception e) {
+			entity = new ResponseEntity<>("fail",HttpStatus.BAD_REQUEST);
+		}
+		return entity;
+	}
+	
 	@RequestMapping(value="/changeQtt", method=RequestMethod.POST)
-	public ResponseEntity<String> changeQttRestPost(int ono,int oquantity,int gprice) throws Exception{ 
+	public ResponseEntity<String> changeQttRestPost(@RequestBody Map<String, Integer> jsonStr) throws Exception{ 
 		logger.info("=======changeQttRestPost=======");
+		Map<String, Integer> maps = jsonStr;
+        int ono = maps.get("ono");
+        int oquantity = maps.get("oquantity");
+        int gprice = maps.get("gprice");
 		ResponseEntity<String> entity = null;
 		try{
 			OrdersVO vo = service.ordersSelectByNo(ono);
@@ -77,10 +97,8 @@ public class OrdersRestController {
 		}
 		return entity;
 	}
-	@RequestMapping(value = "/mypage", method = RequestMethod.GET)
-	public ResponseEntity<Map<String, Object>> myPagePostRest(String uid,
-														HttpSession session,
-														HttpServletResponse response) throws Exception{
+	@RequestMapping(value = "/mypage", method = RequestMethod.POST)
+	public ResponseEntity<Map<String, Object>> myPagePostRest(String uid) throws Exception{
 		logger.info("=============myPage PostRest=============");
 		ResponseEntity<Map<String, Object>> entity = null;
 		Map<String, Object> map = new HashMap<>();
@@ -103,10 +121,11 @@ public class OrdersRestController {
 	@RequestMapping(value = "/shopcart", method = RequestMethod.POST)
 	public ResponseEntity<Map<String, Object>> buyGetRest(@RequestBody Map<String, String> jsonStr){
 
+		logger.info("=============shopcart POST Rest=============");
         Map<String, String> maps = jsonStr;
         String uid = maps.get("uid");
         String gcode = maps.get("gcode");
-		logger.info("=============shopcart POST Rest============="+uid+"gcode:"+gcode);
+        
 		ResponseEntity<Map<String, Object>> entity = null;
 		Map<String, Object> map = new HashMap<>();
 		try{
@@ -170,44 +189,9 @@ public class OrdersRestController {
 		}
 		return entity;
 	}
-
-	/*public String buyGET(String mygcode, Model model,
-						HttpSession session,
-						HttpServletResponse response) throws Exception{
-		logger.info("=============buy GET=============");
-		
-		
-		*/
 /*	
-	@RequestMapping(value = "/changeQtt/{ono}/{oqtt}/{tPrice}", method=RequestMethod.POST)
-	public ResponseEntity<String> changeQuantityPOST(@PathVariable("ono")int ono,
-						@PathVariable("oqtt")int oqtt,@PathVariable("tPrice")int tPrice) throws Exception {
-		ResponseEntity<String> entity = null;
-		try{
-			OrdersVO vo = service.ordersSelectByNo(ono);
-			vo.setOquantity(oqtt);
-			vo.setOtotalprice(tPrice);
-			service.ordersEachUpdate(vo);
-			logger.info("order:"+service.ordersSelectByNo(ono).toString());
-			entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
-		} catch (Exception e) {
-			entity = new ResponseEntity<String>("FAIL",HttpStatus.BAD_REQUEST);
-		}
-		return entity;
-	}
 	
-	@RequestMapping(value = "/removeOrdr/{ono}", method=RequestMethod.POST)
-	public ResponseEntity<Object> removeOrderPOST(@PathVariable("ono")int ono, HttpSession sess) throws Exception {
-		ResponseEntity<Object> entity = null;
-		try{
-			service.ordersRemoveByNo(ono);
-			
-			entity = new ResponseEntity<Object>( ono, HttpStatus.OK);
-		} catch (Exception e) {
-			entity = new ResponseEntity<>("FAIL",HttpStatus.BAD_REQUEST);
-		}
-		return entity;
-	}
+	
 	
 	@RequestMapping(value = "/cancelOrdr/{ono}", method=RequestMethod.POST)
 	public ResponseEntity<Object> cancelOrderPOST(@PathVariable("ono")int ono, HttpSession sess) throws Exception {
